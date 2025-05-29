@@ -5,4 +5,4 @@ print("prueba")
 print("Bi")
 print("Doctor Strange")
 print("Dale")
-P
+print("dale bo")
