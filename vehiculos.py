@@ -1,4 +1,4 @@
-from validaciones import *
+from Validaciones import *
 
 class Vehiculos: 
     modos_permitidos = ["ferroviario", "automotor", "maritimo", "aereo"]
