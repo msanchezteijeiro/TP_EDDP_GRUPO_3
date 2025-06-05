@@ -1,6 +1,6 @@
 import csv
-from Nodos import Nodo
-from Validaciones import Validaciones as Val
+from nodos import Nodo
+from validaciones import Validaciones as Val
 class Conexion():
     #origen  y destino en este caso seria un nodo
     # en este caso el tipo de clase de vehiculos
