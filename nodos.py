@@ -1,4 +1,4 @@
-import Validaciones as Validaciones
+import validaciones as Validaciones
 
 class Nodo:
     def __init__(self, nombre: str):
