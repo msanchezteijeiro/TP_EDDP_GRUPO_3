@@ -1,6 +1,24 @@
 import csv
 
-def cargar_conexiones(ruta_archivo):
+def cargar_archivo_como_listas(ruta_archivo):
+    """
+    Lee cualquier CSV y devuelve una lista de listas.
+    Cada línea del archivo se convierte en una sublista de strings.
+    """
+    filas = []
+
+    with open(ruta_archivo, "r", encoding="utf-8") as archivo:
+        for linea in archivo:
+            partes = linea.strip().split(",")
+            filas.append(partes)
+
+    return filas
+
+
+
+#Esta decodifica la lista_conexioens y la transforma en un diccionario de conexiones:
+
+def decodificar_conexiones(lista_de_listas):
     """
     Lee un archivo CSV de conexiones y devuelve un diccionario con los contenidos
 
@@ -12,12 +30,7 @@ def cargar_conexiones(ruta_archivo):
     """
     conexiones = {}
 
-    with open(ruta_archivo, "r", encoding="utf-8") as archivo:
-        lineas = archivo.readlines()
-
-    # Saltamos la primera línea (cabecera)
-    for linea in lineas[1:]:
-        partes = linea.strip().split(",")
+    for partes in lista_de_listas[1:]:  # Saltamos cabecera
         if len(partes) < 4:
             continue  # línea mal formada
 
@@ -49,37 +62,16 @@ def cargar_conexiones(ruta_archivo):
 
 
 
+#Esta decodifica una lista de listas con nombres de nodos y devuelve una lista de strings:
+#SEGURAMENTE ES INUTIL y REEMPLAZABLE directamente por una funcion que cargue solici
 
-def cargar_nodos(ruta_archivo):
+def decodificar_solicitudes(lista_de_listas):
     """
-    Lee un CSV con una columna 'nombre' y devuelve una lista de objetos Nodo.
-    """
-    nodos = []
-
-    with open(ruta_archivo, "r", encoding="utf-8") as archivo:
-        lineas = archivo.readlines()
-
-    for linea in lineas[1:]:  # Saltamos cabecera
-        nombre = linea.strip()
-        nodos.append(nombre)
-
-    return nodos
-
-
-
-
-def cargar_solicitudes(ruta_archivo):
-    """
-    Lee un CSV con solicitudes de transporte y devuelve un diccionario
-    donde la clave es el id_carga y el valor es un diccionario con el resto de la info.
+    Procesa una lista de listas con solicitudes de transporte y devuelve un diccionario.
     """
     solicitudes = {}
 
-    with open(ruta_archivo, "r", encoding="utf-8") as archivo:
-        lineas = archivo.readlines()
-
-    for linea in lineas[1:]:  # Saltar cabecera
-        partes = linea.strip().split(",")
+    for partes in lista_de_listas[1:]:  # Saltamos cabecera
         if len(partes) < 4:
             continue
 
@@ -101,23 +93,22 @@ def cargar_solicitudes(ruta_archivo):
     return solicitudes
 
 
-def cargar_archivo(ruta_archivo):
-    """
-    Detecta el tipo de archivo CSV según su cabecera y llama a la función adecuada.
-    Retorna: dict o list según el contenido.
-    """
-    with open(ruta_archivo, "r", encoding="utf-8") as archivo:
-        cabecera = archivo.readline().strip().split(",")
 
-    if set(cabecera) >= {"origen", "destino", "tipo", "distancia_km"}:
-        return cargar_conexiones(ruta_archivo)
-    elif "nombre" in cabecera:
-        return cargar_nodos(ruta_archivo)
-    elif set(cabecera) >= {"id_carga", "peso_kg", "origen", "destino"}:
-        return cargar_solicitudes(ruta_archivo)
-    else:
-        raise ValueError("No se reconoce el tipo de archivo por su cabecera.")
+#Esta decodifica una lista de listas con nombres de nodos y devuelve una lista de strings:
+#SEGURAMENTE ES INUTIL y REEMPLAZABLE directamente por una funcion que instancie directamente los nodos:
+#esta funcion estaria en el modulo Nodos.py
 
+def decodificar_nodos(lista_de_listas):
+    """
+    Procesa una lista de listas con nombres de nodos y devuelve una lista de strings.
+    """
+    nodos = []
+
+    for fila in lista_de_listas[1:]:  # Saltamos cabecera
+        if fila:
+            nodos.append(fila[0])
+
+    return nodos
 
 
 
@@ -144,16 +135,17 @@ def imprimir_conexiones(conexiones):
 
 
 
-
-conexiones = cargar_conexiones("conexiones.csv")
+lista_conexiones = cargar_archivo_como_listas("conexiones.csv")
+conexiones = decodificar_conexiones(lista_conexiones)
 print(conexiones)
-
 imprimir_conexiones(conexiones)
 
-nodos = cargar_nodos("nodos.csv")
 
+
+lista_nodos = cargar_archivo_como_listas("nodos.csv")
+nodos = decodificar_nodos(lista_nodos)
 print(nodos)
 
-
-solicitudes = cargar_solicitudes("solicitudes.csv")
+lista_solicitudes = cargar_archivo_como_listas("solicitudes.csv")
+solicitudes = decodificar_solicitudes(lista_solicitudes)
 print(solicitudes)
