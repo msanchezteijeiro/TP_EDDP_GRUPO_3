@@ -1,10 +1,76 @@
 import csv
 from Nodos import Nodo
+from Validaciones import Validaciones as Val
 class Conexion():
     #origen  y destino en este caso seria un nodo
     # en este caso el tipo de clase de vehiculos
+
     def __init__(self, origen: Nodo, destino: Nodo, tipo, distancia: int, restriccion = None, valor_restriccion = None):
-        pass
+        if not(Val.validar_Nodos(origen)):
+            raise TypeError("No existe este nodo origen.")
+        if not(Val.validar_Nodos(destino)):
+            raise TypeError("No existe este nodo destino.")
+        if not(Val.validar_Tipos(tipo)):
+            raise TypeError("No existe este nodo tipo de vehiculo.")
+        if not(Val.validar_int(distancia)):
+            raise TypeError("No existe este nodo tipo de vehiculo.")
+        self.setOrigen(origen)
+        self.setDestino(destino)
+        self.setTipo(tipo)    
+        self.setDistancia(distancia)
+    def setOrigen(self,origen):
+        if not(Val.validar_Nodos(origen)):
+            raise TypeError("No existe este nodo origen.")
+        self.origen = origen
+
+    def getOrigen(self):
+        return self.origen
+    
+    def setOrigen(self,destino):
+        if not(Val.validar_Nodos(destino)):
+            raise TypeError("No existe este nodo destino.")
+        self.destino = destino
+
+    def getDestino(self):
+        return self.destino
+
+    def setTipo(self,tipo):
+        if not(Val.validar_Tipos(tipo)):
+            raise TypeError("No existe este nodo tipo de vehiculo.")
+        self.tipo = tipo
+
+    def getTipo(self):
+        return self.tipo
+
+    def setDistancia(self,distancia):
+        if not(Val.validar_int(distancia)):
+            raise TypeError("No existe este nodo tipo de vehiculo.")
+        self.distancia = distancia
+        
+    
+    
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 #lo de la restriccion deberia ser asi:
