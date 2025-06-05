@@ -1,12 +1,6 @@
 class Validaciones: 
     
     
-    @staticmethod
-    def validar_modos (a, b):
-        if a not in b: 
-            return False
-        else: 
-            return True
         
     @staticmethod
     def validar_float (a): 
