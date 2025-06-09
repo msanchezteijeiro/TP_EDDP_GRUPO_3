@@ -1,55 +1,68 @@
 import csv
+
 from nodos import Nodo
 from validaciones import Validaciones as Val
+
 class Conexion():
     #origen  y destino en este caso seria un nodo
     # en este caso el tipo de clase de vehiculos
 
-    def __init__(self, origen: Nodo, destino: Nodo, tipo, distancia: int, restriccion = None, valor_restriccion = None):
-        if not(Val.validar_Nodos(origen)):
-            raise TypeError("No existe este nodo origen.")
-        if not(Val.validar_Nodos(destino)):
-            raise TypeError("No existe este nodo destino.")
-        if not(Val.validar_Tipos(tipo)):
-            raise TypeError("No existe este nodo tipo de vehiculo.")
-        if not(Val.validar_int(distancia)):
-            raise TypeError("No existe este nodo tipo de vehiculo.")
+    def __init__(self, origen: Nodo, destino: Nodo, modo, distancia: int, restriccion = None, valor_restriccion = None):
+
+        #Seteamos los atributos de la clase:
         self.setOrigen(origen)
         self.setDestino(destino)
-        self.setTipo(tipo)    
+        self.setModo(modo)    
         self.setDistancia(distancia)
+
+        #FALTA HACER UN METODO PARA IDENTIFICAR LAS RESTRICCIONES Y ASIGNAR LA CORRECTA SI ES QUE EXISTE
+
+
+    #Definimos los metodos de la clase:
     def setOrigen(self,origen):
-        if not(Val.validar_Nodos(origen)):
+        """
+        if not(Val.validar_nodo(origen)):   #FALTA DEFINIR validar_nodo en validaciones.py
             raise TypeError("No existe este nodo origen.")
+        """
         self.origen = origen
 
     def getOrigen(self):
         return self.origen
     
-    def setOrigen(self,destino):
-        if not(Val.validar_Nodos(destino)):
+    def setDestino(self,destino):
+        """
+        if not(Val.validar_nodo(destino)):   #FALTA DEFINIR validar_nodo en validaciones.py
             raise TypeError("No existe este nodo destino.")
+        """
         self.destino = destino
 
     def getDestino(self):
         return self.destino
 
-    def setTipo(self,tipo):
-        if not(Val.validar_Tipos(tipo)):
-            raise TypeError("No existe este nodo tipo de vehiculo.")
-        self.tipo = tipo
+    def setModo(self,modo):
+        """
+        if not(Val.validar_modo(modo)):  #FALTA DEFINIR validar_modo en validaciones.py
+            raise TypeError("No existe este modo para estos nodos origen y destino.")
+        """
+        self.modo = modo.lower() #lower para que no haya errores con mayusculas y minusculas
 
-    def getTipo(self):
-        return self.tipo
+    def getModo(self):
+        return self.modo
 
     def setDistancia(self,distancia):
-        if not(Val.validar_int(distancia)):
-            raise TypeError("No existe este nodo tipo de vehiculo.")
+        if not(Val.validar_float(distancia)):
+            raise TypeError("Se ingreso una distancia inválida.")
         self.distancia = distancia
-        
+    
+    """
+    def __repr__(self): #CHEQUERA SI ES NECESARIO
+        return (f"Conexion({self.origen} -> {self.destino}, "
+                f"modo={self.modo}, distancia={self.distancia} km, "
+                f"restriccion={self.restriccion}, valor={self.valor_restriccion})")
+    """
     
     
-    
+
 
 
 
