@@ -9,6 +9,8 @@ class Conexion():
 
     def __init__(self, origen: Nodo, destino: Nodo, modo, distancia: int, restriccion = None, valor_restriccion = None):
 
+        #CHEQUEAR SI LA VALIDACION VA ACA O NO.
+
         #Seteamos los atributos de la clase:
         self.setOrigen(origen)
         self.setDestino(destino)
@@ -54,12 +56,12 @@ class Conexion():
             raise TypeError("Se ingreso una distancia inválida.")
         self.distancia = distancia
     
-    """
+    
     def __repr__(self): #CHEQUERA SI ES NECESARIO
         return (f"Conexion({self.origen} -> {self.destino}, "
                 f"modo={self.modo}, distancia={self.distancia} km, "
                 f"restriccion={self.restriccion}, valor={self.valor_restriccion})")
-    """
+    
     
     
 

@@ -158,7 +158,11 @@ def encontrar_caminos_para_solicitud(nodos, solicitud):
     resultados = {}
 
     # Extraemos el único valor de la solicitud
-    datos = list(solicitud.values())[0]
+    datos = list(solicitud.values())[0] 
+    
+    #esta parte es para obtener el primer (y único) valor del diccionario de solicitud, este seria el id
+    #si tengo multiples solicitudes, deberia iterar sobre ellas, pero por ahora solo tomamos una
+    
     origen = datos["origen"]
     destino = datos["destino"]
 
