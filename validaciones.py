@@ -1,7 +1,5 @@
 class Validaciones: 
-    
-    
-        
+
     @staticmethod
     def validar_float (a): 
         if not isinstance (a, float): 
@@ -13,13 +11,6 @@ class Validaciones:
     @staticmethod
     def validar_int (a): 
         if not isinstance (a, int): 
-            return False
-        else :
-            return True
-
-    @staticmethod
-    def validar_float (a): 
-        if not isinstance (a, float): 
             return False
         else :
             return True
