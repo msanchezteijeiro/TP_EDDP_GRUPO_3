@@ -19,6 +19,10 @@ class Conexion():
         self.restriccion = restriccion
         self.valor_restriccion = valor_restriccion
 
+        self.setRestriccion(restriccion)
+        self.setValorRestriccion(valor_restriccion)
+
+
         #FALTA HACER UN METODO PARA IDENTIFICAR LAS RESTRICCIONES Y ASIGNAR LA CORRECTA SI ES QUE EXISTE
 
 
@@ -58,6 +62,29 @@ class Conexion():
             raise TypeError("Se ingreso una distancia inválida.")
         self.distancia = distancia
     
+    def setRestriccion(self, restriccion):
+        #como solo hay 4 restricciones o vacio. creo la lista con las restrcciones validas
+        #por ahi conviene usar la validacion de str, como esta la posibilidad de vacio no la uso por las dudas
+        #preguntar si tiene sentido que sea None
+        restricciones_validas=["peso_max", "velocidad_max", "prob_mal_tiempo", "tipo", ""]
+
+        if not Val.validar_str(restriccion):
+            raise TypeError("La restriccion debe ser una cadena de texto.")
+        if restriccion not in restricciones_validas:
+            raise ValueError(f"Restriccion no reconocida: {restriccion}")
+    
+        self.restriccion=restriccion
+    
+    def getRestriccion(self):
+        return self.restriccion
+    
+    def setValorRestriccion(self, valor):
+        #esta puede ser vacio, str, int o float, hace falta validar?
+        self.valor_restriccion= valor
+    
+    def getValorRestriccion(self):
+        return self.valor_restriccion
+
     
     def __repr__(self): #CHEQUERA SI ES NECESARIO
         return (f"Conexion({self.origen} -> {self.destino}, "

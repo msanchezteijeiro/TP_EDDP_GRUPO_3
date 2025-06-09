@@ -28,3 +28,10 @@ class Validaciones:
             return True
         else :
             return False
+
+    @staticmethod 
+    def validar_modo (modo, modos):
+        if modo not in modos: 
+            return False
+        else: 
+            return True
