@@ -1,5 +1,7 @@
 import csv
 
+#IMPORTANTE: FALTA AGREGAR UN MANEJO DE ERRORES PARA LOS ARCHIVOS QUE NO EXISTAN O ESTEN MAL FORMADOS!!!!!
+
 def cargar_archivo_como_listas(ruta_archivo):
     """
     Lee cualquier CSV y devuelve una lista de listas.
@@ -134,18 +136,21 @@ def imprimir_conexiones(conexiones):
                     print()
 
 
-
-lista_conexiones = cargar_archivo_como_listas("conexiones.csv")
-conexiones = decodificar_conexiones(lista_conexiones)
-print(conexiones)
-imprimir_conexiones(conexiones)
+if __name__ == "__main__":
+    # código de prueba local_
 
 
+    lista_conexiones = cargar_archivo_como_listas("conexiones.csv")
+    conexiones = decodificar_conexiones(lista_conexiones)
+    print(conexiones)
+    imprimir_conexiones(conexiones)
 
-lista_nodos = cargar_archivo_como_listas("nodos.csv")
-nodos = decodificar_nodos(lista_nodos)
-print(nodos)
 
-lista_solicitudes = cargar_archivo_como_listas("solicitudes.csv")
-solicitudes = decodificar_solicitudes(lista_solicitudes)
-print(solicitudes)
+
+    lista_nodos = cargar_archivo_como_listas("nodos.csv")
+    nodos = decodificar_nodos(lista_nodos)
+    print(nodos)
+
+    lista_solicitudes = cargar_archivo_como_listas("solicitudes.csv")
+    solicitudes = decodificar_solicitudes(lista_solicitudes)
+    print(solicitudes)
