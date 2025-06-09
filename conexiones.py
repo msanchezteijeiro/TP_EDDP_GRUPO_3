@@ -62,19 +62,21 @@ class Conexion():
             raise TypeError("Se ingreso una distancia inválida.")
         self.distancia = distancia
     
+    #YA FUNCIONA! Tal vez convendria ponerla en validaciones.py, y llamarla desde ahi, asi no ocupa tanto espacio.
     def setRestriccion(self, restriccion):
         #como solo hay 4 restricciones o vacio. creo la lista con las restrcciones validas
         #por ahi conviene usar la validacion de str, como esta la posibilidad de vacio no la uso por las dudas
         #preguntar si tiene sentido que sea None
-        restricciones_validas=["peso_max", "velocidad_max", "prob_mal_tiempo", "tipo", ""]
+        restricciones_validas = ["peso_max", "velocidad_max", "prob_mal_tiempo", "tipo", "", None]
 
-        if not Val.validar_str(restriccion):
-            raise TypeError("La restriccion debe ser una cadena de texto.")
+        if restriccion is not None and not Val.validar_str(restriccion):
+            raise TypeError("La restriccion debe ser una cadena de texto o None.")
+
         if restriccion not in restricciones_validas:
             raise ValueError(f"Restriccion no reconocida: {restriccion}")
     
         self.restriccion=restriccion
-    
+
     def getRestriccion(self):
         return self.restriccion
     
