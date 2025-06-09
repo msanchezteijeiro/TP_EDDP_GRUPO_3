@@ -125,6 +125,7 @@ if __name__ == "__main__":
 
     nodos_existentes = construir_red()
 
+"""
     # Prueba
     print(nodos_existentes)
 
@@ -132,8 +133,7 @@ if __name__ == "__main__":
     print(nodos_existentes["Zarate"].vecinos)
 
     print(nodos_existentes)
-
-
+"""
 
 
 # Definimos la función que busca todos los caminos posibles entre dos nodos, con un solo modo de transporte y sin ciclos
@@ -158,18 +158,18 @@ def encontrar_caminos_para_solicitud(nodos, solicitud):
     resultados = {}
 
     # Extraemos el único valor de la solicitud
-    datos = list(solicitud.values())[0] 
+    datos = list(solicitud.values())[0] #extraemos el primer (y único) valor del diccionario de solicitud
+                                        #osea "datos" es un diccionario con los datos de la solicitud
     
-    #esta parte es para obtener el primer (y único) valor del diccionario de solicitud, este seria el id
-    #si tengo multiples solicitudes, deberia iterar sobre ellas, pero por ahora solo tomamos una
-    
-    origen = datos["origen"]
+    origen = datos["origen"]        #extraigo el origen y destino de la solicitud
     destino = datos["destino"]
 
-    # Lista de modos válidos (podés cambiarla si tenés otra forma de validarlos)
-    modos_disponibles = ["ferroviario", "automotor", "maritimo", "aereo"]
+    # Lista de modos disponibles construida a partir del nodo origen:
+    modos_disponibles = nodos[origen].modos_soportados
+        #nos traemos los modos de transporte que soporta el nodo origen, q son los unicos que podemos usar para buscar caminos
 
-    # Función recursiva para buscar caminos
+
+    # Función recursiva para buscar caminos:
     def buscador_caminos(actual, destino, camino, visitados, modo):
         # Caso base: si llegamos al destino, guardamos el camino actual
         if actual == destino:
@@ -199,12 +199,15 @@ def encontrar_caminos_para_solicitud(nodos, solicitud):
         # Desmarcamos el nodo actual para permitir su uso en otros caminos
         visitados.pop()
 
-    # Recorremos todos los modos posibles y buscamos caminos para cada uno
+
+    # Recorremos todos los modos posibles y buscamos caminos para cada uno, con la funcion recursiva definida arriba
     for modo in modos_disponibles:
         if origen in nodos and destino in nodos:
             buscador_caminos(actual=origen, destino=destino, camino=[], visitados=[], modo=modo)
 
-    return resultados
+    return resultados #resultados es un diccionario: el modo de transporte es la clave, y los valores son listas de caminos
+                        #(cada camino es una lista de objetos Conexion)
+
 
 
 
@@ -221,11 +224,14 @@ if __name__ == "__main__":
     })
 
     print(prueba)
+
+
+"""
     print("Caminos encontrados:")
     for modo, caminos in prueba.items():
         print(f"\nModo: {modo}")
         for camino in caminos:
             print(" -> ".join([f"{conexion.origen.nombre} -> {conexion.destino.nombre}" for conexion in camino]))
     
-
+"""
 

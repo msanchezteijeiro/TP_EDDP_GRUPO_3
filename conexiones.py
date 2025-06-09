@@ -16,6 +16,8 @@ class Conexion():
         self.setDestino(destino)
         self.setModo(modo)    
         self.setDistancia(distancia)
+        self.restriccion = restriccion
+        self.valor_restriccion = valor_restriccion
 
         #FALTA HACER UN METODO PARA IDENTIFICAR LAS RESTRICCIONES Y ASIGNAR LA CORRECTA SI ES QUE EXISTE
 
@@ -23,7 +25,7 @@ class Conexion():
     #Definimos los metodos de la clase:
     def setOrigen(self,origen):
         """
-        if not(Val.validar_nodo(origen)):   #FALTA DEFINIR validar_nodo en validaciones.py
+        if not(Val.validar_nodo(origen)):   #FALTA DEFINIR validar_nodo en validaciones.py Y FALTA UN TRY PARA ESE RAISERROR
             raise TypeError("No existe este nodo origen.")
         """
         self.origen = origen
@@ -61,6 +63,7 @@ class Conexion():
         return (f"Conexion({self.origen} -> {self.destino}, "
                 f"modo={self.modo}, distancia={self.distancia} km, "
                 f"restriccion={self.restriccion}, valor={self.valor_restriccion})")
+    
     
     
     
