@@ -159,9 +159,16 @@ if __name__ == "__main__":
     evaluados = calcular_costos_y_tiempos(prueba, carga_kg=5000)
     imprimir_costos_y_tiempos(evaluados)
     
-'''
+
 def kp1(evaluados):
     #este es el del timepo que le pasa como parametro el diccionario con los posibles caminos
-    for (clave) in evaluados:
-        print("->", clave, "\n")
-'''
+    tiempo_min = 0
+    res = None
+    for (clave, valor) in evaluados.items():
+        tiempo_min += valor.tiempo
+    for (clave, valor) in evaluados.items():
+        if tiempo_min> valor.tiempo:
+            tiempo_min=valor.tiempo
+            res = valor
+    return res
+
