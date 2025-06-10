@@ -2,18 +2,18 @@ from validaciones import *
 from conexiones import *
 
 class Vehiculos: 
-    modos = ["Ferroviario", "Automotor", "Maritimo", "Aereo"]
+    modos = ["ferroviario", "automotor", "maritimo", "aereo"]
     def __init__ (self, modo: str, capacidad: float):
         try: 
             if not Validaciones.validar_str (modo): 
                 raise TypeError (f"el el modo tiene que ser una cadena str")        
-            if not Validaciones.validar_float (capacidad) and not Validaciones.validar_int (capacidad): 
+            if not Validaciones.validar_float (capacidad) and not Validaciones.validar_int (capacidad): #creo q con float alcanza
                 raise ValueError (f"la capacidad {capacidad} no es valida")
 
         except: 
             print(f"El Vehiculo no es valido")
         
-        self.setModo(modo)
+        self.setModo(modo.lower()) #agregar .lower() si se quiere que sea case insensitive
         self.setCapacidad(capacidad)
 
     def setModo (self, modo):
@@ -27,7 +27,7 @@ class Vehiculos:
         except ValueError: 
             print ("el modo no es uno de los cuatro permitidos")
          
-        self.modo = modo
+        self.modo = modo.lower() #lower()
     
     def setCapacidad (self, capacidad): 
         try: 
@@ -44,7 +44,7 @@ class Vehiculos:
         return self.capacidad
     
 class Ferroviario (Vehiculos): 
-    def __init__ (self, capacidad, velocidad, costo_fijo, costo_por_kg, modo='Ferroviario'):
+    def __init__ (self, capacidad, velocidad, costo_fijo, costo_por_kg, modo='ferroviario'):
         try: 
             if not Validaciones.validar_int (costo_fijo) and not Validaciones.validar_float(costo_fijo): 
                 raise TypeError ("el costo fijo debe ser un numero")
@@ -113,7 +113,7 @@ class Ferroviario (Vehiculos):
         
 class Automotor (Vehiculos): 
     
-    def __init__ (self, capacidad, velocidad, costo_fijo, costo_por_km, modo = "Automotor"):
+    def __init__ (self, capacidad, velocidad, costo_fijo, costo_por_km, modo = "automotor"):
         try: 
             if not Validaciones.validar_int (costo_fijo) and not Validaciones.validar_float(costo_fijo): 
                 raise TypeError ("el costo fijo debe ser un numero")
@@ -181,7 +181,7 @@ class Automotor (Vehiculos):
         return tiempo_minutos
     
 class Maritimo (Vehiculos): 
-    def __init__ (self, capacidad, velocidad, costo_por_km, costo_por_kg, modo = "Maritimo"):
+    def __init__ (self, capacidad, velocidad, costo_por_km, costo_por_kg, modo = "maritimo"):
         try: 
             if not Validaciones.validar_int (velocidad) and not Validaciones.validar_float(velocidad): 
                 raise TypeError ("la velocidad debe ser un numero")
@@ -250,7 +250,7 @@ class Maritimo (Vehiculos):
         return tiempo_minutos
     
 class Aereo (Vehiculos): 
-    def __init__ (self, capacidad, costo_fijo, costo_por_km, costo_por_kg, modo = "Aereo"):
+    def __init__ (self, capacidad, costo_fijo, costo_por_km, costo_por_kg, modo = "aereo"):
         try: 
             if not Validaciones.validar_int (costo_fijo) and not Validaciones.validar_float(costo_fijo): 
                 raise TypeError ("el costo fijo debe ser un numero")
@@ -315,7 +315,23 @@ class Aereo (Vehiculos):
         pass
     
 
+#DEFINICION DE LOS VEHICULOS: NO BORRAR!!
+
 ferroviario = Ferroviario(15000, 100, 100, 3)
 automotor = Automotor(30000, 80, 30, 5)
 maritimo = Maritimo(100000, 40, 15, 2)
 aereo =  Aereo(5000, 750, 40, 10)
+
+
+#TESTEAMOS:
+if __name__ == "__main__":
+    # código de prueba local_
+    print(ferroviario)
+    print(automotor)
+    print(maritimo)
+    print(aereo)
+
+
+#TAL VEZ deberiamos tener definidas las funciones de calcular_costo y calcular_tiempo en la clase Vehiculos, 
+# y que cada vehiculo las implemente, o sea, que cada vehiculo tenga su propia implementacion de esas funciones.
+#PREGUNTAR SI ES NECESARIO

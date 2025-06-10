@@ -78,8 +78,6 @@ def encontrar_caminos_para_solicitud(nodos, solicitud):
 if __name__ == "__main__":
     # código de prueba local_
 
-    nodos_existentes = construir_red()
-
     prueba = encontrar_caminos_para_solicitud(nodos_existentes, {
         'CARGA_001': {
             'peso_kg': 70000.0,
@@ -91,10 +89,12 @@ if __name__ == "__main__":
     print(prueba)
 
 
-
+    #Mini codigo q imprime los caminos encontrados de manera mas linda:
     print("Caminos encontrados:")
     for modo, caminos in prueba.items():
         print(f"\nModo: {modo}")
         for camino in caminos:
             print(" -> ".join([f"{conexion.origen.nombre} -> {conexion.destino.nombre}" for conexion in camino]))
     
+
+
