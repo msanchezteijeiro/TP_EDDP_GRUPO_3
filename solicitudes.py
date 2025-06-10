@@ -6,6 +6,8 @@
 
 from lector_archivos import cargar_archivo_como_listas, decodificar_solicitudes
 
+
+#Extraemos los datos de las solicitudes desde el archivo CSV y los decodificamos:
 lista_solicitudes = cargar_archivo_como_listas("solicitudes.csv")
 solicitudes = decodificar_solicitudes(lista_solicitudes) #es un diccionario
 # donde la clave es el id de la solicitud y el valor es otro diccionario con los datos de la solicitud

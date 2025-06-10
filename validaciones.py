@@ -1,3 +1,8 @@
+#VALIDACIONES GENERALES PARA VALIDAR DATOS DE ENTRADA
+
+#Si aca importamos otra clase, se rompe todo.
+#Porque al importar otra clase, se importa todo el modulo, y si el modulo tiene un import de este modulo, se rompe la recursividad.
+
 class Validaciones: 
 
     @staticmethod
@@ -29,9 +34,5 @@ class Validaciones:
         else :
             return False
 
-    @staticmethod 
-    def validar_modo (modo, modos):
-        if modo not in modos: 
-            return False
-        else: 
-            return True
+
+    

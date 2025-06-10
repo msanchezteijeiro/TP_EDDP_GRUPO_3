@@ -2,22 +2,34 @@ import csv
 
 from nodos import Nodo
 from validaciones import Validaciones as Val
+from vehiculos import Vehiculo
 
 class Conexion():
     #origen  y destino en este caso seria un nodo
     # en este caso el tipo de clase de vehiculos
 
     def __init__(self, origen: Nodo, destino: Nodo, modo, distancia: int, restriccion = None, valor_restriccion = None):
-
-        #CHEQUEAR SI LA VALIDACION VA ACA O NO.
-
+        
+        #CHEQUEAR SI LA VAL VA ACA O NO.
+        try:
+            if not Val.validar_nodo(origen) and not Val.validar_nodo(destino): 
+                raise TypeError ("el destino y el origen no son nodos validos")
+            if not Val.validar_modo (modo): 
+                raise ValueError ("el modo no es valido")
+        except TypeError: 
+            print (f"la conexion", origen ," ,",destino," ,", modo, " no es valida")
+        except ValueError:
+            print (f"el modo",modo, "no es valido") 
+        
+        
         #Seteamos los atributos de la clase:
-        self.setOrigen(origen)
-        self.setDestino(destino)
-        self.setModo(modo)    
-        self.setDistancia(distancia)
-        self.setRestriccion(restriccion)
-        self.setValorRestriccion(valor_restriccion)
+        
+        self.origen = origen
+        self.destino = destino 
+        self.modo = modo
+        self.distancia = distancia
+        self.restriccion = restriccion
+        self.valor_restriccion = valor_restriccion
 
 
         #FALTA HACER UN METODO PARA IDENTIFICAR LAS RESTRICCIONES Y ASIGNAR LA CORRECTA SI ES QUE EXISTE
@@ -62,7 +74,7 @@ class Conexion():
     #YA FUNCIONA! Tal vez convendria ponerla en validaciones.py, y llamarla desde ahi, asi no ocupa tanto espacio.
     def setRestriccion(self, restriccion):
         #como solo hay 4 restricciones o vacio. creo la lista con las restrcciones validas
-        #por ahi conviene usar la validacion de str, como esta la posibilidad de vacio no la uso por las dudas
+        #por ahi conviene usar la val de str, como esta la posibilidad de vacio no la uso por las dudas
         #preguntar si tiene sentido que sea None
         restricciones_validas = ["peso_max", "velocidad_max", "prob_mal_tiempo", "tipo", "", None]
 
@@ -89,6 +101,22 @@ class Conexion():
         return (f"Conexion({self.origen} -> {self.destino}, "
                 f"modo={self.modo}, distancia={self.distancia} km, "
                 f"restriccion={self.restriccion}, valor={self.valor_restriccion})")
+    
+
+    #Validaciones:
+    
+    def validar_modo (modo):
+        if modo not in (Vehiculo.getModos()): 
+            return False
+        else: 
+            return True
+        
+    def validar_nodo(nodo): 
+        if not isinstance (nodo, Nodo):
+            return False
+        else: 
+            return True
+        
     
     
     

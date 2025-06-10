@@ -1,4 +1,7 @@
 from redes import construir_red
+from nodos import Nodo
+from vehiculos import ferroviario, automotor, maritimo, aereo
+
 
 # Definimos la función que busca todos los caminos posibles entre dos nodos, con un solo modo de transporte y sin ciclos
 
@@ -73,6 +76,57 @@ def construir_itinerario(nodos, solicitud):
 
 
 
+#AGREGAMOS EL TEMA DE COSTOS:
+#La idea seria que a restultados, q es un diccionario con clave por cada modo, y una lista
+
+
+
+
+vehiculos_por_modo = {
+    "ferroviaria": ferroviario,
+    "automotor": automotor,
+    "maritimo": maritimo,
+    "fluvial": maritimo,
+    "aereo": aereo
+}
+
+def calcular_costos_y_tiempos(resultados, carga_kg):
+    evaluados = {}
+
+    for modo, caminos in resultados.items():
+        vehiculo = vehiculos_por_modo.get(modo.lower())
+        if vehiculo is None:
+            continue
+
+        evaluados[modo] = []
+        for camino in caminos:
+            costo_total = 0
+            tiempo_total = 0
+            for conexion in camino:
+                try:
+                    costo_total += vehiculo.calcular_costo(conexion, carga_kg)
+                    tiempo_total += vehiculo.calcular_tiempo(conexion)
+                except Exception as e:
+                    print(f"Error al calcular para {conexion}: {e}")
+                    continue
+            evaluados[modo].append((camino, costo_total, tiempo_total))
+
+    return evaluados
+
+
+
+
+def imprimir_costos_y_tiempos(evaluados):
+    print(f"{'Modo':<12} | {'Camino':<40} | {'Costo Total':<12} | {'Tiempo Total (min)':<20}")
+    print("-" * 90)
+    for modo, caminos in evaluados.items():
+        for camino, costo, tiempo in caminos:
+            camino_str = " -> ".join([f"{c.modo}:{c.distancia}km" for c in camino])
+            print(f"{modo:<12} | {camino_str:<40} | {costo:<12.2f} | {tiempo:<20.2f}")
+
+
+
+
 
 #TESTEAMOS:
 if __name__ == "__main__":
@@ -98,6 +152,11 @@ if __name__ == "__main__":
         print(f"\nModo: {modo}")
         for camino in caminos:
             print(" -> ".join([f"{conexion.origen.nombre} -> {conexion.destino.nombre}" for conexion in camino]))
+
+
+
+    #evaluados = calcular_costos_y_tiempos(prueba, carga_kg=5000)
+    #imprimir_costos_y_tiempos(prueba)
     
 
 

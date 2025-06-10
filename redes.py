@@ -1,3 +1,4 @@
+
 #INSTANCIAMOS NODOS A PARTIR DE nodos.csv
 
 from lector_archivos import cargar_archivo_como_listas, decodificar_nodos
@@ -30,7 +31,6 @@ def instanciar_conexiones(nodos):
 
     lista_conexiones = cargar_archivo_como_listas("conexiones.csv")
     diccionario_conexiones = decodificar_conexiones(lista_conexiones)
-
 
 
     # Recorremos el diccionario de conexiones donde las claves son nodos origen y cada valor es otro dic con 
