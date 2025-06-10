@@ -115,31 +115,3 @@ class Conexion():
         else: 
             return True
         
-    
- 
-
-
-#Lo de aca abajo va aca?
-
-
-#lo de la restriccion deberia ser asi:
-# si tiene restriccion, el dato restriccion sera el tipo, y lo siguiente sera la restriccion en si misma
-
-import csv
-
-def abrir_csv(nombre_csv):
-    origen, destino, tipo, distancia, restriccion, valor_restriccion=[],[],[],[],[],[]
-    try:
-        with open(nombre_csv,"r", encoding="UTF-8") as archivo:
-            lector=csv.reader(archivo)
-            for fila in lector:
-                origen.append(fila[0])
-                destino.append(fila[1])
-                tipo.append(fila[2])
-                distancia.append(fila[3])
-                restriccion.append(fila[4])
-                valor_restriccion.append(fila[5])
-            print("Se crearon las listas")
-    except:
-        print("Ocurrio un error.")
-    return origen[1:], destino[1:], tipo[1:], distancia[1:], restriccion[1:], valor_restriccion[1:]
