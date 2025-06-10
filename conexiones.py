@@ -1,8 +1,5 @@
-import csv
-
 from nodos import Nodo
-from validaciones import Validaciones as Val
-from vehiculos import Vehiculo
+from validaciones import Validaciones
 
 class Conexion():
     #origen  y destino en este caso seria un nodo
@@ -12,9 +9,9 @@ class Conexion():
         
         #CHEQUEAR SI LA VAL VA ACA O NO.
         try:
-            if not Val.validar_nodo(origen) and not Val.validar_nodo(destino): 
+            if not Conexion.validar_nodo(origen) and not Conexion.validar_nodo(destino):
                 raise TypeError ("el destino y el origen no son nodos validos")
-            if not Val.validar_modo (modo): 
+            if not Conexion.validar_modo(modo): 
                 raise ValueError ("el modo no es valido")
         except TypeError: 
             print (f"la conexion", origen ," ,",destino," ,", modo, " no es valida")
@@ -38,7 +35,7 @@ class Conexion():
     #Definimos los metodos de la clase:
     def setOrigen(self,origen):
         """
-        if not(Val.validar_nodo(origen)):   #FALTA DEFINIR validar_nodo en validaciones.py Y FALTA UN TRY PARA ESE RAISERROR
+        if not(Validaciones.validar_nodo(origen)):   #FALTA DEFINIR validar_nodo en validaciones.py Y FALTA UN TRY PARA ESE RAISERROR
             raise TypeError("No existe este nodo origen.")
         """
         self.origen = origen
@@ -48,7 +45,7 @@ class Conexion():
     
     def setDestino(self,destino):
         """
-        if not(Val.validar_nodo(destino)):   #FALTA DEFINIR validar_nodo en validaciones.py
+        if not(Validaciones.validar_nodo(destino)):   #FALTA DEFINIR validar_nodo en validaciones.py
             raise TypeError("No existe este nodo destino.")
         """
         self.destino = destino
@@ -58,7 +55,7 @@ class Conexion():
 
     def setModo(self,modo):
         """
-        if not(Val.validar_modo(modo)):  #FALTA DEFINIR validar_modo en validaciones.py
+        if not(Validaciones.validar_modo(modo)):  #FALTA DEFINIR validar_modo en validaciones.py
             raise TypeError("No existe este modo para estos nodos origen y destino.")
         """
         self.modo = modo.lower() #lower para que no haya errores con mayusculas y minusculas
@@ -67,7 +64,7 @@ class Conexion():
         return self.modo
 
     def setDistancia(self,distancia):
-        if not(Val.validar_float(distancia)):
+        if not(Validaciones.validar_float(distancia)):
             raise TypeError("Se ingreso una distancia inválida.")
         self.distancia = distancia
     
@@ -78,7 +75,7 @@ class Conexion():
         #preguntar si tiene sentido que sea None
         restricciones_validas = ["peso_max", "velocidad_max", "prob_mal_tiempo", "tipo", "", None]
 
-        if restriccion is not None and not Val.validar_str(restriccion):
+        if restriccion is not None and not Validaciones.validar_str(restriccion):
             raise TypeError("La restriccion debe ser una cadena de texto o None.")
 
         if restriccion not in restricciones_validas:
@@ -106,7 +103,8 @@ class Conexion():
     #Validaciones:
     
     def validar_modo (modo):
-        if modo not in (Vehiculo.getModos()): 
+        from vehiculos import Vehiculo  #CHEQUEAR SI ESTO ES VALIDO, me funciono para arreglar importacion circular
+        if modo.lower() not in (Vehiculo.getModos()): 
             return False
         else: 
             return True
@@ -118,35 +116,16 @@ class Conexion():
             return True
         
     
-    
-    
-    
+ 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#Lo de aca abajo va aca?
 
 
 #lo de la restriccion deberia ser asi:
 # si tiene restriccion, el dato restriccion sera el tipo, y lo siguiente sera la restriccion en si misma
+
+import csv
 
 def abrir_csv(nombre_csv):
     origen, destino, tipo, distancia, restriccion, valor_restriccion=[],[],[],[],[],[]

@@ -1,4 +1,4 @@
-from validaciones import Validaciones as Val
+from validaciones import Validaciones
 
 
 #IMPORTANTE: Ver si hay q validar como validamos a setNombre, a las otras funciones (agregar_conexion, etc)
@@ -6,11 +6,11 @@ from validaciones import Validaciones as Val
 class Nodo:
     def __init__(self, nombre: str):
         self.setNombre(nombre)
-        self.modos_soportados = []  # lista de strs, con los modos ya registrados, ej:"aereo", seria como si ese ciudad tiene o no aeropuerto
+        self.modos_soportados = []  # lista de strs, con los modos ya registrados, ej:"aerea", seria como si ese ciudad tiene o no aeropuerto
         self.vecinos = {}  #es un dict, donde la clave es el destino (str) y el valor es una lista con cada objeto conexion que conecta este nodo con el destino
 
     def setNombre(self, nombre):
-        if Val.validar_nombre(nombre):
+        if Validaciones.validar_nombre(nombre):
             self.nombre = nombre
         else:
             raise ValueError("El nombre del nodo no es valido")
@@ -35,6 +35,4 @@ class Nodo:
         #Revisamos si el modo estaba en la lista de modos de ese destino, si no estaba lo agregamos.
         if conexion.modo not in self.modos_soportados:
             self.modos_soportados.append(conexion.modo)
-
-        
 

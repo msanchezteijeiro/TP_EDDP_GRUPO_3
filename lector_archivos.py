@@ -114,7 +114,7 @@ def decodificar_nodos(lista_de_listas):
 
 
 
-#PRUEBAS DE COMO LEER LOS ARCHIVOS:
+#PRUEBAS DE COMO LEER LOS ARCHIVOS: #de aca para abajo se puede borrar
 
 #Imprime las conexiones de manera estructurada
 #Es solo para leerlo.

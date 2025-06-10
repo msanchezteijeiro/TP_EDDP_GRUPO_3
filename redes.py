@@ -1,9 +1,9 @@
+from lector_archivos import cargar_archivo_como_listas, decodificar_nodos, decodificar_conexiones
+from nodos import Nodo
+from conexiones import Conexion
+
 
 #INSTANCIAMOS NODOS A PARTIR DE nodos.csv
-
-from lector_archivos import cargar_archivo_como_listas, decodificar_nodos
-from nodos import Nodo
-
 
 def instanciar_nodos():
     lista_nodos = cargar_archivo_como_listas("nodos.csv")
@@ -23,9 +23,6 @@ def instanciar_nodos():
 #---------------------------------------------------------------------------------
 
 #INSTANCIAMOS LAS CONEXIONES A PARTIR DE conexiones.csv
-
-from lector_archivos import decodificar_conexiones
-from conexiones import Conexion
 
 def instanciar_conexiones(nodos):
 

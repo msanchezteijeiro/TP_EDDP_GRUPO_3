@@ -1,6 +1,5 @@
 from redes import construir_red
-from nodos import Nodo
-from vehiculos import ferroviario, automotor, maritimo, aereo
+from vehiculos import ferroviaria, automotor, fluvial, aerea
 
 
 # Definimos la función que busca todos los caminos posibles entre dos nodos, con un solo modo de transporte y sin ciclos
@@ -77,17 +76,13 @@ def construir_itinerario(nodos, solicitud):
 
 
 #AGREGAMOS EL TEMA DE COSTOS:
-#La idea seria que a restultados, q es un diccionario con clave por cada modo, y una lista
-
-
 
 
 vehiculos_por_modo = {
-    "ferroviaria": ferroviario,
+    "ferroviaria": ferroviaria,
     "automotor": automotor,
-    "maritimo": maritimo,
-    "fluvial": maritimo,
-    "aereo": aereo
+    "fluvial": fluvial,
+    "aerea": aerea
 }
 
 def calcular_costos_y_tiempos(resultados, carga_kg):
@@ -155,8 +150,8 @@ if __name__ == "__main__":
 
 
 
-    #evaluados = calcular_costos_y_tiempos(prueba, carga_kg=5000)
-    #imprimir_costos_y_tiempos(prueba)
+    evaluados = calcular_costos_y_tiempos(prueba, carga_kg=5000)
+    imprimir_costos_y_tiempos(evaluados)
     
 
 
