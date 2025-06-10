@@ -1,3 +1,4 @@
+from information import Informacion
 from redes import construir_red
 from vehiculos import ferroviaria, automotor, fluvial, aerea
 
@@ -85,15 +86,16 @@ vehiculos_por_modo = {
     "aerea": aerea
 }
 
-def calcular_costos_y_tiempos(resultados, carga_kg):
+def calcular_costos_y_tiempos(resultados, carga_kg): #cambie esta funcion para que evaluados salga como un diccionario que tenga como clave un id 
+    #y que guarde como valor, el objeto de la clase infromacion recien creada. esto baja la complejidad de lo que estmaos haciendo 
     evaluados = {}
+    id_actual = 1
 
     for modo, caminos in resultados.items():
         vehiculo = vehiculos_por_modo.get(modo.lower())
         if vehiculo is None:
             continue
 
-        evaluados[modo] = []
         for camino in caminos:
             costo_total = 0
             tiempo_total = 0
@@ -104,9 +106,13 @@ def calcular_costos_y_tiempos(resultados, carga_kg):
                 except Exception as e:
                     print(f"Error al calcular para {conexion}: {e}")
                     continue
-            evaluados[modo].append((camino, costo_total, tiempo_total))
+
+            info = Informacion(modo, camino, costo_total, tiempo_total)
+            evaluados[id_actual] = info
+            id_actual += 1
 
     return evaluados
+
 
 
 
@@ -153,5 +159,9 @@ if __name__ == "__main__":
     evaluados = calcular_costos_y_tiempos(prueba, carga_kg=5000)
     imprimir_costos_y_tiempos(evaluados)
     
-
-
+'''
+def kp1(evaluados):
+    #este es el del timepo que le pasa como parametro el diccionario con los posibles caminos
+    for (clave) in evaluados:
+        print("->", clave, "\n")
+'''
