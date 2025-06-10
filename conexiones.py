@@ -16,9 +16,6 @@ class Conexion():
         self.setDestino(destino)
         self.setModo(modo)    
         self.setDistancia(distancia)
-        self.restriccion = restriccion
-        self.valor_restriccion = valor_restriccion
-
         self.setRestriccion(restriccion)
         self.setValorRestriccion(valor_restriccion)
 
