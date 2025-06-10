@@ -2,7 +2,7 @@ from redes import construir_red
 
 # Definimos la función que busca todos los caminos posibles entre dos nodos, con un solo modo de transporte y sin ciclos
 
-def encontrar_caminos_para_solicitud(nodos, solicitud):
+def construir_itinerario(nodos, solicitud):
     """
     Dada una solicitud, encuentra todos los caminos posibles entre origen y destino,
     respetando:
@@ -78,7 +78,10 @@ def encontrar_caminos_para_solicitud(nodos, solicitud):
 if __name__ == "__main__":
     # código de prueba local_
 
-    prueba = encontrar_caminos_para_solicitud(nodos_existentes, {
+    nodos_existentes = construir_red()  # Cargamos la red de transporte
+
+    # Definimos una solicitud de carga
+    prueba = construir_itinerario(nodos_existentes, {
         'CARGA_001': {
             'peso_kg': 70000.0,
             'origen': 'Zarate',
