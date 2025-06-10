@@ -1,5 +1,3 @@
-
-
 #INSTANCIAMOS NODOS A PARTIR DE nodos.csv
 
 from lector_archivos import cargar_archivo_como_listas, decodificar_nodos
