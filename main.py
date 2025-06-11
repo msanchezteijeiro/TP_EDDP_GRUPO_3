@@ -20,6 +20,7 @@ if __name__ == "__main__":
 
         print(kp2(evaluados))
 
+#no se porque no aparecen todos los vehiculos en la terminal, habria que chequear
 '''
 if __name__ == "__main__":
     nodos_existentes = construir_red()

@@ -106,10 +106,8 @@ class Ferroviaria (Vehiculo):
         if not isinstance (conexion, Conexion):
             raise TypeError ('No se ingreso una conexion valida')
         cantidad_vehiculos = (carga + self.capacidad - 1)//self.capacidad #division con redondeo hacia arriba
-        if conexion.distancia < 200: 
-            costo = (conexion.distancia * 20 + self.costo_por_kg * carga + self.costo_fijo)*cantidad_vehiculos
-        elif conexion.distancia >= 200: 
-            costo = (conexion.distancia * 20 + self.costo_por_kg * carga + self.costo_fijo)*cantidad_vehiculos
+        costo = (conexion.distancia * 20 + self.costo_por_kg * carga + self.costo_fijo)*cantidad_vehiculos
+        #fijarse si existe lo de que con cierta distancia el precio cambia
         return costo
     
     def calcular_tiempo (self, conexion): 
@@ -175,10 +173,8 @@ class Automotor (Vehiculo):
     def calcular_costo (self, conexion, carga): 
         if not isinstance (conexion, Conexion): 
             raise TypeError ('No se ingreso una conexion valida')
-        if carga < 150000: 
-            costo = conexion.distancia * self.costo_por_km + carga * 1 + self.costo_fijo
-        elif carga >= 150000: 
-            costo = conexion.distancia * self.costo_por_km + carga * 2 + self.costo_fijo
+        cantidad_vehiculos = (carga + self.capacidad - 1)//self.capacidad #division con redondeo hacia arriba
+        costo = (conexion.distancia * self.costo_por_km + carga * 1 + self.costo_fijo)*cantidad_vehiculos
         return costo
     
     def calcular_tiempo (self, conexion): 
@@ -343,3 +339,7 @@ if __name__ == "__main__":
 #TAL VEZ deberiamos tener definidas las funciones de calcular_costo y calcular_tiempo en la clase Vehiculo, 
 # y que cada vehiculo las implemente, o sea, que cada vehiculo tenga su propia implementacion de esas funciones.
 #PREGUNTAR SI ES NECESARIO
+
+#arreglamos los costos, aunque algunas condiciones me parece que no hacian falta, de las clases de los ferroviarios, fluvial, etc
+#quedaron iguales que en la tabla de la consigna 
+# parametros como el costo por kilometro habria que pasarlo en el innit
