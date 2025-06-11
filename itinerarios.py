@@ -1,3 +1,4 @@
+from information import Informacion
 from redes import construir_red
 from vehiculos import ferroviaria, automotor, fluvial, aerea
 
@@ -85,15 +86,16 @@ vehiculos_por_modo = {
     "aerea": aerea
 }
 
-def calcular_costos_y_tiempos(resultados, carga_kg):
+def calcular_costos_y_tiempos(resultados, carga_kg): #cambie esta funcion para que evaluados salga como un diccionario que tenga como clave un id 
+    #y que guarde como valor, el objeto de la clase infromacion recien creada. esto baja la complejidad de lo que estmaos haciendo 
     evaluados = {}
+    id_actual = 1
 
     for modo, caminos in resultados.items():
         vehiculo = vehiculos_por_modo.get(modo.lower())
         if vehiculo is None:
             continue
 
-        evaluados[modo] = []
         for camino in caminos:
             costo_total = 0
             tiempo_total = 0
@@ -104,13 +106,17 @@ def calcular_costos_y_tiempos(resultados, carga_kg):
                 except Exception as e:
                     print(f"Error al calcular para {conexion}: {e}")
                     continue
-            evaluados[modo].append((camino, costo_total, tiempo_total))
+
+            info = Informacion(modo, camino, costo_total, tiempo_total)
+            evaluados[id_actual] = info
+            id_actual += 1
 
     return evaluados
 
 
 
 
+'''
 def imprimir_costos_y_tiempos(evaluados):
     print(f"{'Modo':<12} | {'Camino':<40} | {'Costo Total':<12} | {'Tiempo Total (min)':<20}")
     print("-" * 90)
@@ -118,8 +124,14 @@ def imprimir_costos_y_tiempos(evaluados):
         for camino, costo, tiempo in caminos:
             camino_str = " -> ".join([f"{c.modo}:{c.distancia}km" for c in camino])
             print(f"{modo:<12} | {camino_str:<40} | {costo:<12.2f} | {tiempo:<20.2f}")
+'''
 
-
+def imprimir_costos_y_tiempos(evaluados):
+    print(f"{'ID':<4} | {'Modo':<12} | {'Costo Total':<12} | {'Tiempo Total (min)':<20} | Camino")
+    print("-" * 100)
+    for id_, info in evaluados.items():
+        camino_str = " -> ".join([f"{c.origen.nombre}→{c.destino.nombre}" for c in info.camino])
+        print(f"{id_:<4} | {info.modo:<12} | ${info.costo:<11.2f} | {info.tiempo:<19.2f} | {camino_str}")
 
 
 
@@ -153,5 +165,34 @@ if __name__ == "__main__":
     evaluados = calcular_costos_y_tiempos(prueba, carga_kg=5000)
     imprimir_costos_y_tiempos(evaluados)
     
+
+def kp1(evaluados):
+    #este es el del timepo que le pasa como parametro el diccionario con los posibles caminos
+    #el costo total esta mal pero el timepo bien
+    tiempo_min = 0
+    res = None
+    for (clave, valor) in evaluados.items():#preguntar si se puede usar, inf
+        tiempo_min += valor.tiempo
+    for (clave, valor) in evaluados.items():
+        if tiempo_min> valor.tiempo:
+            tiempo_min=valor.tiempo
+            res = valor
+    print("Mejor itinerario según KPI 1 (menor tiempo):")
+    return res
+
+def kp2(evaluados): #este anda bien pero el calcullo de los costos esta mal
+    # Este es el del costo: devuelve el camino con menor costo total
+    costo_min = None
+    res = None
+
+    for clave, valor in evaluados.items():
+        if costo_min is None:
+            costo_min = valor.costo
+            res = valor
+        elif valor.costo < costo_min:
+            costo_min = valor.costo
+            res = valor
+    print("Mejor itinerario según KPI 2 (menor costo):")
+    return res
 
 

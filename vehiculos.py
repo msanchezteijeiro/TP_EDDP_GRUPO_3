@@ -106,10 +106,9 @@ class Ferroviaria (Vehiculo):
     def calcular_costo (self, conexion, carga): 
         if not isinstance (conexion, Conexion):
             raise TypeError ('No se ingreso una conexion valida')
-        if conexion.distancia < 200: 
-            costo = conexion.distancia * 20 + self.costo_por_kg * carga + self.costo_fijo
-        elif conexion.distancia >= 200: 
-            costo = conexion.distancia * 15 + self.costo_por_kg * carga + self.costo_fijo
+        cantidad_vehiculos = (carga + self.capacidad - 1)//self.capacidad #division con redondeo hacia arriba
+        costo = (conexion.distancia * 20 + self.costo_por_kg * carga + self.costo_fijo)*cantidad_vehiculos
+        #fijarse si existe lo de que con cierta distancia el precio cambia
         return costo
     
     def calcular_tiempo (self, conexion): #CHEQUEAR SI CUANDO SE USAN ESTAS FUNCIONES SE USA UN EXCEPT PARA EL ERROR
@@ -175,10 +174,8 @@ class Automotor (Vehiculo):
     def calcular_costo (self, conexion, carga): 
         if not isinstance (conexion, Conexion): 
             raise TypeError ('No se ingreso una conexion valida')
-        if carga < 150000: 
-            costo = conexion.distancia * self.costo_por_km + carga * 1 + self.costo_fijo
-        elif carga >= 150000: 
-            costo = conexion.distancia * self.costo_por_km + carga * 2 + self.costo_fijo
+        cantidad_vehiculos = (carga + self.capacidad - 1)//self.capacidad #division con redondeo hacia arriba
+        costo = (conexion.distancia * self.costo_por_km + carga * 1 + self.costo_fijo)*cantidad_vehiculos
         return costo
     
     def calcular_tiempo (self, conexion): 
@@ -327,7 +324,8 @@ class Aerea (Vehiculo):
 
 #DEFINICION DE LOS VEHICULO: NO BORRAR!!
 
-ferroviaria = Ferroviaria(15000, 100, 100, 3)
+#def __init__ (self, capacidad, velocidad, costo_fijo, costo_por_kg, modo ='ferroviaria'):
+ferroviaria = Ferroviaria(150000, 100, 100, 3)
 automotor = Automotor(30000, 80, 30, 5)
 fluvial = Fluvial(100000, 40, 15, 2)
 aerea =  Aerea(5000, 750, 40, 10)
@@ -345,3 +343,7 @@ if __name__ == "__main__":
 #TAL VEZ deberiamos tener definidas las funciones de calcular_costo y calcular_tiempo en la clase Vehiculo, 
 # y que cada vehiculo las implemente, o sea, que cada vehiculo tenga su propia implementacion de esas funciones.
 #PREGUNTAR SI ES NECESARIO
+
+#arreglamos los costos, aunque algunas condiciones me parece que no hacian falta, de las clases de los ferroviarios, fluvial, etc
+#quedaron iguales que en la tabla de la consigna 
+# parametros como el costo por kilometro habria que pasarlo en el innit
