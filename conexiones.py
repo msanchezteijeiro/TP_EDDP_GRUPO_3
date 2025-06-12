@@ -17,15 +17,15 @@ class Conexion():
                 raise TypeError (f"el nodo destino {destino} no es valido")
             if not Conexion.validar_modo(modo):
                 raise ValueError(f"El modo {modo} no es valido")
-            if not(Validaciones.validar_float(distancia)):
+            if not Validaciones.validar_float(distancia):
                 raise TypeError("Se ingreso una distancia inválida.")
             if not Validaciones.validar_tipo_restriccion(restriccion):
                 raise ValueError(f"Tipo de restriccion no valido: {restriccion}")
-            if not Validaciones.validar_valor_restriccion(valor_restriccion):
+            if (restriccion == None) and not Validaciones.validar_valor_restriccion(valor_restriccion):   
                 raise ValueError(f"Valor de restriccion no reconocido: {valor_restriccion}")
             
         except Exception as e: 
-            print (f"La conexion", origen ," ,",destino," ,", modo, " no es valida. Error: {e}")
+            print (f"La conexion {origen}, {destino}, {modo}, no es valida. Error ERRORRR: {e}")
         
         
         #Seteamos los atributos de la clase:

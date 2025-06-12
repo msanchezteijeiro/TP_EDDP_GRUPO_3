@@ -59,16 +59,17 @@ class Validaciones:
 
         return False
 
-
     @staticmethod
     def validar_valor_restriccion(valor_restriccion):
-        valores_restriccion_validos = ["fluvial", "maritimo"]
+        valores_restriccion_validos = ["fluvial", "maritimo", None]
 
-        if Validaciones.validar_str(valor_restriccion):
-            return valor_restriccion in valores_restriccion_validos
-        elif Validaciones.validar_int (valor_restriccion) and Validaciones.validar_float(valor_restriccion):
+        if valor_restriccion in valores_restriccion_validos:
             return True
-        else:
+
+        try:
+            float(valor_restriccion)  # sirve para ambos: int y float
+            return True
+        except ValueError:
             return False
 
 

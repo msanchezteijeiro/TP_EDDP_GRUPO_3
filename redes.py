@@ -29,10 +29,8 @@ def instanciar_conexiones(nodos):
     lista_conexiones = cargar_archivo_como_listas("conexiones.csv")
     diccionario_conexiones = decodificar_conexiones(lista_conexiones)
 
-
     # Recorremos el diccionario de conexiones donde las claves son nodos origen y cada valor es otro dic con 
     # cada nodos destino y los datos de la conexion (modo, distancia, restriccion, valor_restriccion)
-
 
     for origen, destinos in diccionario_conexiones.items(): #para cada par llave-valor
 
@@ -43,30 +41,7 @@ def instanciar_conexiones(nodos):
                         #salta directamente a la siguiente iteración, saltándose el resto del código dentro del loop actual.
                         #sino es facil de reemplazar usando un if y un else englobando todo el resto del código
 
-
         #cada origen tiene como valor un diccionario donde las claves son los destinos y los valores una lista de las conexiones q tiene (todo en subdiccionarios):
-
-        """
-        Ejemplo: BORRAR DESPUES:
-
-        {'Zarate': {'Buenos_Aires': [{'modo': 'Ferroviaria', 'distancia': 85.0, 'restriccion': 'velocidad_max', 'valor_restriccion': '80'},
-        {'modo': 'Automotor', 'distancia': 85.0, 'restriccion': None, 'valor_restriccion': None}, 
-        {'modo': 'Fluvial', 'distancia': 85.0, 'restriccion': 'tipo', 'valor_restriccion': 'fluvial'}], 
-        'Junin': [{'modo': 'Ferroviaria', 'distancia': 185.0, 'restriccion': None, 'valor_restriccion': None}, 
-        {'modo': 'Automotor', 'distancia': 185.0, 'restriccion': 'peso_max', 'valor_restriccion': '15000'}]},....aca continuaria otro origen....
-        .....}
-
-        - Organizado mas lindo:
-        Origen: Zarate
-        ➜ Destino: Buenos_Aires
-            - Modo: Ferroviaria, Distancia: 85.0 km, Restricción: velocidad_max = 80
-            - Modo: Automotor, Distancia: 85.0 km
-            - Modo: Fluvial, Distancia: 85.0 km, Restricción: tipo = fluvial
-        ➜ Destino: Junin
-            - Modo: Ferroviaria, Distancia: 185.0 km
-            - Modo: Automotor, Distancia: 185.0 km, Restricción: peso_max = 15000
-        """
-
         #recorremos esos diccionarios internos para crear las conexiones, 
         #usamos destinos.items() para obtener los pares clave-valor de cada destino y sus datos de conexion
         for destino, lista_conexiones in destinos.items(): #osea for cada destino y sus modos de conexion....
@@ -108,7 +83,6 @@ def instanciar_conexiones(nodos):
                 nodos[destino].agregar_conexion(origen, conexion_inversa)
 
 
-
 def construir_red():
     nodos_existentes = instanciar_nodos()
     instanciar_conexiones(nodos_existentes)
@@ -128,7 +102,10 @@ def construir_red():
 if __name__ == "__main__":
     # código de prueba local_
 
-    nodos_existentes = construir_red()
+    try:
+        nodos_existentes = construir_red()
+    except Exception as e:
+        print("Error al contruir la red: {e}")
 
 """
     # Prueba
