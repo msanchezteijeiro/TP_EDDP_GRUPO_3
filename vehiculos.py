@@ -106,17 +106,26 @@ class Ferroviaria (Vehiculo):
     def calcular_costo (self, conexion, carga): 
         if not isinstance (conexion, Conexion):
             raise TypeError ('No se ingreso una conexion valida')
+
+        if conexion.distancia < 200:
+            costo_por_km = 20
+        else:
+            costo_por_km = 15
+        
+        costo_por_vehiculo = (conexion.distancia * costo_por_km) + (carga * self.costo_por_kg) + self.costo_fijo #VER SI USAR GETDISTANCIA
         cantidad_vehiculos = (carga + self.capacidad - 1)//self.capacidad #division con redondeo hacia arriba
-        costo = (conexion.distancia * 20 + self.costo_por_kg * carga + self.costo_fijo)*cantidad_vehiculos
-        #fijarse si existe lo de que con cierta distancia el precio cambia
-        return costo
+        
+        costo_total = costo_por_vehiculo * cantidad_vehiculos
+
+        return costo_total
+        
     
     def calcular_tiempo (self, conexion): #CHEQUEAR SI CUANDO SE USAN ESTAS FUNCIONES SE USA UN EXCEPT PARA EL ERROR
         if not isinstance (conexion, Conexion):
             raise TypeError ('No se ingreso una conexion valida')
         tiempo_minutos = (conexion.distancia/self.velocidad)*60
         return tiempo_minutos
-        
+
 
 class Automotor (Vehiculo): 
     def __init__ (self, capacidad, velocidad, costo_fijo, costo_por_km, modo = "automotor"):
@@ -174,9 +183,18 @@ class Automotor (Vehiculo):
     def calcular_costo (self, conexion, carga): 
         if not isinstance (conexion, Conexion): 
             raise TypeError ('No se ingreso una conexion valida')
+        
+        if carga < 150000:
+            costo_por_kg = 1
+        else:
+            costo_por_kg = 2
+        
+        costo_por_vehiculo = (conexion.distancia * self.costo_por_km) + (carga * costo_por_kg) + self.costo_fijo #VER SI USAR GETDISTANCIA
         cantidad_vehiculos = (carga + self.capacidad - 1)//self.capacidad #division con redondeo hacia arriba
-        costo = (conexion.distancia * self.costo_por_km + carga * 1 + self.costo_fijo)*cantidad_vehiculos
-        return costo
+        
+        costo_total = costo_por_vehiculo * cantidad_vehiculos
+
+        return costo_total
     
     def calcular_tiempo (self, conexion): 
         if not isinstance (conexion, Conexion):
@@ -242,11 +260,19 @@ class Fluvial (Vehiculo):
     def calcular_costo (self, conexion, carga): 
         if not isinstance (conexion, Conexion): 
             raise TypeError ('No se ingreso una conexion valida')
+
         if conexion.valor_restriccion == 'fluvial': 
-            costo = conexion.distancia * self.costo_por_km + carga * self.costo_por_kg + 500
+            costo_fijo = 500
         elif conexion.valor_restriccion == 'maritimo':
-            costo = conexion.distancia * self.costo_por_km + carga * self.costo_por_kg + 1500
-        return costo
+            costo_fijo = 1500
+
+        costo_por_vehiculo = (conexion.distancia * self.costo_por_km) + (carga * self.costo_por_kg) + costo_fijo #VER SI USAR GETDISTANCIA
+        cantidad_vehiculos = (carga + self.capacidad - 1)//self.capacidad #division con redondeo hacia arriba
+        
+        costo_total = costo_por_vehiculo * cantidad_vehiculos
+
+        return costo_total
+
     
     def calcular_tiempo (self, conexion): 
         if not isinstance (conexion, Conexion):
@@ -273,16 +299,16 @@ class Aerea (Vehiculo):
         self.costo_por_kg = costo_por_kg
         
         
-    def set_Velocidad (self, costo_fijo): 
+    def setCosto_fijo (self, costo_fijo): 
         try: 
             if not Validaciones.validar_int (costo_fijo) and not Validaciones.validar_float(costo_fijo): 
-                raise TypeError ("la velocidad debe ser un numero")
+                raise TypeError ("el costo fijo debe ser un numero")
         except TypeError as e: 
             print(f"Error: {e}")
             
         self.cosot_fijo = costo_fijo
     
-    def setCosto_fijo (self, costo_por_kg):
+    def setCosto_por_kg (self, costo_por_kg):
         try: 
             if not Validaciones.validar_int (costo_por_kg) and not Validaciones.validar_float(costo_por_kg): 
                 raise TypeError ("el costo por kg debe ser un numero")
@@ -312,7 +338,21 @@ class Aerea (Vehiculo):
     def calcular_costo (self, conexion, carga): 
         if not isinstance (conexion, Conexion): 
             raise TypeError ('No se ingreso una conexion valida')
+
+        if conexion.tipo_restriccion == "prob_mal_tiempo": 
+            velocidad = 400
+        else: 
+            velocidad = 400
+            
         costo = conexion.distancia * self.costo_por_km + self.costo_fijo + carga * self.costo_por_kg
+        
+
+        costo_por_vehiculo = (conexion.distancia * self.costo_por_km) + (carga * self.costo_por_kg) + costo_fijo #VER SI USAR GETDISTANCIA
+        cantidad_vehiculos = (carga + self.capacidad - 1)//self.capacidad #division con redondeo hacia arriba
+        
+        costo_total = costo_por_vehiculo * cantidad_vehiculos
+        
+        
         return costo
         
     def calcular_tiempo (self, conexion): 
@@ -322,13 +362,31 @@ class Aerea (Vehiculo):
 
 
 
+    def calcular_costo (self, conexion, carga): 
+        if not isinstance (conexion, Conexion): 
+            raise TypeError ('No se ingreso una conexion valida')
+        costo = conexion.distancia * self.costo_por_km + self.costo_fijo + carga * self.costo_por_kg
+        return costo
+
+    def calcular_tiempo (self, conexion): 
+        if not isinstance (conexion, Conexion):
+            raise TypeError ('No se ingreso una conexion valida')
+        pass
+
+
 #DEFINICION DE LOS VEHICULO: NO BORRAR!!
 
-#def __init__ (self, capacidad, velocidad, costo_fijo, costo_por_kg, modo ='ferroviaria'):
-ferroviaria = Ferroviaria(150000, 100, 100, 3)
-automotor = Automotor(30000, 80, 30, 5)
-fluvial = Fluvial(100000, 40, 15, 2)
-aerea =  Aerea(5000, 750, 40, 10)
+#no se pasa por parametro aquellos valores que dependen de algo, se calculan por metodos
+
+try:
+    ferroviaria = Ferroviaria(150000, 100, 100, 3) #capacidad, velocidad, costo_fijo, costo_por_kg
+    automotor = Automotor(30000, 80, 30, 5) #capacidad, velocidad, costo_fijo, costo_por_km
+    fluvial = Fluvial(100000, 40, 15, 2) #capacidad, velocidad, costo_por_km, costo_por_kg
+    aerea =  Aerea(5000, 750, 40, 10) #capacidad, costo_fijo, costo_por_km, costo_por_kg
+except TypeError as e:
+    print(f"Error: {e}")
+except Exception as e:
+    print(f"Error: {e}")
 
 
 vehiculos_por_modo = {

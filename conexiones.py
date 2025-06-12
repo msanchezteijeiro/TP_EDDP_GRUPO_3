@@ -1,18 +1,22 @@
 from nodos import Nodo
 from validaciones import Validaciones
 
+#conexiones.py
+
 class Conexion():
     #origen  y destino en este caso seria un nodo
     # en este caso el tipo de clase de vehiculos
 
-    def __init__(self, origen: Nodo, destino: Nodo, modo, distancia: int, restriccion = None, valor_restriccion = None):
+    def __init__(self, origen: Nodo, destino: Nodo, modo:str, distancia: int, restriccion = None, valor_restriccion = None):
         
         #CHEQUEAR SI LA VAL VA ACA O NO.
         try:
-            if not Conexion.validar_nodo(origen) and not Conexion.validar_nodo(destino):
-                raise TypeError ("el destino y el origen no son nodos validos")
-            if not Conexion.validar_modo(modo): 
-                raise ValueError ("el modo no es valido")
+            if not Conexion.validar_nodo(origen):
+                raise TypeError (f"el nodo origen {origen} no es valido")
+            if not Conexion.validar_nodo(destino):
+                raise TypeError (f"el nodo destino {destino} no es valido")
+            if not Conexion.validar_modo(modo):
+                raise ValueError(f"El modo {modo} no es valido")
         except TypeError: 
             print (f"la conexion", origen ," ,",destino," ,", modo, " no es valida")
         except ValueError:
@@ -23,7 +27,7 @@ class Conexion():
         
         self.origen = origen
         self.destino = destino 
-        self.modo = modo
+        self.modo = modo.lower()
         self.distancia = distancia
         self.restriccion = restriccion
         self.valor_restriccion = valor_restriccion
@@ -101,14 +105,16 @@ class Conexion():
     
 
     #Validaciones:
-    
+    #por ahi conviene hacer un modos_validos = {"aerea", "automotor", "ferroviaria", "fluvial"} porque son estaticos
+    @staticmethod
     def validar_modo (modo):
         from vehiculos import Vehiculo  #CHEQUEAR SI ESTO ES VALIDO, me funciono para arreglar importacion circular
         if modo.lower() not in (Vehiculo.getModos()): 
             return False
         else: 
             return True
-        
+    
+    @staticmethod
     def validar_nodo(nodo): 
         if not isinstance (nodo, Nodo):
             return False

@@ -4,6 +4,8 @@
 
 #Si es asi, preparar una funcion que reciba 
 
+#ver si hace falta validar 
+
 from lector_archivos import cargar_archivo_como_listas, decodificar_solicitudes
 
 

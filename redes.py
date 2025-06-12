@@ -2,7 +2,7 @@ from lector_archivos import cargar_archivo_como_listas, decodificar_nodos, decod
 from nodos import Nodo
 from conexiones import Conexion
 
-
+#redes.py
 #INSTANCIAMOS NODOS A PARTIR DE nodos.csv
 
 def instanciar_nodos():

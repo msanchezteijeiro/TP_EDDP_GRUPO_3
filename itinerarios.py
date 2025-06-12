@@ -1,6 +1,28 @@
-from information import Informacion
 from redes import construir_red
 from vehiculos import Vehiculo, vehiculos_por_modo
+
+#Definimos clase Itinerario:
+
+class Itinerario:
+    def __init__(self, modo: str, camino: list, costo: float, tiempo: float):
+        #crear esto para guardar mejor la informacion del itinerario
+        #preguntar si hace falta validar
+        #agregar getters y setters??
+        self.modo = modo
+        self.camino = camino
+        self.costo = costo
+        self.tiempo = tiempo
+
+        
+    def __repr__(self):
+        camino_str = " -> ".join(
+            f"{c.origen.nombre} → {c.destino.nombre} ({c.distancia} km)" for c in self.camino
+        )
+        return (f"Modo: {self.modo}\n"
+                f"Camino: {camino_str}\n"
+                f"Costo Total: ${self.costo:.2f}\n"
+                f"Tiempo Total: {self.tiempo:.2f} minutos")
+
 
 
 # Definimos la función que busca todos los caminos posibles entre dos nodos, con un solo modo de transporte y sin ciclos
@@ -74,7 +96,7 @@ def construir_itinerario(nodos, solicitud):
                        #Ejemplo: {...,'fluvial': [[Conexion(Nodo(Zarate) -> Nodo(Buenos_Aires)), Conexion(Nodo(Buenos_Aires) -> Nodo(Mar_del_Plata)]],...}
                         #Del modo fluvial hay un solo itinerario, que va de Zarate a Buenos Aires y de ahi a Mar del Plata.
 
-
+#preguntar por temas de complejidad, igual si es una red de grafos chica, no deberia dar problema 
 
 #AGREGAMOS EL TEMA DE COSTOS:
 
@@ -101,7 +123,7 @@ def calcular_costos_y_tiempos(resultados, carga_kg): #cambie esta funcion para q
                     print(f"Error al calcular para {conexion}: {e}")
                     continue
 
-            info = Informacion(modo, camino, costo_total, tiempo_total)
+            info = Itinerario(modo, camino, costo_total, tiempo_total)
             evaluados[id_actual] = info
             id_actual += 1
 
@@ -137,7 +159,7 @@ def kp1(evaluados):
     print("Mejor itinerario según KPI 1 (menor tiempo):")
     return res
 
-def kp2(evaluados): #este anda bien pero el calcullo de los costos esta mal
+def kp2(evaluados): 
     # Este es el del costo: devuelve el camino con menor costo total
     costo_min = None
     res = None
@@ -186,5 +208,6 @@ if __name__ == "__main__":
     evaluados = calcular_costos_y_tiempos(prueba, carga_kg=5000)
     imprimir_costos_y_tiempos(evaluados)
 """
+
 
 
