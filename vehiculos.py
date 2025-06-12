@@ -331,6 +331,14 @@ fluvial = Fluvial(100000, 40, 15, 2)
 aerea =  Aerea(5000, 750, 40, 10)
 
 
+vehiculos_por_modo = {
+    "ferroviaria": ferroviaria,
+    "automotor": automotor,
+    "fluvial": fluvial,
+    "aerea": aerea
+}
+
+
 #TESTEAMOS:
 if __name__ == "__main__":
     # código de prueba local_

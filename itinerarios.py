@@ -1,6 +1,6 @@
 from information import Informacion
 from redes import construir_red
-from vehiculos import ferroviaria, automotor, fluvial, aerea
+from vehiculos import Vehiculo, vehiculos_por_modo
 
 
 # Definimos la función que busca todos los caminos posibles entre dos nodos, con un solo modo de transporte y sin ciclos
@@ -79,24 +79,18 @@ def construir_itinerario(nodos, solicitud):
 #AGREGAMOS EL TEMA DE COSTOS:
 
 
-vehiculos_por_modo = {
-    "ferroviaria": ferroviaria,
-    "automotor": automotor,
-    "fluvial": fluvial,
-    "aerea": aerea
-}
 
 def calcular_costos_y_tiempos(resultados, carga_kg): #cambie esta funcion para que evaluados salga como un diccionario que tenga como clave un id 
     #y que guarde como valor, el objeto de la clase infromacion recien creada. esto baja la complejidad de lo que estmaos haciendo 
     evaluados = {}
     id_actual = 1
 
-    for modo, caminos in resultados.items():
-        vehiculo = vehiculos_por_modo.get(modo.lower())
+    for modo, caminos in resultados.items(): #modo es un str, caminos una lista de listas con las conexiones.
+        vehiculo = vehiculos_por_modo.get((modo.lower())) #del diccionario vehiculos_por_modo, se el objeto vehiculo correspondiente al modo
         if vehiculo is None:
-            continue
+            continue #osea si no existe ese vehiculo este ni siquiera es analizado, ni aparecera en el dict "evaluados" devuelto
 
-        for camino in caminos:
+        for camino in caminos: #camino es una lista de objetos conexion
             costo_total = 0
             tiempo_total = 0
             for conexion in camino:
@@ -115,56 +109,19 @@ def calcular_costos_y_tiempos(resultados, carga_kg): #cambie esta funcion para q
 
 
 
-
-'''
-def imprimir_costos_y_tiempos(evaluados):
-    print(f"{'Modo':<12} | {'Camino':<40} | {'Costo Total':<12} | {'Tiempo Total (min)':<20}")
-    print("-" * 90)
-    for modo, caminos in evaluados.items():
-        for camino, costo, tiempo in caminos:
-            camino_str = " -> ".join([f"{c.modo}:{c.distancia}km" for c in camino])
-            print(f"{modo:<12} | {camino_str:<40} | {costo:<12.2f} | {tiempo:<20.2f}")
-'''
-
 def imprimir_costos_y_tiempos(evaluados):
     print(f"{'ID':<4} | {'Modo':<12} | {'Costo Total':<12} | {'Tiempo Total (min)':<20} | Camino")
     print("-" * 100)
-    for id_, info in evaluados.items():
-        camino_str = " -> ".join([f"{c.origen.nombre}→{c.destino.nombre}" for c in info.camino])
-        print(f"{id_:<4} | {info.modo:<12} | ${info.costo:<11.2f} | {info.tiempo:<19.2f} | {camino_str}")
-
-
-
-#TESTEAMOS:
-if __name__ == "__main__":
-    # código de prueba local_
-
-    nodos_existentes = construir_red()  # Cargamos la red de transporte
-
-    # Definimos una solicitud de carga
-    prueba = construir_itinerario(nodos_existentes, {
-        'CARGA_001': {
-            'peso_kg': 70000.0,
-            'origen': 'Zarate',
-            'destino': 'Mar_del_Plata'
-        }
-    })
-
-    print(prueba)
-
-
-    #Mini codigo q imprime los caminos encontrados de manera mas linda:
-    print("Caminos encontrados:")
-    for modo, caminos in prueba.items():
-        print(f"\nModo: {modo}")
-        for camino in caminos:
-            print(" -> ".join([f"{conexion.origen.nombre} -> {conexion.destino.nombre}" for conexion in camino]))
-
-
-
-    evaluados = calcular_costos_y_tiempos(prueba, carga_kg=5000)
-    imprimir_costos_y_tiempos(evaluados)
     
+    for id_, info in evaluados.items(): #CHEQUEAR SI HAY Q USAR LOS GETS de origen y nombre (de conexion y nodo)
+        camino_limpio = [info.camino[0].origen.nombre] #empiezo lista con el primer nodo origen 
+        camino_limpio += [c.destino.nombre for c in info.camino] #le agregamos solo los destinos de cada conexion
+        camino_str = " → ".join(camino_limpio) #transformamos la lista final en un str
+
+        print(f"{id_:<4} | {info.modo:<12} | ${info.costo:<11.2f} | {info.tiempo:<20.2f} | {camino_str}")
+
+
+
 
 def kp1(evaluados):
     #este es el del timepo que le pasa como parametro el diccionario con los posibles caminos
@@ -194,5 +151,40 @@ def kp2(evaluados): #este anda bien pero el calcullo de los costos esta mal
             res = valor
     print("Mejor itinerario según KPI 2 (menor costo):")
     return res
+
+
+
+
+"""
+#TESTEAMOS:
+if __name__ == "__main__":
+    # código de prueba local_
+
+    nodos_existentes = construir_red()  # Cargamos la red de transporte
+
+    # Definimos una solicitud de carga
+    prueba = construir_itinerario(nodos_existentes, {
+        'CARGA_001': {
+            'peso_kg': 70000.0,
+            'origen': 'Zarate',
+            'destino': 'Mar_del_Plata'
+        }
+    })
+
+    print(prueba)
+
+
+    #Mini codigo q imprime los caminos encontrados de manera mas linda:
+    print("Caminos encontrados:")
+    for modo, caminos in prueba.items():
+        print(f"\nModo: {modo}")
+        for camino in caminos:
+            print(" -> ".join([f"{conexion.origen.nombre} -> {conexion.destino.nombre}" for conexion in camino]))
+
+
+
+    evaluados = calcular_costos_y_tiempos(prueba, carga_kg=5000)
+    imprimir_costos_y_tiempos(evaluados)
+"""
 
 
