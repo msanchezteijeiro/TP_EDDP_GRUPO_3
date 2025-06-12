@@ -1,5 +1,5 @@
 import csv
-
+#lector_archivos.py
 #IMPORTANTE: FALTA AGREGAR UN MANEJO DE ERRORES PARA LOS ARCHIVOS QUE NO EXISTAN O ESTEN MAL FORMADOS!!!!!
 
 def cargar_archivo_como_listas(ruta_archivo):
@@ -8,17 +8,21 @@ def cargar_archivo_como_listas(ruta_archivo):
     Cada línea del archivo se convierte en una sublista de strings.
     """
     filas = []
-
-    with open(ruta_archivo, "r", encoding="utf-8") as archivo:
-        for linea in archivo:
-            partes = linea.strip().split(",")
-            filas.append(partes)
+    try:
+        with open(ruta_archivo, "r", encoding="utf-8") as archivo:
+            for linea in archivo:
+                partes = linea.strip().split(",")
+                filas.append(partes)
+    except FileNotFoundError:
+        print(f"Error: no se encontro el archivo {ruta_archivo}")
+    except Exception as e:
+        print(f"Error al leer el archivo {ruta_archivo}: {e}")
 
     return filas
 
 
 
-#Esta decodifica la lista_conexioens y la transforma en un diccionario de conexiones:
+#Esta decodifica la lista_conexiones y la transforma en un diccionario de conexiones:
 
 def decodificar_conexiones(lista_de_listas):
     """
