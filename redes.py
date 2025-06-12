@@ -96,6 +96,16 @@ def instanciar_conexiones(nodos):
                 # Agregamos esta conexión al nodo origen, usamos el método agregar_conexion q esta en la clase Nodo
                 # REVISAR SI ESTO ESTA BIEN
                 nodos[origen].agregar_conexion(destino, conexion)
+                #revisar que no haya conexion duplicada
+                conexion_inversa = Conexion(
+                    origen=nodos[destino],
+                    destino=nodos[origen],
+                    modo=c["modo"],
+                    distancia=c["distancia"],
+                    restriccion=c["restriccion"],
+                    valor_restriccion=c["valor_restriccion"]
+                )
+                nodos[destino].agregar_conexion(origen, conexion_inversa)
 
 
 
