@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 
-class Graficos: 
+class Grafico: 
     
     @staticmethod
     def grafico_barras(titulo, nombre_x, nombre_y, lista_x, lista_y):
@@ -20,13 +20,20 @@ class Graficos:
         plt.title(label=titulo, loc='center', color='blue')
     
     @staticmethod 
-    def grafico_lineales(titulo, linea1, linea2, nombre_x, nombre_y, x1, y1, x2, y2): #linea 1 y linea2 son los nombres de las dos lineas
+    def grafico_lineal(titulo, nombre_x, nombre_y, x1, y1): #linea 1 y linea2 son los nombres de las dos lineas
         plt.title(titulo)
         plt.xlabel(nombre_x)
         plt.ylabel(nombre_y)
         # Grafica de lineas
-        plt.plot(x1,y1,color='green',linewidth=3,label=linea1)
-        plt.plot(x2,y2,'o-',color='red',linewidth=3,label=linea2)
+        plt.plot(x1,y1,color='green',linewidth=3)
+
+
+#Grafico Tiempo vs Distancia Recorrida (FALTA PONER LOS DATOS DE TIEMPO Y DISTANCIA)
+Grafico.grafico_lineal("Tiempo vs Distancia", "Tiempo [min]", "Distancia [km]", )
+
+#Grafico Costo por Distancia Recorrida (FALTA PONER LOS DATOS DE COSTO Y DISTANCIA)
+Grafico.grafico_lineal("Costo vs Distancia", "Costo [$]", "Distancia [km]", )
+
 
 
 
