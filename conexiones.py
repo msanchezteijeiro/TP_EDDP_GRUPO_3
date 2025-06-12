@@ -17,10 +17,17 @@ class Conexion():
                 raise TypeError (f"el nodo destino {destino} no es valido")
             if not Conexion.validar_modo(modo):
                 raise ValueError(f"El modo {modo} no es valido")
-        except TypeError: 
-            print (f"la conexion", origen ," ,",destino," ,", modo, " no es valida")
-        except ValueError:
-            print (f"el modo",modo, "no es valido") 
+            if not(Validaciones.validar_float(distancia)):
+                raise TypeError("Se ingreso una distancia inválida.")
+            
+            restricciones_validas = ["peso_max", "velocidad_max", "prob_mal_tiempo", "tipo", "", None]
+            if restriccion is not None and not Validaciones.validar_str(restriccion):
+                raise TypeError("La restriccion debe ser una cadena de texto o None.")
+            if restriccion not in restricciones_validas:
+                raise ValueError(f"Restriccion no reconocida: {restriccion}")
+            
+        except Exception as e: 
+            print (f"La conexion", origen ," ,",destino," ,", modo, " no es valida. Error: {e}")
         
         
         #Seteamos los atributos de la clase:
@@ -38,30 +45,24 @@ class Conexion():
 
     #Definimos los metodos de la clase:
     def setOrigen(self,origen):
-        """
-        if not(Validaciones.validar_nodo(origen)):   #FALTA DEFINIR validar_nodo en validaciones.py Y FALTA UN TRY PARA ESE RAISERROR
-            raise TypeError("No existe este nodo origen.")
-        """
+        if not Conexion.validar_nodo(origen):
+                raise TypeError (f"el nodo origen {origen} no es valido")
         self.origen = origen
 
     def getOrigen(self):
         return self.origen
     
     def setDestino(self,destino):
-        """
-        if not(Validaciones.validar_nodo(destino)):   #FALTA DEFINIR validar_nodo en validaciones.py
-            raise TypeError("No existe este nodo destino.")
-        """
+        if not Conexion.validar_nodo(destino):
+            raise TypeError (f"el nodo destino {destino} no es valido")
         self.destino = destino
 
     def getDestino(self):
         return self.destino
 
     def setModo(self,modo):
-        """
-        if not(Validaciones.validar_modo(modo)):  #FALTA DEFINIR validar_modo en validaciones.py
-            raise TypeError("No existe este modo para estos nodos origen y destino.")
-        """
+        if not Conexion.validar_modo(modo):
+            raise ValueError(f"El modo {modo} no es valido")
         self.modo = modo.lower() #lower para que no haya errores con mayusculas y minusculas
 
     def getModo(self):
@@ -91,7 +92,7 @@ class Conexion():
         return self.restriccion
     
     def setValorRestriccion(self, valor):
-        #esta puede ser vacio, str, int o float, hace falta validar?
+        #esta puede ser vacio, str, int o float, hace falta validar? PREGUNTAR
         self.valor_restriccion= valor
     
     def getValorRestriccion(self):

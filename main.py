@@ -11,14 +11,14 @@ if __name__ == "__main__":
     for id_carga, datos in solicitudes.items():
         print(f"\nProcesando solicitud: {id_carga}")
         resultados = construir_itinerario(nodos_existentes, {id_carga: datos})
-        evaluados = calcular_costos_y_tiempos(resultados, carga_kg=datos["peso_kg"])
-        imprimir_costos_y_tiempos(evaluados)
+        itinerarios_final = calcular_costos_y_tiempos(resultados, carga_kg=datos["peso_kg"])
+        imprimir_costos_y_tiempos(itinerarios_final)
 
 
-        print(kp1(evaluados))
+        print(kp1(itinerarios_final))
 
 
-        print(kp2(evaluados))
+        print(kp2(itinerarios_final))
 
 #no se porque no aparecen todos los vehiculos en la terminal, habria que chequear
 '''
@@ -32,9 +32,9 @@ if __name__ == "__main__":
         }
     }
     resultados = construir_itinerario(nodos_existentes, solicitud)
-    evaluados = calcular_costos_y_tiempos(resultados, carga_kg=70000)
-    imprimir_costos_y_tiempos(evaluados) 
-    print(kp1(evaluados))
-    print(kp2(evaluados))
-    #print(evaluados)
+    itinerarios_final = calcular_costos_y_tiempos(resultados, carga_kg=70000)
+    imprimir_costos_y_tiempos(evaitinerarios_finalluados) 
+    print(kp1(itinerarios_final))
+    print(kp2(itinerarios_final))
+    #print(itinerarios_final)
 '''
