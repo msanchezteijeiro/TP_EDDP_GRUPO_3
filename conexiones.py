@@ -19,12 +19,10 @@ class Conexion():
                 raise ValueError(f"El modo {modo} no es valido")
             if not(Validaciones.validar_float(distancia)):
                 raise TypeError("Se ingreso una distancia inválida.")
-            
-            restricciones_validas = ["peso_max", "velocidad_max", "prob_mal_tiempo", "tipo", "", None]
-            if restriccion is not None and not Validaciones.validar_str(restriccion):
-                raise TypeError("La restriccion debe ser una cadena de texto o None.")
-            if restriccion not in restricciones_validas:
-                raise ValueError(f"Restriccion no reconocida: {restriccion}")
+            if not Validaciones.validar_tipo_restriccion(restriccion):
+                raise ValueError(f"Tipo de restriccion no valido: {restriccion}")
+            if not Validaciones.validar_valor_restriccion(valor_restriccion):
+                raise ValueError(f"Valor de restriccion no reconocido: {valor_restriccion}")
             
         except Exception as e: 
             print (f"La conexion", origen ," ,",destino," ,", modo, " no es valida. Error: {e}")
@@ -78,22 +76,18 @@ class Conexion():
         #como solo hay 4 restricciones o vacio. creo la lista con las restrcciones validas
         #por ahi conviene usar la val de str, como esta la posibilidad de vacio no la uso por las dudas
         #preguntar si tiene sentido que sea None
-        restricciones_validas = ["peso_max", "velocidad_max", "prob_mal_tiempo", "tipo", "", None]
-
-        if restriccion is not None and not Validaciones.validar_str(restriccion):
-            raise TypeError("La restriccion debe ser una cadena de texto o None.")
-
-        if restriccion not in restricciones_validas:
-            raise ValueError(f"Restriccion no reconocida: {restriccion}")
-    
+        if not Validaciones.validar_tipo_restriccion(restriccion):
+            raise ValueError(f"Tipo de restriccion no valido: {restriccion}")
         self.restriccion=restriccion
 
     def getRestriccion(self):
         return self.restriccion
     
-    def setValorRestriccion(self, valor):
+    def setValorRestriccion(self, valor_restriccion):
         #esta puede ser vacio, str, int o float, hace falta validar? PREGUNTAR
-        self.valor_restriccion= valor
+        if not Validaciones.validar_valor_restriccion(valor_restriccion):
+            raise ValueError(f"Valor de restriccion no reconocido: {valor_restriccion}")
+        self.valor_restriccion= valor_restriccion
     
     def getValorRestriccion(self):
         return self.valor_restriccion

@@ -105,28 +105,47 @@ class Ferroviaria (Vehiculo):
     
     def getCosto_por_kg (self):
         return self.costo_por_kg
-    
-    def calcular_costo (self, conexion, carga): #PREGUNTAR LO DE COSTO POR KG!!!!!
-        if not isinstance (conexion, Conexion):
-            raise TypeError ('No se ingreso una conexion valida')
 
+    #El error que estoy intentando corregir es que la parte de (carga * self.costo_por_kg) deberia ser general de todo el itinerario
+    #El problema para sumarlo directo al final, es...
+
+    def calcular_costo_tramo (self, conexion, carga):
+        if not isinstance (conexion, Conexion): 
+            raise TypeError ('No se ingreso una conexion valida')
+        
         if conexion.distancia < 200:
             costo_por_km = 20
         else:
             costo_por_km = 15
         
-        costo_por_vehiculo = (conexion.distancia * costo_por_km) + (carga * self.costo_por_kg) + self.costo_fijo #VER SI USAR GETDISTANCIA
-        cantidad_vehiculos = (carga + self.capacidad - 1)//self.capacidad #division con redondeo hacia arriba
+        costo_tramo_por_vehiculo = (conexion.distancia * costo_por_km) + self.costo_fijo #VER SI USAR GETDISTANCIA
         
-        costo_total = costo_por_vehiculo * cantidad_vehiculos
+        return costo_tramo_por_vehiculo
+    
+    def calcular_costo_carga (self, carga): #PREGUNTAR LO DE COSTO POR KG!!!!!        
+        costo_por_tramo = (carga * self.costo_por_kg)
 
-        return costo_total
-        
+        return costo_por_tramo
+
+    def calcular_cant_vehiculos (self, conexion, carga):
+        if not isinstance (conexion, Conexion): 
+            raise TypeError ('No se ingreso una conexion valida')
+
+        cant_vehiculos = (carga + self.capacidad - 1)//self.capacidad #division con redondeo hacia arriba
+
+        return cant_vehiculos
     
     def calcular_tiempo (self, conexion): #CHEQUEAR SI CUANDO SE USAN ESTAS FUNCIONES SE USA UN EXCEPT PARA EL ERROR
         if not isinstance (conexion, Conexion):
             raise TypeError ('No se ingreso una conexion valida')
-        tiempo_minutos = (conexion.distancia/self.velocidad)*60
+        
+        velocidad = self.velocidad #fijo el valor
+        if conexion.restriccion == 'velocidad_max': #VER SI USAR GETRESTRICCION!!!
+            if self.velocidad > conexion.valor_restriccion:
+                velocidad = float(conexion.valor_restriccion) #se renombra velocidad en ese tramo si se cumple, si no, no
+                #HABRIA QUE HACER UNA VALIDACION DE QUE NO DA ERROR HACER ESTO!! PREGUNTAR
+
+        tiempo_minutos = (conexion.distancia/velocidad)*60
         return tiempo_minutos
 
 
@@ -183,21 +202,36 @@ class Automotor (Vehiculo):
     def getCosto_por_km (self):
         return self.costo_por_km
     
-    def calcular_costo (self, conexion, carga): 
+    def calcular_costo_tramo (self, conexion, carga):
         if not isinstance (conexion, Conexion): 
             raise TypeError ('No se ingreso una conexion valida')
         
+        costo_tramo_por_vehiculo = (conexion.distancia * self.costo_por_km) + self.costo_fijo #VER SI USAR GETDISTANCIA
+        
+        return costo_tramo_por_vehiculo
+    
+    def calcular_costo_carga (self, carga):
         if carga < 150000:
             costo_por_kg = 1
         else:
             costo_por_kg = 2
-        
-        costo_por_vehiculo = (conexion.distancia * self.costo_por_km) + (carga * costo_por_kg) + self.costo_fijo #VER SI USAR GETDISTANCIA
-        cantidad_vehiculos = (carga + self.capacidad - 1)//self.capacidad #division con redondeo hacia arriba
-        
-        costo_total = costo_por_vehiculo * cantidad_vehiculos
 
-        return costo_total
+        costo_por_tramo = (carga * costo_por_kg)
+
+        return costo_por_tramo
+
+    def calcular_cant_vehiculos (self, conexion, carga):
+        if not isinstance (conexion, Conexion): 
+            raise TypeError ('No se ingreso una conexion valida')
+        
+        capacidad = self.capacidad
+        if conexion.restriccion == 'peso_max': #VER SI USAR GETRESTRICCION!!! 
+            if self.capacidad > conexion.valor_restriccion: #PREGUNTAR SI ACA SE ROMPE O SE DIVIDE EN MAS AUTOS
+                capacidad = conexion.valor_restriccion #se renombra capacidad en ese tramo
+
+        cant_vehiculos = (carga + capacidad - 1)//capacidad #division con redondeo hacia arriba
+
+        return cant_vehiculos
     
     def calcular_tiempo (self, conexion): 
         if not isinstance (conexion, Conexion):
@@ -260,10 +294,11 @@ class Fluvial (Vehiculo):
     def getCosto_por_kg (self):
         return self.costo_por_kg
     
-    def calcular_costo (self, conexion, carga): 
+
+    def calcular_costo_tramo (self, conexion, carga):
         if not isinstance (conexion, Conexion): 
             raise TypeError ('No se ingreso una conexion valida')
-
+        
         if conexion.restriccion == 'tipo': #VER SI USAR GETRESTRICCION!!!
             if conexion.valor_restriccion == 'fluvial': 
                 costo_fijo = 500
@@ -273,13 +308,23 @@ class Fluvial (Vehiculo):
                 raise ValueError ("El campo obligatorio 'restriccion' vino vacío (None).")
         else:
             raise ValueError ("El campo obligatorio 'restriccion' vino vacío (None).")
-
-        costo_por_vehiculo = (conexion.distancia * self.costo_por_km) + (carga * self.costo_por_kg) + costo_fijo #VER SI USAR GETDISTANCIA
-        cantidad_vehiculos = (carga + self.capacidad - 1)//self.capacidad #division con redondeo hacia arriba
         
-        costo_total = costo_por_vehiculo * cantidad_vehiculos
+        costo_tramo_por_vehiculo = (conexion.distancia * self.costo_por_km) + costo_fijo #VER SI USAR GETDISTANCIA
+        
+        return costo_tramo_por_vehiculo
+    
+    def calcular_costo_carga (self, carga): #PREGUNTAR LO DE COSTO POR KG!!!!!
+        costo_por_tramo = (carga * self.costo_por_kg)
 
-        return costo_total
+        return costo_por_tramo
+
+    def calcular_cant_vehiculos (self, conexion, carga):
+        if not isinstance (conexion, Conexion): 
+            raise TypeError ('No se ingreso una conexion valida')
+
+        cant_vehiculos = (carga + self.capacidad - 1)//self.capacidad #division con redondeo hacia arriba
+
+        return cant_vehiculos
 
     def calcular_tiempo (self, conexion): 
         if not isinstance (conexion, Conexion):
@@ -342,16 +387,27 @@ class Aerea (Vehiculo):
     def getCosto_por_kg (self):
         return self.costo_por_kg
     
-    def calcular_costo (self, conexion, carga): 
+    
+    def calcular_costo_tramo (self, conexion, carga):
         if not isinstance (conexion, Conexion): 
             raise TypeError ('No se ingreso una conexion valida')
+        
+        costo_tramo_por_vehiculo = (conexion.distancia * self.costo_por_km) + self.costo_fijo #VER SI USAR GETDISTANCIA
+        
+        return costo_tramo_por_vehiculo
+    
+    def calcular_costo_carga (self, carga):
+        costo_por_tramo = (carga * self.costo_por_kg)
 
-        costo_por_vehiculo = (conexion.distancia * self.costo_por_km) + (carga * self.costo_por_kg) + self.costo_fijo #VER SI USAR GETDISTANCIA
-        cantidad_vehiculos = (carga + self.capacidad - 1)//self.capacidad #division con redondeo hacia arriba
+        return costo_por_tramo
+
+    def calcular_cant_vehiculos (self, conexion, carga):
+        if not isinstance (conexion, Conexion): 
+            raise TypeError ('No se ingreso una conexion valida')
         
-        costo_total = costo_por_vehiculo * cantidad_vehiculos
-        
-        return costo_total
+        cant_vehiculos = (carga + self.capacidad - 1)//self.capacidad #division con redondeo hacia arriba
+
+        return cant_vehiculos
         
     def calcular_tiempo (self, conexion): 
         if not isinstance (conexion, Conexion):

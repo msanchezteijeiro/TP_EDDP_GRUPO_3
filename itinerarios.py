@@ -113,11 +113,11 @@ def calcular_costos_y_tiempos(itinerarios_base, carga_kg): #cambie esta funcion 
             continue #osea si no existe ese vehiculo este ni siquiera es analizado, ni aparecera en el dict "itinerarios_final" devuelto
 
         for camino in caminos: #camino es una lista de objetos conexion
-            costo_total_camino = 0
+            costo_total_camino = vehiculo.calcular_costo_carga(carga_kg)
             tiempo_total_camino = 0
             for conexion in camino:
                 try:
-                    costo_total_camino += vehiculo.calcular_costo(conexion, carga_kg)
+                    costo_total_camino += (vehiculo.calcular_costo_tramo(conexion, carga_kg) * vehiculo.calcular_cant_vehiculos(conexion, carga_kg)) #PREGUNTAR, revisar si estas dos se pueden fusionar
                     tiempo_total_camino += vehiculo.calcular_tiempo(conexion)
                 except Exception as e:
                     print(f"Error al calcular para {conexion}: {e}")

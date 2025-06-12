@@ -33,6 +33,44 @@ class Validaciones:
             return True
         else :
             return False
+        
+    @staticmethod
+    def validar_tipo_restriccion(tipo_restriccion):
+        tipos_restriccion_validas = ["peso_max", "velocidad_max", "prob_mal_tiempo", "tipo", "", None]
+        if tipo_restriccion in tipos_restriccion_validas:
+            return True
+
+        elif tipo_restriccion is None and not Validaciones.validar_str(tipo_restriccion):
+            raise TypeError("La restriccion debe ser una cadena de texto o None.")
+
+        if tipo_restriccion not in tipos_restriccion_validas:
+            raise ValueError(f"Restriccion no reconocida: {tipo_restriccion}")
+
+
+    @staticmethod
+    def validar_tipo_restriccion(tipo_restriccion):
+        restricciones_validas = ["peso_max", "velocidad_max", "prob_mal_tiempo", "tipo", "", None]
+
+        if tipo_restriccion is None:
+            return True
+
+        if Validaciones.validar_str(tipo_restriccion):
+            return tipo_restriccion in restricciones_validas
+
+        return False
+
+
+    @staticmethod
+    def validar_valor_restriccion(valor_restriccion):
+        valores_restriccion_validos = ["fluvial", "maritimo"]
+
+        if Validaciones.validar_str(valor_restriccion):
+            return valor_restriccion in valores_restriccion_validos
+        elif Validaciones.validar_int (valor_restriccion) and Validaciones.validar_float(valor_restriccion):
+            return True
+        else:
+            return False
+
 
 
     
