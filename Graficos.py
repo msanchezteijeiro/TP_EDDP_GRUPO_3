@@ -13,7 +13,6 @@ class Grafico:
     def grafico_linea(valores):
         plt.plot(valores)
 
-
     @staticmethod
     def grafico_torta(titulo, secciones, cantidades):
         plt.pie(cantidades,labels=secciones, autopct='%1.2f%%')
