@@ -45,6 +45,9 @@ class Conexion():
             raise TypeError("Se ingreso una distancia inválida.")
         self.distancia = distancia
     
+    def getDistancia(self):
+        return self.distancia
+    
     def setRestriccion(self, restriccion):
         if not Validaciones.validar_tipo_restriccion(restriccion):
             raise ValueError(f"Tipo de restriccion no valido: {restriccion}")

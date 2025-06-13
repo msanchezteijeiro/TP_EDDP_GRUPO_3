@@ -1,5 +1,8 @@
 from redes import construir_red
-from vehiculos import Vehiculo, vehiculos_por_modo
+from vehiculos import Vehiculo, vehiculos_por_modo #creo que Vehiculo se puede sacar porque no lo llamamos en nigun momento
+from nodos import Nodo
+from conexiones import Conexion
+#creo que no hace falta inportar estas clases pero no se, lo dejo por las dudas
 
 #Definimos clase Itinerario:
 
@@ -16,8 +19,9 @@ class Itinerario: #LE FALTAN GETS A LAS COSAS (SOBRE todo AL TIEMPO Y CARGA PARA
         
     def __repr__(self):
         camino_str = " -> ".join(
-            f"{c.origen.nombre} → {c.destino.nombre} ({c.distancia} km)" for c in self.camino
+            f"{c.getOrigen().getNombre()} → {c.getDestino().getNombre()} ({c.getDistancia()} km)" for c in self.camino
         )
+        #aca c.getOrigen() trae un nodo y el getNombre trae el nombre de ese nodo. lo mismo para el destino
         SANGRIA = "  "
         return (f"{SANGRIA}● Modo: {self.modo.capitalize()}\n"
                 f"{SANGRIA}● Itinerario: {camino_str}\n"
@@ -29,6 +33,33 @@ class Itinerario: #LE FALTAN GETS A LAS COSAS (SOBRE todo AL TIEMPO Y CARGA PARA
     def formatear_tiempo_minutos(tiempo_en_min):
         from datetime import timedelta
         return str(timedelta(minutes=tiempo_en_min))
+    '''
+    def getModo(self):
+        return self.modo
+
+    def getCamino(self):
+        return self.camino
+
+    def getCosto(self):
+        return self.costo
+
+    def getTiempo(self):
+        return self.tiempo
+    
+    def setModo(self, modo):
+        self.modo = modo
+
+    def setCamino(self, camino):
+        self.camino = camino
+
+    def setCosto(self, costo):
+        self.costo = costo
+
+    def setTiempo(self, tiempo):
+        self.tiempo = tiempo
+''' #preguntar si haca falta agregarlo (los dejo por las dudas hecho. por ahi en los sets habria que validar)
+    # aunque no creo porque toda la info que usa viene validada.
+
 
 
 # Definimos la función que busca todos los caminos posibles entre dos nodos, con un solo modo de transporte y sin ciclos
@@ -75,7 +106,8 @@ def construir_itinerario(nodos, solicitud):
         visitados.append(actual)
 
         # Recorremos todos los vecinos del nodo actual
-        for vecino, conexiones in nodos[actual].vecinos.items():
+        for vecino, conexiones in nodos[actual].vecinos.items(): #nodos[actual].getVecinos().items() (por ahi podemos hacer un getVecinos())
+
 
             # Si el vecino ya fue visitado, lo salteamos para evitar ciclos
             if vecino in visitados:
@@ -84,7 +116,7 @@ def construir_itinerario(nodos, solicitud):
             # Recorremos todas las conexiones hacia ese vecino
             for conexion in conexiones:
                 # Si el modo coincide con el modo actual...
-                if conexion.modo == modo:
+                if conexion.getModo() == modo:
                     camino.append(conexion)              # agregamos la conexión al camino actual
                     buscador_caminos(vecino, destino, camino, visitados, modo)  # llamamos recursivamente desde el vecino
                     camino.pop()                         # volvemos para atrás (backtracking)
