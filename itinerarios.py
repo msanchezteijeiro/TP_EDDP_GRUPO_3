@@ -135,24 +135,32 @@ def calcular_costos_y_tiempos(itinerarios_base, carga_kg): #cambie esta funcion 
     return itinerarios_final #es un dict: clave: id, valor: objeto itinerario correspondiente
 
 
+#Funcion para imprimir tabla itinerarios
+def imprimir_itinerario_final(itinerarios_final):
 
-def imprimir_costos_y_tiempos(itinerarios_final):
-    print("")
-    print(f"{'ID':<4} | {'Modo':<12} | {'Costo Total':<12} | {'Tiempo Total (min)':<20} | Camino")
-    print("-" * 125)
-    
-    for id_, itinerario in itinerarios_final.items(): #CHEQUEAR SI HAY Q USAR LOS GETS de origen y nombre (de conexion y nodo)
-        camino_limpio = [itinerario.camino[0].origen.nombre] #empiezo lista con el primer nodo origen 
-        camino_limpio += [c.destino.nombre for c in itinerario.camino] #le agregamos solo los destinos de cada conexion
-        camino_str = " → ".join(camino_limpio) #transformamos la lista final en un str
+    if not itinerarios_final:
+        print(f"\nNo existen itinerarios posibles para la solicitud pedida.")
 
-        print(f"{id_:<4} | {itinerario.modo.capitalize():<12} | ${itinerario.costo:<11.2f} | {itinerario.tiempo:<20.2f} | {camino_str}")
+    else:
+        print("")
+        print(f"{'ID':<4} | {'Modo':<12} | {'Costo Total':<12} | {'Tiempo Total (min)':<20} | Itinerario")
+        print("-" * 125)
+        
+        for id_, itinerario in itinerarios_final.items(): #CHEQUEAR SI HAY Q USAR LOS GETS de origen y nombre (de conexion y nodo)
+            camino_limpio = [itinerario.camino[0].origen.nombre] #empiezo lista con el primer nodo origen 
+            camino_limpio += [c.destino.nombre for c in itinerario.camino] #le agregamos solo los destinos de cada conexion
+            camino_str = " → ".join(camino_limpio) #transformamos la lista final en un str
+
+            print(f"{id_:<4} | {itinerario.modo.capitalize():<12} | ${itinerario.costo:<11.2f} | {itinerario.tiempo:<20.2f} | {camino_str}")
 
 
 
+#Este es el del timepo que le pasa como parametro el diccionario con los posibles caminos
+def kpi_1(itinerarios_final):
 
-def kp1(itinerarios_final):
-    #Este es el del timepo que le pasa como parametro el diccionario con los posibles caminos
+    if not itinerarios_final:
+        return None #como tiene un return, si entra a este if, termina la funcion
+
     tiempo_min = float('inf')
     id_res = None
     res = None
@@ -161,13 +169,17 @@ def kp1(itinerarios_final):
             tiempo_min = itinerario.tiempo
             id_res = id
             res = itinerario
-    print("\n\nMEJOR ITINERARIO SEGÚN: → | KPI 1: Minimizar el Tiempo Total de Entrega |")
-    print("-" * 72)
-    print(f"El itinerario {id_res} es el mejor.\n")
-    return res
+    par_res = (id_res, res) #tupla
 
-def kp2(itinerarios_final): 
-    #Este es el del costo: devuelve el camino con menor costo total
+    return par_res
+
+
+#Este es el del costo: devuelve el camino con menor costo total
+def kpi_2(itinerarios_final): 
+
+    if not itinerarios_final:
+        return None #como tiene un return, si entra a este if, termina la funcion
+
     costo_min = None
     id_res = None
     res = None
@@ -180,12 +192,34 @@ def kp2(itinerarios_final):
             costo_min = itinerario.costo
             id_res = id
             res = itinerario
-    print("\n\nMEJOR ITINERARIO SEGÚN: → | KPI 2: Minimizar el Costo Total del Transporte |")
-    print("-" * 75)
-    print(f"El itinerario {id_res} es el mejor.\n")
-    return res
+    par_res = (id_res, res) #tupla
+
+    return par_res 
 
 
+#Funciones para imprimir KPIs:
+
+def imprimir_kpi_1(par_res):
+    if not par_res:
+        print("\n\nNo hay itinerarios disponibles para KPI 1.")
+    else:
+        id_res = par_res[0]
+        res = par_res[1]
+        print("\n\nMEJOR ITINERARIO SEGÚN: → | KPI 1: Minimizar el Tiempo Total de Entrega |")
+        print("-" * 72)
+        print(f"El itinerario {id_res} es el mejor.\n")
+        print(res)
+
+def imprimir_kpi_2(par_res):
+    if not par_res:
+        print("\n\nNo hay itinerarios disponibles para KPI 2.")
+    else:
+        id_res = par_res[0]
+        res = par_res[1]
+        print("\n\nMEJOR ITINERARIO SEGÚN: → | KPI 2: Minimizar el Costo Total del Transporte |")
+        print("-" * 75)
+        print(f"El itinerario {id_res} es el mejor.\n")
+        print(res)
 
 
 """
