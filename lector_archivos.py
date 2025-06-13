@@ -2,6 +2,8 @@ import csv
 #lector_archivos.py
 #IMPORTANTE: FALTA AGREGAR UN MANEJO DE ERRORES PARA LOS ARCHIVOS QUE NO EXISTAN O ESTEN MAL FORMADOS!!!!!
 #HACER UNA CLASE LEER ARCHIVOS Y QUE SEAN STATIC METHODS
+
+
 def cargar_archivo_como_listas(ruta_archivo):
     """
     Lee cualquier CSV y devuelve una lista de listas.

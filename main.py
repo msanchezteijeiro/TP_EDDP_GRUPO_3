@@ -6,6 +6,9 @@ from solicitudes import solicitudes
 
 #este saca la solicitud del csv (chequear), deje el otro abajo por las dudas
 if __name__ == "__main__":
+
+    #aca creo q va un try:
+
     nodos_existentes = construir_red()
 
     for id_carga, datos in solicitudes.items():

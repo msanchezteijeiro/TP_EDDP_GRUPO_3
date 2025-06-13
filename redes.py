@@ -16,7 +16,10 @@ def instanciar_nodos():
 
     nodos = {}
     for nombre in nombres_nodos:
-        nodos[nombre] = Nodo(nombre)
+        try:
+            nodos[nombre] = Nodo(nombre)
+        except ValueError as e:
+            print(f"Error creando nodo '{nombre}': {e}. Nodo omitido.")
     
     return nodos
 
@@ -57,33 +60,37 @@ def instanciar_conexiones(nodos):
             #osea por cada disccionario dentro de la lista conexiones, instanciamos un objeto Conexion:
 
             for c in lista_conexiones: #cada c es un modo de conexion entre esos dos nodos, con datos distintos (restricciones, etc)
+                
+                try: #CAPTURAMOS CUALQUIER ERROR INSTANCIANDO UNA CONEXION
+                    # Creamos un objeto de tipo Conexion con los datos correspondientes
+                    conexion = Conexion(
+                        origen=nodos[origen],
+                        destino=nodos[destino],
+                        modo=c["modo"],
+                        distancia=c["distancia"],
+                        restriccion=c["restriccion"],
+                        valor_restriccion=c["valor_restriccion"]
+                    )
 
-                # Creamos un objeto de tipo Conexion con los datos correspondientes
-                conexion = Conexion(
-                    origen=nodos[origen],
-                    destino=nodos[destino],
-                    modo=c["modo"],
-                    distancia=c["distancia"],
-                    restriccion=c["restriccion"],
-                    valor_restriccion=c["valor_restriccion"]
-                )
+                    # Agregamos esta conexión al nodo origen, usamos el método agregar_conexion q esta en la clase Nodo
+                    # REVISAR SI ESTO ESTA BIEN
+                    nodos[origen].agregar_conexion(destino, conexion)
+                    #revisar que no haya conexion duplicada
+                    conexion_inversa = Conexion(
+                        origen=nodos[destino],
+                        destino=nodos[origen],
+                        modo=c["modo"],
+                        distancia=c["distancia"],
+                        restriccion=c["restriccion"],
+                        valor_restriccion=c["valor_restriccion"]
+                    )
+                    nodos[destino].agregar_conexion(origen, conexion_inversa)
 
-                # Agregamos esta conexión al nodo origen, usamos el método agregar_conexion q esta en la clase Nodo
-                # REVISAR SI ESTO ESTA BIEN
-                nodos[origen].agregar_conexion(destino, conexion)
-                #revisar que no haya conexion duplicada
-                conexion_inversa = Conexion(
-                    origen=nodos[destino],
-                    destino=nodos[origen],
-                    modo=c["modo"],
-                    distancia=c["distancia"],
-                    restriccion=c["restriccion"],
-                    valor_restriccion=c["valor_restriccion"]
-                )
-                nodos[destino].agregar_conexion(origen, conexion_inversa)
+                except (ValueError, TypeError) as e:
+                    print(f"Error creando conexión entre '{origen}' y '{destino}' via '{c["modo"]}': {e}. Registro omitido.")
 
 
-def construir_red():
+def construir_red(): #YA NO NECESITA NINGUN MANEJO DE ERRO, se manejaron al instanciar Nodos y Conexiones arriba.
     nodos_existentes = instanciar_nodos()
     instanciar_conexiones(nodos_existentes)
     return nodos_existentes
