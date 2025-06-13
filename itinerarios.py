@@ -33,7 +33,7 @@ class Itinerario: #LE FALTAN GETS A LAS COSAS (SOBRE todo AL TIEMPO Y CARGA PARA
     def formatear_tiempo_minutos(tiempo_en_min):
         from datetime import timedelta
         return str(timedelta(minutes=tiempo_en_min))
-    '''
+    
     def getModo(self):
         return self.modo
 
@@ -57,9 +57,8 @@ class Itinerario: #LE FALTAN GETS A LAS COSAS (SOBRE todo AL TIEMPO Y CARGA PARA
 
     def setTiempo(self, tiempo):
         self.tiempo = tiempo
-''' #preguntar si haca falta agregarlo (los dejo por las dudas hecho. por ahi en los sets habria que validar)
-    # aunque no creo porque toda la info que usa viene validada.
-
+    
+    #ver si hace falta validar algo
 
 
 # Definimos la función que busca todos los caminos posibles entre dos nodos, con un solo modo de transporte y sin ciclos
@@ -89,7 +88,7 @@ def construir_itinerario(nodos, solicitud):
     destino = datos["destino"]
 
     # Lista de modos disponibles construida a partir del nodo origen:
-    modos_disponibles = nodos[origen].modos_soportados
+    modos_disponibles = nodos[origen].getModosSoportados()
         #nos traemos los modos de transporte que soporta el nodo origen, q son los unicos que podemos usar para buscar caminos
 
 
@@ -106,7 +105,7 @@ def construir_itinerario(nodos, solicitud):
         visitados.append(actual)
 
         # Recorremos todos los vecinos del nodo actual
-        for vecino, conexiones in nodos[actual].vecinos.items(): #nodos[actual].getVecinos().items() (por ahi podemos hacer un getVecinos())
+        for vecino, conexiones in nodos[actual].getVecinos().items(): #nodos[actual].getVecinos().items() (por ahi podemos hacer un getVecinos())
 
 
             # Si el vecino ya fue visitado, lo salteamos para evitar ciclos
@@ -179,11 +178,11 @@ def imprimir_itinerario_final(itinerarios_final):
         print("-" * 125)
         
         for id_, itinerario in itinerarios_final.items(): #CHEQUEAR SI HAY Q USAR LOS GETS de origen y nombre (de conexion y nodo)
-            camino_limpio = [itinerario.camino[0].origen.nombre] #empiezo lista con el primer nodo origen 
-            camino_limpio += [c.destino.nombre for c in itinerario.camino] #le agregamos solo los destinos de cada conexion
+            camino_limpio = [itinerario.camino[0].getOrigen().getNombre()] #empiezo lista con el primer nodo origen 
+            camino_limpio += [c.getDestino().getNombre() for c in itinerario.camino] #le agregamos solo los destinos de cada conexion
             camino_str = " → ".join(camino_limpio) #transformamos la lista final en un str
 
-            print(f"{id_:<4} | {itinerario.modo.capitalize():<12} | ${itinerario.costo:<11.2f} | {itinerario.tiempo:<20.2f} | {camino_str}")
+            print(f"{id_:<4} | {itinerario.getModo().capitalize():<12} | ${itinerario.getCosto():<11.2f} | {itinerario.getTiempo():<20.2f} | {camino_str}")
 
 
 
@@ -197,8 +196,8 @@ def kpi_1(itinerarios_final):
     id_res = None
     res = None
     for (id, itinerario) in itinerarios_final.items():
-        if itinerario.tiempo < tiempo_min:
-            tiempo_min = itinerario.tiempo
+        if itinerario.getTiempo() < tiempo_min:
+            tiempo_min = itinerario.getTiempo()
             id_res = id
             res = itinerario
     par_res = (id_res, res) #tupla
@@ -217,11 +216,11 @@ def kpi_2(itinerarios_final):
     res = None
     for id, itinerario in itinerarios_final.items():
         if costo_min is None:
-            costo_min = itinerario.costo
+            costo_min = itinerario.getCosto()
             id_res = id
             res = itinerario
-        elif itinerario.costo < costo_min:
-            costo_min = itinerario.costo
+        elif itinerario.getCosto() < costo_min:
+            costo_min = itinerario.getCosto()
             id_res = id
             res = itinerario
     par_res = (id_res, res) #tupla

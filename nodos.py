@@ -37,3 +37,8 @@ class Nodo:
         if conexion.modo not in self.modos_soportados:
             self.modos_soportados.append(conexion.modo)
 
+    def getVecinos(self):
+        return self.vecinos
+
+    def getModosSoportados(self):
+        return self.modos_soportados
