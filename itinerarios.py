@@ -18,11 +18,17 @@ class Itinerario:
         camino_str = " -> ".join(
             f"{c.origen.nombre} → {c.destino.nombre} ({c.distancia} km)" for c in self.camino
         )
-        return (f"Modo: {self.modo}\n"
-                f"Camino: {camino_str}\n"
-                f"Costo Total: ${self.costo:.2f}\n"
-                f"Tiempo Total: {self.tiempo:.2f} minutos")
-
+        SANGRIA = "  "
+        return (f"{SANGRIA}● Modo: {self.modo.capitalize()}\n"
+                f"{SANGRIA}● Itinerario: {camino_str}\n"
+                f"{SANGRIA}● Costo Total: ${self.costo:.2f}\n"
+                f"{SANGRIA}● Tiempo Total (min): {self.tiempo:.2f} minutos\n"
+                f"{SANGRIA}● Tiempo Total (HH:MM:SS): {self.formatear_tiempo_minutos(self.tiempo)}")
+    
+    @staticmethod
+    def formatear_tiempo_minutos(tiempo_en_min):
+        from datetime import timedelta
+        return str(timedelta(minutes=tiempo_en_min))
 
 
 # Definimos la función que busca todos los caminos posibles entre dos nodos, con un solo modo de transporte y sin ciclos
@@ -96,11 +102,10 @@ def construir_itinerario(nodos, solicitud):
                        #Ejemplo: {...,'fluvial': [[Conexion(Nodo(Zarate) -> Nodo(Buenos_Aires)), Conexion(Nodo(Buenos_Aires) -> Nodo(Mar_del_Plata)]],...}
                         #Del modo fluvial hay un solo itinerario, que va de Zarate a Buenos Aires y de ahi a Mar del Plata.
 
-#preguntar por temas de complejidad, igual si es una red de grafos chica, no deberia dar problema 
+
+
 
 #AGREGAMOS EL TEMA DE COSTOS:
-
-
 
 def calcular_costos_y_tiempos(itinerarios_base, carga_kg): #cambie esta funcion para que itinerarios_final salga como un diccionario que tenga como clave un id 
     #y que guarde como valor, el objeto de la clase infromacion recien creada. esto baja la complejidad de lo que estmaos haciendo 
@@ -117,8 +122,7 @@ def calcular_costos_y_tiempos(itinerarios_base, carga_kg): #cambie esta funcion 
             tiempo_total_camino = 0
             for conexion in camino:
                 try:
-                    costo_total_camino += (vehiculo.calcular_costo_tramo(conexion, carga_kg) * vehiculo.calcular_cant_vehiculos(conexion, carga_kg)) #PREGUNTAR, revisar si estas dos se pueden fusionar
-                    #cambiar
+                    costo_total_camino += vehiculo.calcular_costo_tramo(conexion, carga_kg)
                     tiempo_total_camino += vehiculo.calcular_tiempo(conexion)
                 except Exception as e:
                     print(f"Error al calcular para {conexion}: {e}")
@@ -133,15 +137,16 @@ def calcular_costos_y_tiempos(itinerarios_base, carga_kg): #cambie esta funcion 
 
 
 def imprimir_costos_y_tiempos(itinerarios_final):
+    print("")
     print(f"{'ID':<4} | {'Modo':<12} | {'Costo Total':<12} | {'Tiempo Total (min)':<20} | Camino")
-    print("-" * 100)
+    print("-" * 125)
     
     for id_, info in itinerarios_final.items(): #CHEQUEAR SI HAY Q USAR LOS GETS de origen y nombre (de conexion y nodo)
         camino_limpio = [info.camino[0].origen.nombre] #empiezo lista con el primer nodo origen 
         camino_limpio += [c.destino.nombre for c in info.camino] #le agregamos solo los destinos de cada conexion
         camino_str = " → ".join(camino_limpio) #transformamos la lista final en un str
 
-        print(f"{id_:<4} | {info.modo:<12} | ${info.costo:<11.2f} | {info.tiempo:<20.2f} | {camino_str}")
+        print(f"{id_:<4} | {info.modo.capitalize():<12} | ${info.costo:<11.2f} | {info.tiempo:<20.2f} | {camino_str}")
 
 
 
@@ -150,29 +155,37 @@ def kp1(itinerarios_final):
     #este es el del timepo que le pasa como parametro el diccionario con los posibles caminos
     #el costo total esta mal pero el timepo bien
     tiempo_min = 0
+    id_res = None
     res = None
     for (clave, valor) in itinerarios_final.items():#preguntar si se puede usar, inf
         tiempo_min += valor.tiempo
     for (clave, valor) in itinerarios_final.items():
         if tiempo_min> valor.tiempo:
             tiempo_min=valor.tiempo
+            id_res = clave
             res = valor
-    print("Mejor itinerario según KPI 1 (menor tiempo):")
+    print("\n\nMEJOR ITINERARIO SEGÚN: → | KPI 1: Minimizar el Tiempo Total de Entrega |")
+    print("-" * 72)
+    print(f"El itinerario {id_res} es el mejor.\n")
     return res
 
 def kp2(itinerarios_final): 
     # Este es el del costo: devuelve el camino con menor costo total
     costo_min = None
+    id_res = None
     res = None
-
     for clave, valor in itinerarios_final.items():
         if costo_min is None:
             costo_min = valor.costo
+            id_res = clave
             res = valor
         elif valor.costo < costo_min:
             costo_min = valor.costo
+            id_res = clave
             res = valor
-    print("Mejor itinerario según KPI 2 (menor costo):")
+    print("\n\nMEJOR ITINERARIO SEGÚN: → | KPI 2: Minimizar el Costo Total del Transporte |")
+    print("-" * 75)
+    print(f"El itinerario {id_res} es el mejor.\n")
     return res
 
 

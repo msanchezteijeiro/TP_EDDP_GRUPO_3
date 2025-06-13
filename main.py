@@ -9,7 +9,7 @@ if __name__ == "__main__":
     nodos_existentes = construir_red()
 
     for id_carga, datos in solicitudes.items():
-        print(f"\nProcesando solicitud: {id_carga}")
+        print(f"\n\nProcesando solicitud: {id_carga}")
         resultados = construir_itinerario(nodos_existentes, {id_carga: datos})
         itinerarios_final = calcular_costos_y_tiempos(resultados, carga_kg=datos["peso_kg"])
         imprimir_costos_y_tiempos(itinerarios_final)
