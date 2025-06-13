@@ -18,7 +18,7 @@ class Conexion():
     #Definimos los metodos de la clase:
     def setOrigen(self,origen):
         if not Conexion.validar_nodo(origen):
-                raise TypeError (f"el nodo origen {origen} no es valido")
+            raise TypeError (f"el nodo origen {origen} no es valido")
         self.origen = origen
 
     def getOrigen(self):
@@ -70,11 +70,13 @@ class Conexion():
     #Validaciones:
     @staticmethod
     def validar_modo (modo):
-        from vehiculos import Vehiculo  #CHEQUEAR SI ESTO ES VALIDO, me funciono para arreglar importacion circular
-        if modo.lower() not in (Vehiculo.getModos()): 
+        modos_validos = {"ferroviaria", "automotor", "fluvial", "aerea"}
+        if modo.lower() not in modos_validos:
             return False
         else: 
             return True
+        
+        
     
     @staticmethod
     def validar_nodo(nodo): 
