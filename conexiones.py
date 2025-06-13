@@ -66,9 +66,9 @@ class Conexion():
         return self.valor_restriccion
 
     def __repr__(self): #CHEQUERA SI ES NECESARIO
-        return (f"Conexion({self.origen} -> {self.destino}, "
-                f"modo={self.modo}, distancia={self.distancia} km, "
-                f"restriccion={self.restriccion}, valor={self.valor_restriccion})")
+        return (f"Conexion({self.getOrigen()} -> {self.getDestino()}, "
+                f"modo={self.getModo()}, distancia={self.getDistancia()} km, "
+                f"restriccion={self.getRestriccion()}, valor={self.getValorRestriccion()})")
     
     #Validaciones:
     @staticmethod
