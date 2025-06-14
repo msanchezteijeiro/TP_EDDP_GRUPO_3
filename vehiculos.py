@@ -82,12 +82,12 @@ class Ferroviaria (Vehiculo):
         if not isinstance (conexion, Conexion): 
             raise TypeError ('No se ingreso una conexion valida')
         
-        if conexion.distancia < 200:
+        if conexion.getDistancia() < 200:
             costo_por_km = 20
         else:
             costo_por_km = 15
         
-        costo_tramo_por_vehiculo = (conexion.distancia * costo_por_km) + self.costo_fijo #VER SI USAR GETDISTANCIA
+        costo_tramo_por_vehiculo = (conexion.getDistancia() * costo_por_km) + self.costo_fijo 
 
         costo_tramo = costo_tramo_por_vehiculo * self.calcular_cant_vehiculos(conexion, carga)
         
@@ -98,12 +98,12 @@ class Ferroviaria (Vehiculo):
             raise TypeError ('No se ingreso una conexion valida')
         
         velocidad = self.velocidad #fijo el valor
-        if conexion.restriccion == 'velocidad_max': #VER SI USAR GETRESTRICCION!!!
-            if self.velocidad > float(conexion.valor_restriccion):
-                velocidad = float(conexion.valor_restriccion) #se renombra velocidad en ese tramo si se cumple, si no, no
+        if conexion.getRestriccion() == 'velocidad_max': #VER SI USAR GETRESTRICCION!!!
+            if self.velocidad > float(conexion.getValorRestriccion()):
+                velocidad = float(conexion.getValorRestriccion()) #se renombra velocidad en ese tramo si se cumple, si no, no
                 #HABRIA QUE HACER UNA VALIDACION DE QUE NO DA ERROR HACER ESTO!! PREGUNTAR
 
-        tiempo_minutos = (conexion.distancia/velocidad)*60
+        tiempo_minutos = (conexion.getDistancia()/velocidad)*60
         return tiempo_minutos
 
 
@@ -144,9 +144,9 @@ class Automotor (Vehiculo):
             raise TypeError ('No se ingreso una conexion valida')
         
         capacidad = self.capacidad
-        if conexion.restriccion == 'peso_max': #VER SI USAR GETRESTRICCION!!! 
-            if self.capacidad > float(conexion.valor_restriccion): #PREGUNTAR SI ACA SE ROMPE O SE DIVIDE EN MAS AUTOS
-                capacidad = float(conexion.valor_restriccion) #se renombra capacidad en ese tramo
+        if conexion.getRestriccion() == 'peso_max': #VER SI USAR GETRESTRICCION!!! 
+            if self.capacidad > float(conexion.getValorRestriccion()): #PREGUNTAR SI ACA SE ROMPE O SE DIVIDE EN MAS AUTOS
+                capacidad = float(conexion.getValorRestriccion()) #se renombra capacidad en ese tramo
 
         cant_vehiculos = (carga + capacidad - 1)//capacidad #division con redondeo hacia arriba
 
@@ -172,9 +172,9 @@ class Automotor (Vehiculo):
             if not isinstance (conexion, Conexion): 
                 raise TypeError ('No se ingreso una conexion valida')
 
-            if conexion.restriccion == 'peso_max': #VER SI USAR GETRESTRICCION!!! 
-                if capacidad > float(conexion.valor_restriccion): #PREGUNTAR SI ACA SE ROMPE O SE DIVIDE EN MAS AUTOS
-                    capacidad = float(conexion.valor_restriccion) #se renombra capacidad en ese tramo
+            if conexion.getRestriccion() == 'peso_max': #VER SI USAR GETRESTRICCION!!! 
+                if capacidad > float(conexion.getValorRestriccion()): #PREGUNTAR SI ACA SE ROMPE O SE DIVIDE EN MAS AUTOS
+                    capacidad = float(conexion.getValorRestriccion()) #se renombra capacidad en ese tramo
         
         #Aca se calcula el costo por cada vehiculo usado
         cant_vehiculos = int((carga + capacidad - 1)//capacidad) #division con redondeo hacia arriba
@@ -192,7 +192,7 @@ class Automotor (Vehiculo):
         if not isinstance (conexion, Conexion): 
             raise TypeError ('No se ingreso una conexion valida')
         
-        costo_tramo_por_vehiculo = (conexion.distancia * self.costo_por_km) + self.costo_fijo #VER SI USAR GETDISTANCIA
+        costo_tramo_por_vehiculo = (conexion.getDistancia() * self.costo_por_km) + self.costo_fijo #VER SI USAR GETDISTANCIA
         
         costo_tramo = costo_tramo_por_vehiculo * self.calcular_cant_vehiculos(conexion, carga)
 
@@ -201,7 +201,7 @@ class Automotor (Vehiculo):
     def calcular_tiempo (self, conexion): 
         if not isinstance (conexion, Conexion):
             raise TypeError ('No se ingreso una conexion valida')
-        tiempo_minutos = (conexion.distancia/self.velocidad)*60
+        tiempo_minutos = (conexion.getDistancia()/self.velocidad)*60
         return tiempo_minutos
 
 
@@ -245,7 +245,7 @@ class Fluvial (Vehiculo):
         return cant_vehiculos
 
     def calcular_costo_carga(self, lista_conexiones, carga): #PREGUNTAR LO DE COSTO POR KG!!!!!
-        costo_carga = (carga * self.costo_por_kg)
+        costo_carga = (carga * self.getCosto_por_kg())
 
         return costo_carga
 
@@ -253,17 +253,17 @@ class Fluvial (Vehiculo):
         if not isinstance (conexion, Conexion): 
             raise TypeError ('No se ingreso una conexion valida')
         
-        if conexion.restriccion == 'tipo': #VER SI USAR GETRESTRICCION!!!
-            if conexion.valor_restriccion == 'fluvial': 
+        if conexion.getRestriccion() == 'tipo': #VER SI USAR GETRESTRICCION!!!
+            if conexion.getValorRestriccion() == 'fluvial': 
                 costo_fijo = 500
-            elif conexion.valor_restriccion == 'maritimo':
+            elif conexion.getValorRestriccion() == 'maritimo':
                 costo_fijo = 1500
             else:
-                raise ValueError (f"El campo obligatorio {conexion.valor_restriccion} vino vacío (None).")
+                raise ValueError (f"El campo obligatorio {conexion.getValorRestriccion()} vino vacío (None).")
         else:
-            raise ValueError (f"El campo obligatorio {conexion.restriccion} vino vacío (None).")
+            raise ValueError (f"El campo obligatorio {conexion.getRestriccion()} vino vacío (None).")
         
-        costo_tramo_por_vehiculo = (conexion.distancia * self.costo_por_km) + costo_fijo #VER SI USAR GETDISTANCIA
+        costo_tramo_por_vehiculo = (conexion.getDistancia() * self.getCosto_por_km()) + costo_fijo #VER SI USAR GETDISTANCIA
 
         costo_tramo = costo_tramo_por_vehiculo * self.calcular_cant_vehiculos(conexion, carga)
         
@@ -272,7 +272,7 @@ class Fluvial (Vehiculo):
     def calcular_tiempo (self, conexion): 
         if not isinstance (conexion, Conexion):
             raise TypeError ('No se ingreso una conexion valida')
-        tiempo_minutos = (conexion.distancia/self.velocidad)*60
+        tiempo_minutos = (conexion.getDistancia()/self.velocidad)*60
         return tiempo_minutos
 
 
@@ -316,7 +316,7 @@ class Aerea (Vehiculo):
         return cant_vehiculos
 
     def calcular_costo_carga(self, lista_conexiones, carga): #revisar
-        costo_carga = (carga * self.costo_por_kg)
+        costo_carga = (carga * self.getCosto_por_kg())
 
         return costo_carga
 
@@ -324,7 +324,7 @@ class Aerea (Vehiculo):
         if not isinstance (conexion, Conexion): 
             raise TypeError ('No se ingreso una conexion valida')
         
-        costo_tramo_por_vehiculo = (conexion.distancia * self.costo_por_km) + self.costo_fijo #VER SI USAR GETDISTANCIA
+        costo_tramo_por_vehiculo = (conexion.getDistancia() * self.getCosto_por_km()) + self.getCosto_fijo() #VER SI USAR GETDISTANCIA
         
         costo_tramo = costo_tramo_por_vehiculo * self.calcular_cant_vehiculos(conexion, carga)
         
@@ -352,7 +352,7 @@ class Aerea (Vehiculo):
             except (ValueError, TypeError): #nos cubrimos de que se haya filtrado un None, "", o algo q no sea numerico.
                 print(f"Se definió una restriccion de probabilidad de mal tiempo pero el campo {conexion.valor_restriccion} no posee un valor númerico (int o float). Se asume que no hay restricción.")
 
-        tiempo_minutos = (conexion.distancia/velocidad)*60
+        tiempo_minutos = (conexion.getDistancia()/velocidad)*60
         return tiempo_minutos
 
 
