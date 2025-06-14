@@ -2,21 +2,42 @@ from redes import construir_red
 from vehiculos import Vehiculo, vehiculos_por_modo #creo que Vehiculo se puede sacar porque no lo llamamos en nigun momento
 from nodos import Nodo
 from conexiones import Conexion
-#creo que no hace falta inportar estas clases pero no se, lo dejo por las dudas
+#creo que no hace falta importar estas clases pero no se, lo dejo por las dudas
 
 #Definimos clase Itinerario:
-
 class Itinerario: #LE FALTAN GETS A LAS COSAS (SOBRE todo AL TIEMPO Y CARGA PARA LOS KPI) REVISARRR
     def __init__(self, modo: str, camino: list, costo: float, tiempo: float):
-        #crear esto para guardar mejor la informacion del itinerario
-        #preguntar si hace falta validar
-        #agregar getters y setters??
+        
+        self.setModo(modo)
+        self.setCamino(camino)
+        self.setCosto(costo)
+        self.setTiempo(tiempo)
+
+    def setModo(self, modo):
         self.modo = modo
+
+    def setCamino(self, camino):
         self.camino = camino
+
+    def setCosto(self, costo):
         self.costo = costo
+
+    def setTiempo(self, tiempo):
         self.tiempo = tiempo
 
-        
+    def getModo(self):
+        return self.modo
+
+    def getCamino(self):
+        return self.camino
+
+    def getCosto(self):
+        return self.costo
+
+    def getTiempo(self):
+        return self.tiempo
+    #ver si hace falta validar algo, yp diria que no, son todos datos ya validados previamente PREGUNTAR!!
+
     def __repr__(self):
         camino_str = " -> ".join(
             f"{c.getOrigen().getNombre()} → {c.getDestino().getNombre()} ({c.getDistancia()} km)" for c in self.camino
@@ -34,55 +55,14 @@ class Itinerario: #LE FALTAN GETS A LAS COSAS (SOBRE todo AL TIEMPO Y CARGA PARA
         from datetime import timedelta
         return str(timedelta(minutes=tiempo_en_min))
     
-    def getModo(self):
-        return self.modo
-
-    def getCamino(self):
-        return self.camino
-
-    def getCosto(self):
-        return self.costo
-
-    def getTiempo(self):
-        return self.tiempo
-    
-    def setModo(self, modo):
-        self.modo = modo
-
-    def setCamino(self, camino):
-        self.camino = camino
-
-    def setCosto(self, costo):
-        self.costo = costo
-
-    def setTiempo(self, tiempo):
-        self.tiempo = tiempo
-    
-    #ver si hace falta validar algo
-
 
 # Definimos la función que busca todos los caminos posibles entre dos nodos, con un solo modo de transporte y sin ciclos
-
-def construir_itinerario(nodos, solicitud):
-    """
-    Dada una solicitud, encuentra todos los caminos posibles entre origen y destino,
-    respetando:
-    - el mismo modo de transporte en todo el camino
-    - que no se repita ningún nodo
-
-    Parámetros:
-    - nodos: diccionario con los objetos Nodo instanciados
-    - solicitud: diccionario con formato {'CARGA_001': {'peso_kg': 70000.0, 'origen': 'Zarate', 'destino': 'Mar_del_Plata'}}
-
-    Devuelve:
-    - diccionario con claves = modo de transporte, valores = lista de caminos posibles (cada uno como lista de conexiones)
-    """
+def construir_itinerario(nodos, solicitud_tupla): #nodos es un..., solicitud_tupla es una tupla con id_carga y datos
     
     itinerarios_base = {}
 
-    # Extraemos el único valor de la solicitud
-    datos = list(solicitud.values())[0] #extraemos el primer (y único) valor del diccionario de solicitud
-                                        #osea "datos" es un diccionario con los datos de la solicitud
+    # Extraemos de la tupla, el diccionario datos (el id no nos interesa por ahora)
+    _, datos = solicitud_tupla #pues se que no usare id_carga
     
     origen = datos["origen"]        #extraigo el origen y destino de la solicitud
     destino = datos["destino"]
@@ -90,7 +70,6 @@ def construir_itinerario(nodos, solicitud):
     # Lista de modos disponibles construida a partir del nodo origen:
     modos_disponibles = nodos[origen].getModosSoportados()
         #nos traemos los modos de transporte que soporta el nodo origen, q son los unicos que podemos usar para buscar caminos
-
 
     # Función recursiva para buscar caminos:
     def buscador_caminos(actual, destino, camino, visitados, modo):
@@ -107,7 +86,6 @@ def construir_itinerario(nodos, solicitud):
         # Recorremos todos los vecinos del nodo actual
         for vecino, conexiones in nodos[actual].getVecinos().items(): #nodos[actual].getVecinos().items() (por ahi podemos hacer un getVecinos())
 
-
             # Si el vecino ya fue visitado, lo salteamos para evitar ciclos
             if vecino in visitados:
                 continue
@@ -120,9 +98,7 @@ def construir_itinerario(nodos, solicitud):
                     buscador_caminos(vecino, destino, camino, visitados, modo)  # llamamos recursivamente desde el vecino
                     camino.pop()                         # volvemos para atrás (backtracking)
 
-        # Desmarcamos el nodo actual para permitir su uso en otros caminos
-        visitados.pop()
-
+        visitados.pop() # Desmarcamos el nodo actual para permitir su uso en otros caminos
 
     # Recorremos todos los modos posibles y buscamos caminos para cada uno, con la funcion recursiva definida arriba
     for modo in modos_disponibles:
@@ -134,12 +110,8 @@ def construir_itinerario(nodos, solicitud):
                         #Del modo fluvial hay un solo itinerario, que va de Zarate a Buenos Aires y de ahi a Mar del Plata.
 
 
-
-
 #AGREGAMOS EL TEMA DE COSTOS:
-
-def calcular_costos_y_tiempos(itinerarios_base, carga_kg): #cambie esta funcion para que itinerarios_final salga como un diccionario que tenga como clave un id 
-    #y que guarde como valor, el objeto de la clase infromacion recien creada. esto baja la complejidad de lo que estmaos haciendo 
+def calcular_costos_y_tiempos(itinerarios_base, carga_kg):
     itinerarios_final = {}
     id_actual = 1
 
@@ -166,6 +138,19 @@ def calcular_costos_y_tiempos(itinerarios_base, carga_kg): #cambie esta funcion 
     return itinerarios_final #es un dict: clave: id, valor: objeto itinerario correspondiente
 
 
+#Funcion unificada que llamo desde el main:
+
+def itinerario_por_solicitud(nodos_existentes, solicitud_tupla):
+    itinerario_sin_costos = construir_itinerario(nodos_existentes, solicitud_tupla)
+    # Extraemos de la tupla, el diccionario datos
+    _, datos = solicitud_tupla #pues se que no usare id_carga
+    
+    itinerarios_final_por_solicitud = calcular_costos_y_tiempos(itinerario_sin_costos, datos["peso_kg"]) #asi aca en el main sale una sola
+    
+    return itinerarios_final_por_solicitud
+
+
+
 #Funcion para imprimir tabla itinerarios
 def imprimir_itinerario_final(itinerarios_final):
 
@@ -177,7 +162,7 @@ def imprimir_itinerario_final(itinerarios_final):
         print(f"{'ID':<4} | {'Modo':<12} | {'Costo Total':<12} | {'Tiempo Total (min)':<20} | Itinerario")
         print("-" * 125)
         
-        for id_, itinerario in itinerarios_final.items(): #CHEQUEAR SI HAY Q USAR LOS GETS de origen y nombre (de conexion y nodo)
+        for id_, itinerario in itinerarios_final.items():
             camino_limpio = [itinerario.camino[0].getOrigen().getNombre()] #empiezo lista con el primer nodo origen 
             camino_limpio += [c.getDestino().getNombre() for c in itinerario.camino] #le agregamos solo los destinos de cada conexion
             camino_str = " → ".join(camino_limpio) #transformamos la lista final en un str
@@ -228,6 +213,7 @@ def kpi_2(itinerarios_final):
     return par_res 
 
 
+
 #Funciones para imprimir KPIs:
 
 def imprimir_kpi_1(par_res):
@@ -252,38 +238,6 @@ def imprimir_kpi_2(par_res):
         print(f"El itinerario {id_res} es el mejor.\n")
         print(res)
 
-
-"""
-#TESTEAMOS:
-if __name__ == "__main__":
-    # código de prueba local_
-
-    nodos_existentes = construir_red()  # Cargamos la red de transporte
-
-    # Definimos una solicitud de carga
-    prueba = construir_itinerario(nodos_existentes, {
-        'CARGA_001': {
-            'peso_kg': 70000.0,
-            'origen': 'Zarate',
-            'destino': 'Mar_del_Plata'
-        }
-    })
-
-    print(prueba)
-
-
-    #Mini codigo q imprime los caminos encontrados de manera mas linda:
-    print("Caminos encontrados:")
-    for modo, caminos in prueba.items():
-        print(f"\nModo: {modo}")
-        for camino in caminos:
-            print(" -> ".join([f"{conexion.origen.nombre} -> {conexion.destino.nombre}" for conexion in camino]))
-
-
-
-    itinerarios_final = calcular_costos_y_tiempos(prueba, carga_kg=5000)
-    imprimir_costos_y_tiempos(itinerarios_final)
-"""
 
 
 

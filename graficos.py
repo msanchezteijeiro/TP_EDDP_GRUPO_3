@@ -117,7 +117,7 @@ if __name__ == "__main__":
     from itinerarios import construir_itinerario, calcular_costos_y_tiempos
     from vehiculos import vehiculos_por_modo
     from itinerarios import kpi_1  # opcional, para elegir el mejor itinerario
-    from Graficos import Grafico  # este mismo archivo
+    from graficos import Grafico  # este mismo archivo
 
     def graficar_itinerario_desde_solicitud(id_solicitud):
         nodos = construir_red()
