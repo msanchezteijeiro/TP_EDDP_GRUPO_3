@@ -39,9 +39,10 @@ class Itinerario: #LE FALTAN GETS A LAS COSAS (SOBRE todo AL TIEMPO Y CARGA PARA
     #ver si hace falta validar algo, yp diria que no, son todos datos ya validados previamente PREGUNTAR!!
 
     def __repr__(self):
-        camino_str = " -> ".join(
-            f"{c.getOrigen().getNombre()} → {c.getDestino().getNombre()} ({c.getDistancia()} km)" for c in self.camino
-        )
+        rec_fin = [self.getCamino()[0].getOrigen().getNombre()]
+        for conexion in self.getCamino():
+            rec_fin.append(conexion.getDestino().getNombre())
+        camino_str = " -> ".join(rec_fin)
         #aca c.getOrigen() trae un nodo y el getNombre trae el nombre de ese nodo. lo mismo para el destino
         SANGRIA = "  "
         return (f"{SANGRIA}● Modo: {self.modo.capitalize()}\n"
@@ -163,10 +164,10 @@ def imprimir_itinerario_final(itinerarios_final):
         print("-" * 125)
         
         for id_, itinerario in itinerarios_final.items():
-            camino_limpio = [itinerario.camino[0].getOrigen().getNombre()] #empiezo lista con el primer nodo origen 
+            camino_limpio = [itinerario.getCamino()[0].getOrigen().getNombre()] #empiezo lista con el primer nodo origen 
+            
             camino_limpio += [c.getDestino().getNombre() for c in itinerario.camino] #le agregamos solo los destinos de cada conexion
             camino_str = " → ".join(camino_limpio) #transformamos la lista final en un str
-
             print(f"{id_:<4} | {itinerario.getModo().capitalize():<12} | ${itinerario.getCosto():<11.2f} | {itinerario.getTiempo():<20.2f} | {camino_str}")
 
 
@@ -186,7 +187,6 @@ def kpi_1(itinerarios_final):
             id_res = id
             res = itinerario
     par_res = (id_res, res) #tupla
-
     return par_res
 
 

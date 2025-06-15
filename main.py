@@ -8,7 +8,6 @@ from solicitudes import solicitudes
 if __name__ == "__main__":
 
     #aca creo q va un try:
-
     #Construyo la Red
     nodos_disponibles = construir_red()
 
@@ -19,7 +18,7 @@ if __name__ == "__main__":
     for tupla_solicitud in solicitudes.items(): 
         id_carga, datos = tupla_solicitud #datos es un dict con claves (peso_kg, origen, destino)
         print("\n\n" + ("-" * 150))
-        print(f"\nProcesando solicitud: {id_carga} | Peso = {datos["peso_kg"]:<.2f}kg | {datos["origen"]} → {datos["destino"]}")
+        print(f"\nProcesando solicitud: {id_carga} | Peso = {datos['peso_kg']:<.2f}kg | {datos['origen']} → {datos['destino']}")
         
         itinerarios_final = itinerario_por_solicitud(nodos_disponibles, tupla_solicitud)
         imprimir_itinerario_final(itinerarios_final)

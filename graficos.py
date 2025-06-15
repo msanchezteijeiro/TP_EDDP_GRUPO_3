@@ -1,4 +1,9 @@
 import matplotlib.pyplot as plt
+from redes import construir_red
+from solicitudes import solicitudes
+from itinerarios import construir_itinerario, calcular_costos_y_tiempos
+from vehiculos import vehiculos_por_modo
+from itinerarios import kpi_1
 
 class Grafico: 
     
@@ -9,19 +14,19 @@ class Grafico:
         plt.ylabel(nombre_y)
         plt.bar(lista_x, lista_y,color='green',width=0.5)
         plt.grid()
-        plt.show()
+        
 
     @staticmethod
     def grafico_linea(valores):
         plt.plot(valores)
         plt.grid()
-        plt.show()
+        
 
     @staticmethod
     def grafico_torta(titulo, secciones, cantidades):
         plt.pie(cantidades,labels=secciones, autopct='%1.2f%%')
         plt.title(label=titulo, loc='center', color='blue')
-        plt.show()
+        
     
     @staticmethod 
     def grafico_lineal(titulo, nombre_x, nombre_y, x1, y1): #linea 1 y linea2 son los nombres de las dos lineas
@@ -31,7 +36,7 @@ class Grafico:
         # Grafica de lineas
         plt.plot(x1,y1,color='green',linewidth=3, marker="o")
         plt.grid()
-        plt.show()
+        
 
     @staticmethod
     def calcular_acumulados(itinerario, vehiculo, carga_kg):
@@ -66,7 +71,7 @@ class Grafico:
         plt.ylabel("Distancia Acumulada [km]")
         plt.plot(tiempo_acum, distancia_acum, marker='o')
         plt.grid()
-        plt.show()
+
     
     @staticmethod
     def grafico_costo_vs_distancia(costo_acum, distancia_acum):
@@ -76,7 +81,7 @@ class Grafico:
         plt.ylabel("Costo Acumulado [$]")
         plt.plot(distancia_acum, costo_acum, marker='o', color='orange')
         plt.grid()
-        plt.show()
+
 
     @staticmethod
     def grafico_kpis_itinerarios(itinerarios):
@@ -100,30 +105,13 @@ class Grafico:
             plt.annotate(f"ID {ids[i]}", (tiempos[i], costos[i]), textcoords="offset points", xytext=(5,5), ha='left')
 
         plt.grid()
-        plt.show()
-
-
-#Grafico Tiempo vs Distancia Recorrida (FALTA PONER LOS DATOS DE TIEMPO Y DISTANCIA)
-#Grafico.grafico_lineal("Tiempo vs Distancia", "Tiempo [min]", "Distancia [km]", )
-
-#Grafico Costo por Distancia Recorrida (FALTA PONER LOS DATOS DE COSTO Y DISTANCIA)
-#Grafico.grafico_lineal("Costo vs Distancia", "Costo [$]", "Distancia [km]", )
-
-if __name__ == "__main__":
-    # Probamos con una solicitud real del CSV y graficamos los resultados
-
-    from redes import construir_red
-    from solicitudes import solicitudes
-    from itinerarios import construir_itinerario, calcular_costos_y_tiempos
-    from vehiculos import vehiculos_por_modo
-    from itinerarios import kpi_1  # opcional, para elegir el mejor itinerario
-    from graficos import Grafico  # este mismo archivo
-
+    
     def graficar_itinerario_desde_solicitud(id_solicitud):
         nodos = construir_red()
         datos = solicitudes[id_solicitud]
-
-        caminos = construir_itinerario(nodos, {id_solicitud: datos})
+        print(nodos)
+        print({id_solicitud: datos})
+        caminos = construir_itinerario(nodos, (id_solicitud,datos))
         itinerarios = calcular_costos_y_tiempos(caminos, datos["peso_kg"])
         if not itinerarios:
             print("No hay itinerarios posibles.")
@@ -138,7 +126,16 @@ if __name__ == "__main__":
         vehiculo = vehiculos_por_modo[itinerario.getModo()]
         dist, tiempo, costo = Grafico.calcular_acumulados(itinerario, vehiculo, datos["peso_kg"])
         Grafico.grafico_distancia_vs_tiempo(dist, tiempo)
-        Grafico.grafico_costo_vs_distancia(costo, dist)
+        Grafico.grafico_costo_vs_distancia(costo, dist)    
 
+
+#Grafico Tiempo vs Distancia Recorrida (FALTA PONER LOS DATOS DE TIEMPO Y DISTANCIA)
+#Grafico.grafico_lineal("Tiempo vs Distancia", "Tiempo [min]", "Distancia [km]", )
+
+#Grafico Costo por Distancia Recorrida (FALTA PONER LOS DATOS DE COSTO Y DISTANCIA)
+#Grafico.grafico_lineal("Costo vs Distancia", "Costo [$]", "Distancia [km]", )
+
+if __name__ == "__main__":
     # Acá elegís la solicitud que querés visualizar
-    graficar_itinerario_desde_solicitud("CARGA_001")
+    Grafico.graficar_itinerario_desde_solicitud("CARGA_001")
+    plt.show()
