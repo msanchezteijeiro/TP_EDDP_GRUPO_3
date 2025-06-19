@@ -325,3 +325,6 @@ El archivo incluye un try-except general para atrapar errores en la ejecucion.
 -Los vehiculos deben estar instanciados en vehiculos.py.
 
 
+# Instructivo de ejecución deprograma
+
+
