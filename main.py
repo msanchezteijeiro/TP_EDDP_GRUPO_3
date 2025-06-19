@@ -31,15 +31,14 @@ if __name__ == "__main__":
             resultado_kpi_2 = kpi_2(itinerarios_final)
             imprimir_kpi_1(resultado_kpi_1)
             imprimir_kpi_2(resultado_kpi_2)
-            print(resultado_kpi_1)
 
-            #Graficos:
+
 
             #Grafico de Costo Acumulado vs Distancia Acumulada: Para el Itinerario KPI 1
             tiempo_acum, distancia_acum_t = Grafico.obtener_datos_distancia_vs_tiempo(tupla_solicitud, itinerarios_final, resultado_kpi_1)
 
-            print(distancia_acum_t)
-            print(tiempo_acum)
+            #print(distancia_acum_t)
+            #print(tiempo_acum)
 
             grafico1 = Grafico.grafico_lineal("Distancia Acumulada vs. Tiempo Acumulado", "Tiempo Acumulado [min]", "Distancia Acumulada [km]", tiempo_acum, distancia_acum_t)
 
@@ -49,8 +48,8 @@ if __name__ == "__main__":
             #Grafico de Costo Acumulado vs Distancia Acumulada: Para el Itinerario KPI 2
             distancia_acum_c, costo_acum = Grafico.obtener_datos_costo_vs_distancia(tupla_solicitud, itinerarios_final, resultado_kpi_2)
 
-            print(distancia_acum_c)
-            print(costo_acum)
+            #print(distancia_acum_c)
+            #print(costo_acum)
 
             grafico1 = Grafico.grafico_lineal("Costo Acumulado vs. Distancia Acumulada", "Distancia Acumulada [km]", "Costo Acumulado [$]", distancia_acum_c, costo_acum)
 

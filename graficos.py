@@ -1,7 +1,8 @@
 import matplotlib.pyplot as plt
+import numpy as np
 from redes import construir_red
 from solicitudes import solicitudes
-from itinerarios import construir_itinerario, calcular_costos_y_tiempos
+from itinerarios import construir_itinerario, calcular_costos_y_tiempos, itinerario_por_solicitud
 from vehiculos import vehiculos_por_modo
 from itinerarios import kpi_1
 
@@ -93,7 +94,34 @@ class Grafico:
         return distancia_acum, costo_acum
 
 
+"""
+    @staticmethod
+    def Cantidad_modo(solicitudes,nodos_disponibles):
+        for tupla_solicitud in solicitudes.items():
 
+            itinerarios_final = itinerario_por_solicitud(nodos_disponibles, tupla_solicitud)
+        
+            cant_modos = []
+            for i in itinerarios_final.values():
+                cant_modos.append(i.getModo())
+            modos = []
+            cantidad = []
+            for elemento in cant_modos:
+                if elemento not in modos:
+                    modos.append(elemento)
+                    cantidad.append(cant_modos.count(elemento))
+            X = np.array(modos)
+            Y = np.array(cantidad)
+
+            fig, ax = plt.subplots(figsize=(5, 5))
+            ax.bar(X, Y, color='blue')
+
+            ax.set_title('Cantidad de modos en todos los caminos posibles.')
+            ax.set_xlabel('Modos')
+            ax.set_ylabel('Cantidades')
+
+            plt.show()
+"""
 
 """
 
