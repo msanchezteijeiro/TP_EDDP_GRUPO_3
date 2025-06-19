@@ -124,14 +124,10 @@ def calcular_costos_y_tiempos(itinerarios_base, carga_kg):
         for camino in caminos: #camino es una lista de objetos conexion
             costo_total_camino = vehiculo.calcular_costo_carga(camino, carga_kg)
             tiempo_total_camino = 0
-            for conexion in camino:
-                try:
-                    costo_total_camino += vehiculo.calcular_costo_tramo(conexion, carga_kg)
-                    tiempo_total_camino += vehiculo.calcular_tiempo(conexion)
-                except Exception as e:
-                    print(f"Error al calcular para {conexion}: {e}")
-                    continue
 
+            for conexion in camino:
+                costo_total_camino += vehiculo.calcular_costo_tramo(conexion, carga_kg)
+                tiempo_total_camino += vehiculo.calcular_tiempo(conexion)
             info = Itinerario(modo, camino, costo_total_camino, tiempo_total_camino)
             itinerarios_final[id_actual] = info
             id_actual += 1
@@ -166,7 +162,7 @@ def imprimir_itinerario_final(itinerarios_final):
         for id_, itinerario in itinerarios_final.items():
             camino_limpio = [itinerario.getCamino()[0].getOrigen().getNombre()] #empiezo lista con el primer nodo origen 
             
-            camino_limpio += [c.getDestino().getNombre() for c in itinerario.camino] #le agregamos solo los destinos de cada conexion
+            camino_limpio += [c.getDestino().getNombre() for c in itinerario.getCamino()] #le agregamos solo los destinos de cada conexion
             camino_str = " → ".join(camino_limpio) #transformamos la lista final en un str
             print(f"{id_:<4} | {itinerario.getModo().capitalize():<12} | ${itinerario.getCosto():<11.2f} | {itinerario.getTiempo():<20.2f} | {camino_str}")
 

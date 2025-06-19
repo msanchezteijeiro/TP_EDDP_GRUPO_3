@@ -19,7 +19,7 @@ def instanciar_nodos():
         try:
             nodos[nombre] = Nodo(nombre)
         except ValueError as e:
-            print(f"Error creando nodo '{nombre}': {e}. Nodo omitido.")
+            raise ValueError(f"Error creando nodo '{nombre}': {e}. Nodo omitido.")
     
     return nodos
 

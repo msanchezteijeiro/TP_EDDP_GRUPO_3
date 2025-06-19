@@ -16,3 +16,4 @@ Buenos_Aires,Mar_del_Plata,Fluvial,384,tipo,maritimo
 Junin,Buenos_Aires,Aerea,238,prob_mal_tiempo,0.1
 Azul,Buenos_Aires,Aerea,278,prob_mal_tiempo,0.2
 Buenos_Aires,Mar_del_Plata,Aerea,384,prob_mal_tiempo,0.3
+Zarate,Junin,Aerea,423,prob_mal_tiempo,0.5

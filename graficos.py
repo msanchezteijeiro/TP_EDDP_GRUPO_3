@@ -112,6 +112,9 @@ class Grafico:
         print(nodos)
         print({id_solicitud: datos})
         caminos = construir_itinerario(nodos, (id_solicitud,datos))
+        print(caminos)
+        for i in caminos.values():
+            print(i)
         itinerarios = calcular_costos_y_tiempos(caminos, datos["peso_kg"])
         if not itinerarios:
             print("No hay itinerarios posibles.")
@@ -138,4 +141,4 @@ class Grafico:
 if __name__ == "__main__":
     # Acá elegís la solicitud que querés visualizar
     Grafico.graficar_itinerario_desde_solicitud("CARGA_001")
-    plt.show()
+    #plt.show()

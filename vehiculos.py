@@ -281,8 +281,8 @@ class Aerea (Vehiculo):
         
     def setCosto_fijo (self, costo_fijo):  
         if not Validaciones.validar_int (costo_fijo) and not Validaciones.validar_float(costo_fijo): 
-            raise TypeError ("el costo fijo debe ser un numero")            
-        self.cosot_fijo = costo_fijo
+            raise TypeError ("El costo fijo debe ser un numero")            
+        self.costo_fijo = costo_fijo
     
     def setCosto_por_km (self, costo_por_km): 
         if not Validaciones.validar_int (costo_por_km) and not Validaciones.validar_float(costo_por_km): 
@@ -331,23 +331,22 @@ class Aerea (Vehiculo):
             raise TypeError ('No se ingreso una conexion valida')
         
         velocidad = 600
-
-        if conexion.restriccion == "prob_mal_tiempo":
-            float(conexion.valor_restriccion)
+        if conexion.getRestriccion() == "prob_mal_tiempo":
+            
             try:
-                prob_mal_tiempo = float(conexion.valor_restriccion)
+                prob_mal_tiempo = float(conexion.getValorRestriccion())
+                if not(0<=prob_mal_tiempo<=1):
+                    raise ValueError
                 
                 import random
                 num_random = random.random()
-            
                 if num_random < prob_mal_tiempo: #hay mal tiempo, uso menor velocidad
                     velocidad = 400
 
                 #Si num_random es mayor o igual, no hay mal tiempo, me quedo con la mayor velocidad definida antes
 
             except (ValueError, TypeError): #nos cubrimos de que se haya filtrado un None, "", o algo q no sea numerico.
-                print(f"Se definió una restriccion de probabilidad de mal tiempo pero el campo {conexion.valor_restriccion} no posee un valor númerico (int o float). Se asume que no hay restricción.")
-
+                raise ValueError("La probabilidad de mal tiempo no es un valor numérico entre 0 y 1.")
         tiempo_minutos = (conexion.getDistancia()/velocidad)*60
         return tiempo_minutos
 
