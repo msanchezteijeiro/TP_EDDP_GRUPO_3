@@ -15,13 +15,7 @@ class Grafico:
         plt.bar(lista_x, lista_y,color='green',width=0.5)
         plt.grid()
         
-
-    @staticmethod
-    def grafico_linea(valores):
-        plt.plot(valores)
-        plt.grid()
         
-
     @staticmethod
     def grafico_torta(titulo, secciones, cantidades):
         plt.pie(cantidades,labels=secciones, autopct='%1.2f%%')
@@ -38,30 +32,70 @@ class Grafico:
         plt.grid()
         
 
-    @staticmethod
-    def calcular_acumulados(itinerario, vehiculo, carga_kg):
-        distancia_acumulada = []
-        tiempo_acumulado = []
-        costo_acumulado = []
 
+    #from vehiculos import vehiculos_por_modo  CREO Q ESTA ARRIBA
+
+    @staticmethod
+    def obtener_datos_distancia_vs_tiempo(tupla_solicitud, itinerarios, resultado_kp1):
+        id_carga, datos = tupla_solicitud
+
+        if not itinerarios:
+            raise ValueError(f"No hay itinerarios disponibles para la solicitud {id_carga}.")
+
+        # Usamo el itinearaio recibido por parametro
+        _, mejor_itinerario = resultado_kp1
+        vehiculo = vehiculos_por_modo[mejor_itinerario.getModo()]
+
+        distancia_acum = [0]
+        tiempo_acum = [0]
         total_distancia = 0
         total_tiempo = 0
-        total_costo = 0
 
-        for conexion in itinerario.camino:
+        for conexion in mejor_itinerario.camino:
             distancia = conexion.getDistancia()
             tiempo = vehiculo.calcular_tiempo(conexion)
-            costo = vehiculo.calcular_costo_tramo(conexion, carga_kg)
 
             total_distancia += distancia
             total_tiempo += tiempo
+
+            distancia_acum.append(total_distancia)
+            tiempo_acum.append(total_tiempo)
+
+        return tiempo_acum, distancia_acum
+
+
+    @staticmethod
+    def obtener_datos_costo_vs_distancia(tupla_solicitud, itinerarios, resultado_kp1):
+        id_carga, datos = tupla_solicitud
+
+        if not itinerarios:
+            raise ValueError(f"No hay itinerarios disponibles para la solicitud {id_carga}.")
+
+        _, mejor_itinerario = resultado_kp1
+        vehiculo = vehiculos_por_modo[mejor_itinerario.getModo()]
+
+        carga_kg = datos["peso_kg"]
+        distancia_acum = [0, 0]
+        costo_acum = [0, vehiculo.calcular_costo_carga(mejor_itinerario.camino, carga_kg)]
+        total_distancia = 0
+        total_costo = vehiculo.calcular_costo_carga(mejor_itinerario.camino, carga_kg)
+
+        for conexion in mejor_itinerario.camino:
+            distancia = conexion.getDistancia()
+            costo = vehiculo.calcular_costo_tramo(conexion, carga_kg)
+
+            total_distancia += distancia
             total_costo += costo
 
-            distancia_acumulada.append(total_distancia)
-            tiempo_acumulado.append(total_tiempo)
-            costo_acumulado.append(total_costo)
+            distancia_acum.append(total_distancia)
+            costo_acum.append(total_costo)
 
-        return distancia_acumulada, tiempo_acumulado, costo_acumulado
+        return distancia_acum, costo_acum
+
+
+
+
+"""
 
     @staticmethod
     def grafico_distancia_vs_tiempo(distancia_acum, tiempo_acum):
@@ -104,38 +138,6 @@ class Grafico:
         for i in range(len(ids)):
             plt.annotate(f"ID {ids[i]}", (tiempos[i], costos[i]), textcoords="offset points", xytext=(5,5), ha='left')
 
-        plt.grid()
-    
-    @staticmethod
-    def graficar_itinerario_desde_solicitud(id_solicitud):
-        nodos = construir_red()
-        datos = solicitudes[id_solicitud]
-        caminos = construir_itinerario(nodos, (id_solicitud, datos))
-        itinerarios = calcular_costos_y_tiempos(caminos, datos["peso_kg"])
-
-        if not itinerarios:
-            print("No hay itinerarios posibles.")
-            return
-
-        itinerario = kpi_1(itinerarios)[1]
-        vehiculo = vehiculos_por_modo[itinerario.getModo()]
-
-        dist, tiempo, costo = Grafico.calcular_acumulados(itinerario, vehiculo, datos["peso_kg"])
-
-        Grafico.grafico_kpis_itinerarios(itinerarios)
-        Grafico.grafico_lineal("Tiempo vs Distancia", "Tiempo [min]", "Distancia [km]", tiempo, dist)
-        Grafico.grafico_lineal("Costo vs Distancia", "Distancia [km]", "Costo [$]", dist, costo)
-
-        plt.show()  # <- mostrar todo junto
+       """
 
 
-#Grafico Tiempo vs Distancia Recorrida (FALTA PONER LOS DATOS DE TIEMPO Y DISTANCIA)
-#Grafico.grafico_lineal("Tiempo vs Distancia", "Tiempo [min]", "Distancia [km]", )
-
-#Grafico Costo por Distancia Recorrida (FALTA PONER LOS DATOS DE COSTO Y DISTANCIA)
-#Grafico.grafico_lineal("Costo vs Distancia", "Costo [$]", "Distancia [km]", )
-
-if __name__ == "__main__":
-    # Acá elegís la solicitud que querés visualizar
-    Grafico.graficar_itinerario_desde_solicitud("CARGA_001")
-    #plt.show()
