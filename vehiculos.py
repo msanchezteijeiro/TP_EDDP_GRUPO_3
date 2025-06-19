@@ -9,18 +9,9 @@ class Vehiculo:
     def getModos(cls):
         return cls.modos
 
-    def __init__ (self, modo: str, capacidad: float): #que modo sea none y el set de modo este en los subvehiculos REVISARRR
-        
-        self.setModo(modo)
+    def __init__ (self, capacidad: float, modo=None):
+        self.modo = modo
         self.setCapacidad(capacidad)
-        self.modos.append(modo.lower()) #agrega el modo a la lista de modos
-
-    def setModo (self, modo):
-        if not Validaciones.validar_str(modo):
-            raise TypeError(f"el modo tiene que ser una cadena str")       
-        if not Conexion.validar_modo(modo): 
-            raise ValueError("el modo no es uno de los cuatro permitidos")
-        self.modo = modo.lower()
     
     def setCapacidad (self, capacidad): 
         if not Validaciones.validar_float (capacidad) and not Validaciones.validar_int (capacidad): 
@@ -35,11 +26,14 @@ class Vehiculo:
 
 
 class Ferroviaria (Vehiculo): 
-    def __init__ (self, capacidad, velocidad, costo_fijo, costo_por_kg, modo ='ferroviaria'):    
-        super().__init__(modo, capacidad)
+    def __init__ (self, capacidad, velocidad, costo_fijo, costo_por_kg, modo='ferroviaria'):    
+        super().__init__(capacidad)
+        self.setModo (modo)
         self.setVelocidad(velocidad)
         self.setCosto_fijo(costo_fijo)
         self.setCosto_por_kg(costo_por_kg)
+        
+        Vehiculo.modos.append(modo.lower())
     
     def setVelocidad (self, velocidad): 
         if not Validaciones.validar_int(velocidad) and not Validaciones.validar_float(velocidad): 
@@ -55,7 +49,15 @@ class Ferroviaria (Vehiculo):
         if not Validaciones.validar_int(costo_por_kg) and not Validaciones.validar_float(costo_por_kg): 
             raise TypeError ("el costo_por_kg debe ser un numero")
         self.costo_por_kg = costo_por_kg
-        
+    
+    def setModo (self, modo):
+        if not Validaciones.validar_str(modo):
+            raise TypeError(f"el modo tiene que ser una cadena str")       
+        if not Conexion.validar_modo(modo): 
+            raise ValueError("el modo no es uno de los cuatro permitidos")
+        self.modo = modo.lower()
+    
+    
     def getVelocidad (self): 
         return self.velocidad
     
@@ -108,11 +110,14 @@ class Ferroviaria (Vehiculo):
 
 class Automotor (Vehiculo): 
     def __init__ (self, capacidad, velocidad, costo_fijo, costo_por_km, modo = "automotor"):
-        super().__init__(modo, capacidad)
+        super().__init__(capacidad)
+        self.setModo (modo)
         self.setVelocidad(velocidad)
         self.setCosto_fijo(costo_fijo)
         self.setCosto_por_km(costo_por_km)
-    
+        
+        Vehiculo.modos.append(modo.lower())
+        
     def setVelocidad (self, velocidad): 
         if not Validaciones.validar_int(velocidad) and not Validaciones.validar_float(velocidad): 
             raise TypeError ("la velocidad debe ser un numero")
@@ -127,6 +132,13 @@ class Automotor (Vehiculo):
         if not Validaciones.validar_int (costo_por_km) and not Validaciones.validar_float(costo_por_km): 
             raise TypeError ("el costo por km debe ser un numero")
         self.costo_por_km = costo_por_km
+    
+    def setModo (self, modo):
+        if not Validaciones.validar_str(modo):
+            raise TypeError(f"el modo tiene que ser una cadena str")       
+        if not Conexion.validar_modo(modo): 
+            raise ValueError("el modo no es uno de los cuatro permitidos")
+        self.modo = modo.lower()
     
     def getVelocidad (self): 
         return self.velocidad
@@ -163,7 +175,7 @@ class Automotor (Vehiculo):
         return costo_carga_por_vehiculo
 
     def calcular_costo_carga(self, lista_conexiones, carga):
-        capacidad = self.capacidad #REVISAR SI ESTO NO ES MEJOR PARA TODOS LOS VEHICULOS
+        capacidad = self.capacidad
         
         #Itera sobre la lista de conexiones y busca la menor restriccion de capacidad 
         for conexion in lista_conexiones:
@@ -203,10 +215,13 @@ class Automotor (Vehiculo):
 
 class Fluvial (Vehiculo): 
     def __init__ (self, capacidad, velocidad, costo_por_km, costo_por_kg, modo = "fluvial"):
-        super().__init__(modo, capacidad)
+        super().__init__(capacidad)
+        self.setModo(modo)
         self.setVelocidad(velocidad)
         self.setCosto_por_km(costo_por_km)
         self.setCosto_por_kg(costo_por_kg)
+        
+        Vehiculo.modos.append(modo.lower())
         
     def setVelocidad (self, velocidad): 
         if not Validaciones.validar_int(velocidad) and not Validaciones.validar_float(velocidad): 
@@ -222,6 +237,13 @@ class Fluvial (Vehiculo):
         if not Validaciones.validar_int (costo_por_kg) and not Validaciones.validar_float(costo_por_kg): 
             raise TypeError ("el costo por kg debe ser un numero")
         self.costo_por_kg = costo_por_kg
+        
+    def setModo (self, modo):
+        if not Validaciones.validar_str(modo):
+            raise TypeError(f"el modo tiene que ser una cadena str")       
+        if not Conexion.validar_modo(modo): 
+            raise ValueError("el modo no es uno de los cuatro permitidos")
+        self.modo = modo.lower()
 
     def getVelocidad (self): 
         return self.velocidad
@@ -274,10 +296,13 @@ class Fluvial (Vehiculo):
 
 class Aerea (Vehiculo): 
     def __init__ (self, capacidad, costo_fijo, costo_por_km, costo_por_kg, modo = "aerea"):
-        super().__init__(modo, capacidad)
+        super().__init__(capacidad)
+        self.setModo(modo)
         self.setCosto_fijo(costo_fijo)
         self.setCosto_por_km(costo_por_km)
         self.setCosto_por_kg(costo_por_kg)
+        
+        Vehiculo.modos.append(modo.lower())
         
     def setCosto_fijo (self, costo_fijo):  
         if not Validaciones.validar_int (costo_fijo) and not Validaciones.validar_float(costo_fijo): 
@@ -293,7 +318,15 @@ class Aerea (Vehiculo):
         if not Validaciones.validar_int (costo_por_kg) and not Validaciones.validar_float(costo_por_kg): 
             raise TypeError ("el costo por kg debe ser un numero")
         self.costo_por_kg = costo_por_kg
-    
+        
+    def setModo (self, modo):
+        if not Validaciones.validar_str(modo):
+            raise TypeError(f"el modo tiene que ser una cadena str")       
+        if not Conexion.validar_modo(modo): 
+            raise ValueError("el modo no es uno de los cuatro permitidos")
+        self.modo = modo.lower()
+
+        
     def getCosto_fijo (self): 
         return self.costo_fijo   
     
@@ -311,7 +344,7 @@ class Aerea (Vehiculo):
 
         return cant_vehiculos
 
-    def calcular_costo_carga(self, lista_conexiones, carga): #revisar
+    def calcular_costo_carga(self, lista_conexiones, carga):
         costo_carga = (carga * self.getCosto_por_kg())
 
         return costo_carga
@@ -343,7 +376,7 @@ class Aerea (Vehiculo):
                 if num_random < prob_mal_tiempo: #hay mal tiempo, uso menor velocidad
                     velocidad = 400
 
-                #Si num_random es mayor o igual, no hay mal tiempo, me quedo con la mayor velocidad definida antes
+                #si num_random es mayor o igual, no hay mal tiempo, me quedo con la mayor velocidad definida antes
 
             except (ValueError, TypeError): #nos cubrimos de que se haya filtrado un None, "", o algo q no sea numerico.
                 raise ValueError("La probabilidad de mal tiempo no es un valor numérico entre 0 y 1.")
@@ -352,7 +385,7 @@ class Aerea (Vehiculo):
 
 
 
-#DEFINICION DE LOS VEHICULO: NO BORRAR!!
+#definicion de los vehiculos
 def instanciar_vehiculos():
 
     try: #no se pasa por parametro aquellos valores que dependen de algo, se calculan por metodos
@@ -375,7 +408,7 @@ def instanciar_vehiculos():
 
     return vehiculos_por_modo, ferroviaria, automotor, fluvial, aerea
 
-#Instanciamos las variables: ESTO SE PODRIA MOVER A Itinerarios.py REVISAR!!!
+
 vehiculos_por_modo, ferroviaria, automotor, fluvial, aerea = instanciar_vehiculos()
 
 #TESTEAMOS:

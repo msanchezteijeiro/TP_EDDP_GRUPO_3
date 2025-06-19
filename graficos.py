@@ -106,30 +106,27 @@ class Grafico:
 
         plt.grid()
     
+    @staticmethod
     def graficar_itinerario_desde_solicitud(id_solicitud):
         nodos = construir_red()
         datos = solicitudes[id_solicitud]
-        print(nodos)
-        print({id_solicitud: datos})
-        caminos = construir_itinerario(nodos, (id_solicitud,datos))
-        print(caminos)
-        for i in caminos.values():
-            print(i)
+        caminos = construir_itinerario(nodos, (id_solicitud, datos))
         itinerarios = calcular_costos_y_tiempos(caminos, datos["peso_kg"])
+
         if not itinerarios:
             print("No hay itinerarios posibles.")
             return
 
-        # Podés elegir el primero o el mejor según KPI 1
-        # itinerario = list(itinerarios.values())[0]
         itinerario = kpi_1(itinerarios)[1]
-    # Para comparar todos los itinerarios de esa solicitud
-        Grafico.grafico_kpis_itinerarios(itinerarios)
-
         vehiculo = vehiculos_por_modo[itinerario.getModo()]
+
         dist, tiempo, costo = Grafico.calcular_acumulados(itinerario, vehiculo, datos["peso_kg"])
-        Grafico.grafico_distancia_vs_tiempo(dist, tiempo)
-        Grafico.grafico_costo_vs_distancia(costo, dist)    
+
+        Grafico.grafico_kpis_itinerarios(itinerarios)
+        Grafico.grafico_lineal("Tiempo vs Distancia", "Tiempo [min]", "Distancia [km]", tiempo, dist)
+        Grafico.grafico_lineal("Costo vs Distancia", "Distancia [km]", "Costo [$]", dist, costo)
+
+        plt.show()  # <- mostrar todo junto
 
 
 #Grafico Tiempo vs Distancia Recorrida (FALTA PONER LOS DATOS DE TIEMPO Y DISTANCIA)

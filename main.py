@@ -1,4 +1,3 @@
-# main.py
 from redes import construir_red
 from vehiculos import instanciar_vehiculos
 from itinerarios import itinerario_por_solicitud, imprimir_itinerario_final, kpi_1, kpi_2, imprimir_kpi_1, imprimir_kpi_2
@@ -7,12 +6,8 @@ from solicitudes import solicitudes
 
 if __name__ == "__main__":
     try:
-    #aca creo q va un try:
     #Construyo la Red
         nodos_disponibles = construir_red()
-
-        #Instancio los vehiculos:  NO FUNCIONA SI LOS INSTANCIAMOS ACA!!! REVISAR (sino quedaran en vehiculos)
-        #vehiculos_por_modo, ferroviaria, automotor, fluvial, aerea = instanciar_vehiculos()
 
         #RECORRO SOLICITUDES:
         for tupla_solicitud in solicitudes.items(): 

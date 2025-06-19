@@ -21,8 +21,6 @@ class Nodo:
     def __repr__(self): #Revisar si es necesario
         return f"Nodo({self.nombre})"
 
-    #tal vez deberia agregar un get vecinos y usarlo en lugar de acceder directamente al atributo vecinos
-    #PREGUNTAR SI ES NECESARIO
 
 
     def agregar_conexion(self, destino, conexion):#funcion q agrega una conexion al nodo
