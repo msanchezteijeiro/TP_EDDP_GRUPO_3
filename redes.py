@@ -1,4 +1,4 @@
-from lector_archivos import cargar_archivo_como_listas, decodificar_nodos, decodificar_conexiones
+from lector_archivos import Lector_Archivos
 from nodos import Nodo
 from conexiones import Conexion
 
@@ -6,8 +6,8 @@ from conexiones import Conexion
 #INSTANCIAMOS NODOS A PARTIR DE nodos.csv
 
 def instanciar_nodos():
-    lista_nodos = cargar_archivo_como_listas("nodos.csv")
-    nombres_nodos = decodificar_nodos(lista_nodos)
+    lista_nodos = Lector_Archivos.cargar_archivo_como_listas("nodos.csv")
+    nombres_nodos = Lector_Archivos.decodificar_nodos(lista_nodos)
 
     # Creamos un diccionario de nodos, donde la clave es el nombre del nodo y el valor es una instancia de Nodo
     # Estamos suponiendo que el archivo nodos.csv se recibirá una unica vez, este codigo no contempla que se agreguen o eliminen nodos permitidos
@@ -29,8 +29,8 @@ def instanciar_nodos():
 
 def instanciar_conexiones(nodos):
 
-    lista_conexiones = cargar_archivo_como_listas("conexiones.csv")
-    diccionario_conexiones = decodificar_conexiones(lista_conexiones)
+    lista_conexiones = Lector_Archivos.cargar_archivo_como_listas("conexiones.csv")
+    diccionario_conexiones = Lector_Archivos.decodificar_conexiones(lista_conexiones)
 
     # Recorremos el diccionario de conexiones donde las claves son nodos origen y cada valor es otro dic con 
     # cada nodos destino y los datos de la conexion (modo, distancia, restriccion, valor_restriccion)
