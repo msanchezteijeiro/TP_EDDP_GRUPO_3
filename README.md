@@ -2,12 +2,14 @@
 
 Este es el repositorio del Grupo 5.
 
+# Proposito del trabajo
+
 Este proyecto resuelve un problema de planificación de transporte multimodal. 
 Dado un conjunto de ciudades (nodos), conexiones disponibles entre ellas y solicitudes de carga, el sistema busca
 todos los itinerarios posibles para transportar esa carga cumpliendo restricciones, calcula los costos y tiempos,
 y genera visualizaciones gráficas.
 
-Archivos .csv
+# Archivos .csv
 
 El programa necesita tres archivos .csv para su correcto funcionamiento.
 El estado inicial de la red de transporte, las solicitudes de envio y los nodos disponibles.
@@ -47,9 +49,9 @@ restriccion puede tomar el valor de: "peso_max", "velocidad_max", "prob_mal_tiem
 Si una restriccion esta presente debe tener un valor asociado.
 
 
-Archivos.py del programa
+# Archivos.py del programa
 
-lector_archivos.py
+# lector_archivos.py
 
 Este modulo se encarga de la carga, procesamiento y decodificacion de los archivos .csv con los datos de entrada del sistema.
 
@@ -84,9 +86,9 @@ Estrae los nombres de los nodos desde nodos.csv y los devuelve como una lista de
 
 
 
-validaciones.py
+# validaciones.py
 
-Acá se define la clase "Validaciones" la cual agrupa metodos estaticos para validar tipos de datos.
+Aca se define la clase "Validaciones" la cual agrupa metodos estaticos para validar tipos de datos.
 Se utiliza en multiples clases del proyecto para evitar errores en la ejecucion del programa.
 
 La clase "Validaciones" tiene distitnos metodos donde se validan floats, int, str, nombre, tipo de restricciones, valor de las restricciones.
@@ -95,7 +97,7 @@ Esta pensada para evitar errores al cargar datosdesde archivos externos o al cre
 IMPORTANTE: no debe importar otras clases del sistema para evitar dependencias circulares.
 
 
-nodos.py
+# nodos.py
 
 En este archivo se define la clase "Nodo", que represneta un punto dentro de la red de transporte (ciudad). Cada nodo tiene una conexion hacia otros nodos y los modos de transporte que soporta.
 
@@ -121,11 +123,11 @@ Se utilizan los getters para devolver la informacion.
 Esta clase permite que los nodos se construyan desde un archivos ".csv"
 
 
-conexiones.py
+# conexiones.py
 
 Se define la clase "Conexion", que representa un tramo directo entre dos nodos dentro de la red de transporte. Cada conexion tiene un origen, un destino, un modo de transporte y si las hay, restricciones.
 
-Clase "COnexion"
+Clase "Conexion"
 
 Atributos:
 "origen": objeto de tipo "Nodo", punto de partida de la conexion
@@ -151,7 +153,7 @@ Esta clase se usa para construir la red de transporte. Cada objeto "Conexion" se
 
 
 
-vehiculos.py
+# vehiculos.py
 
 Aca se implementa la clase "Vehiculo" y sus cuatro subclases que representan distintos modos de transporte disponibles:
 
@@ -205,7 +207,7 @@ Devuelve "vehiculos_por_modo", diccionario con las claves "ferroviaria", "automo
 
 
 
-redes.py
+# redes.py
 
 Este archivo es responsable de construir la red de nodos y sus conexiones a partir de los archivos "nodos.csv" y "conexiones.csv".
 
@@ -230,7 +232,7 @@ La red se presenta como un diciconario de nodos y cada nodo guarda a sus vecinos
 -Se incluye manejo de errores ante datos invalido o archivos incompletos
 
 
-solicitudes.py
+# solicitudes.py
 
 Se encarga de leer y preparar las solicitudes de transporte desde el archivo "solicitudes.csv".
 
@@ -247,7 +249,7 @@ Las solicitudes se almacenan en un diccionario donde:
 
 
 
-intinerarios.py
+# intinerarios.py
 
 Este archivo genera, evalua e imprime los itinerarios de transporte entre dos nodos segun la solicitud de carga.
 
@@ -293,7 +295,7 @@ Cada uno retorna una tupla (ID, itinerario) correspondiente al mejor caso.
 
 
 
-main.py
+# main.py
 
 Archivo principal del TP. Ejecuta todo el proceso de planificacion de transporte desde la lectura de archivos hasta la impresion de resultados y KPIs.
 
@@ -325,6 +327,48 @@ El archivo incluye un try-except general para atrapar errores en la ejecucion.
 -Los vehiculos deben estar instanciados en vehiculos.py.
 
 
-# Instructivo de ejecución deprograma
+# Instructivo de ejecucion deprograma
+
+1. Requisitos previos:
+Python instalado
+Libreria matplotlib instalada
+El Trabajo contiene:
+
+Archivos .csv:
+-nodos.csv
+-conexiones.csv
+-solicitudes.csv
+
+Archivos .py:
+-main.py
+-lector_archivos.py
+-nodos.py
+-conexiones.py
+-validaciones.py
+-vehiculos.py
+-redes.py
+-solicitudes.py
+-itinerarios.py
+-graficos.py (opcional, para visualizaciones)
+
+2. Ejecucion del programa:
+
+Desde el arvhivo main.py, ejecutrarlo
+Este archivo realiza lo siguiente para cada solicitud de carga en solicitudes.csv
+
+-Construye la red de transporte a partir de los archivos .csv
+-Encuentra todos los itinerarios posibles por modo de transporte
+-Calcula el costo total y el tiempo total de cada itinerario.
+-Imprime una tabla resumen con todos los caminos posibles
+-Muestra los itinerarios optimos segun los KPIs (menor tiempo total, menor costo total)
+
+3. Visualizacion de graficos
+
+Para
+
+
+
+
+
 
 

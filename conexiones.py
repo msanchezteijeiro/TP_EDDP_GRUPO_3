@@ -1,10 +1,8 @@
 from nodos import Nodo
 from validaciones import Validaciones
 
-#conexiones.py
-
 class Conexion():
-    #origen  y destino en este caso seria un nodo
+
     def __init__(self, origen: Nodo, destino: Nodo, modo:str, distancia: int, restriccion = None, valor_restriccion = None):   
 
         #Seteamos los atributos de la clase:
@@ -57,7 +55,6 @@ class Conexion():
         return self.restriccion
     
     def setValorRestriccion(self, valor_restriccion):
-        #esta puede ser vacio, str, int o float, hace falta validar? PREGUNTAR
         if not Validaciones.validar_valor_restriccion(valor_restriccion):
             raise ValueError(f"Valor de restriccion no reconocido: {valor_restriccion}")
         self.valor_restriccion= valor_restriccion
@@ -65,12 +62,12 @@ class Conexion():
     def getValorRestriccion(self):
         return self.valor_restriccion
 
-    def __repr__(self): #CHEQUERA SI ES NECESARIO
+    def __repr__(self):
         return (f"Conexion({self.getOrigen()} -> {self.getDestino()}, "
                 f"modo={self.getModo()}, distancia={self.getDistancia()} km, "
                 f"restriccion={self.getRestriccion()}, valor={self.getValorRestriccion()})")
     
-    #Validaciones:
+    #Validaciones: no esta en la clase Validaciones por importacion circular
     @staticmethod
     def validar_modo (modo):
         modos_validos = {"ferroviaria", "automotor", "fluvial", "aerea"}

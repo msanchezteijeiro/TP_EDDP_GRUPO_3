@@ -1,2 +1,6 @@
 id_carga,peso_kg,origen,destino
 CARGA_001,70000,Zarate,Mar_del_Plata
+<<<<<<< HEAD
+=======
+CARGA_002,80000,Azul,Mar_del_Plata
+>>>>>>> b84472c91de0909f6f8782b19343372f1ff289b4
