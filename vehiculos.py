@@ -1,5 +1,7 @@
+import random
 from validaciones import Validaciones
 from conexiones import Conexion
+
 
 
 class Vehiculo: 
@@ -371,7 +373,6 @@ class Aerea (Vehiculo):
                 if not(0<=prob_mal_tiempo<=1):
                     raise ValueError
                 
-                import random
                 num_random = random.random()
                 if num_random < prob_mal_tiempo: #hay mal tiempo, uso menor velocidad
                     velocidad = 400

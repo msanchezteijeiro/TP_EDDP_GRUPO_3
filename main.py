@@ -1,17 +1,15 @@
 # main.py
 import matplotlib.pyplot as plt
-import matplotlib.pyplot as plt
 from redes import construir_red
 from vehiculos import instanciar_vehiculos
 from itinerarios import itinerario_por_solicitud, imprimir_itinerario_final, kpi_1, kpi_2, imprimir_kpi_1, imprimir_kpi_2
 from solicitudes import solicitudes
 from graficos import Grafico
-from graficos import Grafico
+
 
 
 if __name__ == "__main__":
     try:
-    #aca creo q va un try:
     #Construyo la Red
         nodos_disponibles = construir_red()
 
