@@ -39,9 +39,14 @@ if __name__ == "__main__":
 
             #Grafico de Cantidad de Caminos Posibles por Modo:
             Grafico.graf_cantidad_vs_modo(itinerarios_final)
+            
+            Grafico.graf_carga_por_unidad(resultado_kpi_1, tupla_solicitud)
+ 
 
-
+            
+            
     except Exception as e:
         print(f'Error: {e}')
+
 
 

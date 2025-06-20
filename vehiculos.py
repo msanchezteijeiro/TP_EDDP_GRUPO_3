@@ -6,7 +6,7 @@ from conexiones import Conexion
 
 class Vehiculo: 
     modos = []
-
+    vehiculos = []
     @classmethod
     def getModos(cls):
         return cls.modos
@@ -14,6 +14,7 @@ class Vehiculo:
     def __init__ (self, capacidad: float, modo=None):
         self.modo = modo
         self.setCapacidad(capacidad)
+        Vehiculo.vehiculos.append(self)
     
     def setCapacidad (self, capacidad): 
         if not Validaciones.validar_float (capacidad) and not Validaciones.validar_int (capacidad): 
@@ -475,4 +476,3 @@ if __name__ == "__main__":
     print(aerea)
 
 """
-

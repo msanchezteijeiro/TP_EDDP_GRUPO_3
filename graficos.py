@@ -1,17 +1,17 @@
 import matplotlib.pyplot as plt
 import numpy as np
-
-from itinerarios import Itinerario
+from vehiculos import Vehiculo
 
 class Grafico: 
     
     @staticmethod
     def grafico_barras(titulo, nombre_x, nombre_y, lista_x, lista_y):
-        plt.title(label= titulo, fontsize=20, color='blue')
+        plt.title(label= titulo, fontsize=10, color='black')
         plt.xlabel(nombre_x)
         plt.ylabel(nombre_y)
         plt.bar(lista_x, lista_y,color='green',width=0.5)
         plt.grid()
+        plt.xticks(rotation=0, ha='center')
         
     @staticmethod
     def grafico_torta(titulo, secciones, cantidades):
@@ -118,9 +118,34 @@ class Grafico:
 
         plt.show()
 
-
-"""
-
+    @staticmethod
+    def graf_carga_por_unidad (itinerario_final, solicitud):
+        carga = solicitud[1]['peso_kg']
+        modo = itinerario_final[1].getModo()
+        cant_vehiculos = 0
+        vehiculos = []
+        cargas = []
+        for vehiculo in Vehiculo.vehiculos: 
+            if vehiculo.getModo() == modo.lower(): 
+                while carga >= vehiculo.getCapacidad():
+                    cargas.append(vehiculo.getCapacidad())
+                    cant_vehiculos += 1
+                    vehiculos.append(cant_vehiculos)
+                    carga -= vehiculo.getCapacidad()
+                if carga > 0: 
+                    cargas.append(carga)
+                    cant_vehiculos += 1
+                    vehiculos.append(cant_vehiculos)
+                    carga = 0 
+                    
+        
+        nros_vehiculos = np.array(vehiculos)
+        x = nros_vehiculos.astype(str)
+        y = np.array(cargas)
+        grafico = Grafico.grafico_barras('Carga por vehiculo', "Vehiculo nro", "Carga [kg]", x, y)
+        plt.show()
+        
+        """ 
     @staticmethod
     def grafico_distancia_vs_tiempo(distancia_acum, tiempo_acum):
         plt.figure()

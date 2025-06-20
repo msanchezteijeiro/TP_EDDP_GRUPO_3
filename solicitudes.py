@@ -9,3 +9,4 @@ solicitudes = Lector_Archivos.decodificar_solicitudes(lista_solicitudes) #es un 
 if __name__ == "__main__":
 
     print(solicitudes)
+
