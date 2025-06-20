@@ -25,6 +25,18 @@ class Vehiculo:
 
     def getCapacidad (self): 
         return self.capacidad
+    
+    def calcular_cant_vehiculos(self):
+        raise NotImplementedError("La subclase debe implementar calcular_cant_vehiculos")
+
+    def calcular_costo_carga(self):
+        raise NotImplementedError("La subclase debe implementar calcular_costo_carga")
+
+    def calcular_costo_tramo(self):
+        raise NotImplementedError("La subclase debe implementar calcular_costo_tramo")
+
+    def calcular_tiempo(self):
+        raise NotImplementedError("La subclase debe implementar calcular_tiempo")
 
 
 class Ferroviaria (Vehiculo): 
