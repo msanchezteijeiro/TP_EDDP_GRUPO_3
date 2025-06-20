@@ -2,7 +2,7 @@
 import matplotlib.pyplot as plt
 from redes import construir_red
 from vehiculos import instanciar_vehiculos
-from itinerarios import itinerario_por_solicitud, imprimir_itinerario_final, kpi_1, kpi_2, imprimir_kpi_1, imprimir_kpi_2
+from itinerarios import Itinerario
 from solicitudes import solicitudes
 from graficos import Grafico
 
@@ -22,13 +22,13 @@ if __name__ == "__main__":
             print("\n\n" + ("-" * 150))
             print(f"\nProcesando solicitud: {id_carga} | Peso = {datos['peso_kg']:<.2f}kg | {datos['origen']} → {datos['destino']}")
         
-            itinerarios_final = itinerario_por_solicitud(nodos_disponibles, tupla_solicitud)
-            imprimir_itinerario_final(itinerarios_final)
+            itinerarios_final = Itinerario.itinerario_por_solicitud(nodos_disponibles, tupla_solicitud)
+            Itinerario.imprimir_itinerario_final(itinerarios_final)
 
-            resultado_kpi_1 = kpi_1(itinerarios_final)
-            resultado_kpi_2 = kpi_2(itinerarios_final)
-            imprimir_kpi_1(resultado_kpi_1)
-            imprimir_kpi_2(resultado_kpi_2)
+            resultado_kpi_1 = Itinerario.kpi_1(itinerarios_final)
+            resultado_kpi_2 = Itinerario.kpi_2(itinerarios_final)
+            Itinerario.imprimir_kpi_1(resultado_kpi_1)
+            Itinerario.imprimir_kpi_2(resultado_kpi_2)
 
 
 
