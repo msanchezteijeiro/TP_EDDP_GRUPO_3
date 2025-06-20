@@ -326,6 +326,20 @@ Notas:
 El archivo incluye un try-except general para atrapar errores en la ejecucion.
 -Los vehiculos deben estar instanciados en vehiculos.py.
 
+# graficos.py
+
+Este archivo cuenta con la clase Grafico donde se generan los graficos de linea de distancia vs tiempo y costos vs distancia y, un grafico de barras que muestra la cantida de itinerario que hay con cada medio de transporte lo que nos permite ver que tan conectada estan las ciudades entre sí. 
+
+Tambien nos permite ver el resutlado del itinerario mas rápido (gráfico de distancia vs tiempo) y con menor costo (gráfico costo vs distancia).
+
+Para generar los gráficos hacemos uso de la librería matplotlib la cual debe ser instalada
+
+
+
+
+
+
+
 
 # Instructivo de ejecucion deprograma
 
@@ -364,8 +378,17 @@ Este archivo realiza lo siguiente para cada solicitud de carga en solicitudes.cs
 
 3. Visualizacion de graficos
 
-Para
+Desde el archivo main.py, se generan  gráficos utilizando las funciones del archivo graficos.py.
+Para cada solicitud procesada se muestra:
 
+-Un gráfico de línea de distancia  vs. tiempo 
+
+-Un gráfico de línea de costo  vs. distancia
+
+-Un gráfico de barras que muestra la cantidad de itinerarios por modo de transporte
+
+Estos gráficos se visualizan automáticamente al ejecutar el programa principal y requieren tener instalada la librería matplotlib.
+Las funciones pueden ser reutilizadas o adaptadas para otros análisis visuales según las necesidades del usuario.
 
 
 
