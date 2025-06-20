@@ -142,51 +142,8 @@ class Grafico:
         nros_vehiculos = np.array(vehiculos)
         x = nros_vehiculos.astype(str)
         y = np.array(cargas)
-        grafico = Grafico.grafico_barras('Carga por vehiculo', "Vehiculo nro", "Carga [kg]", x, y)
+        Grafico.grafico_barras('Carga por vehiculo', "Vehiculo nro", "Carga [kg]", x, y)
         plt.show()
         
-        """ 
-    @staticmethod
-    def grafico_distancia_vs_tiempo(distancia_acum, tiempo_acum):
-        plt.figure()
-        plt.title("Distancia Acumulada vs. Tiempo Acumulado")
-        plt.xlabel("Tiempo Acumulado [min]")
-        plt.ylabel("Distancia Acumulada [km]")
-        plt.plot(tiempo_acum, distancia_acum, marker='o')
-        plt.grid()
-
-    
-    @staticmethod
-    def grafico_costo_vs_distancia(costo_acum, distancia_acum):
-        plt.figure()
-        plt.title("Costo Acumulado vs. Distancia Acumulada")
-        plt.xlabel("Distancia Acumulada [km]")
-        plt.ylabel("Costo Acumulado [$]")
-        plt.plot(distancia_acum, costo_acum, marker='o', color='orange')
-        plt.grid()
-
-
-    @staticmethod
-    def grafico_kpis_itinerarios(itinerarios):
-        tiempos = []
-        costos = []
-        ids = []
-
-        for id_, itin in itinerarios.items():
-            tiempos.append(itin.tiempo)
-            costos.append(itin.costo)
-            ids.append(id_)
-
-        plt.figure()
-        plt.title("Comparación de Itinerarios: Costo vs Tiempo")
-        plt.xlabel("Tiempo Total [min]")
-        plt.ylabel("Costo Total [$]")
-        plt.scatter(tiempos, costos, color='purple')
-
-        # Etiquetas con el ID encima de cada punto
-        for i in range(len(ids)):
-            plt.annotate(f"ID {ids[i]}", (tiempos[i], costos[i]), textcoords="offset points", xytext=(5,5), ha='left')
-
-       """
 
 

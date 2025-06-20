@@ -15,9 +15,9 @@ class Lector_Archivos:
                     partes = linea.strip().split(",")
                     filas.append(partes)
         except FileNotFoundError:
-            print(f"Error: no se encontro el archivo {ruta_archivo}")
+            raise Exception(f"No se encontro el archivo {ruta_archivo}")
         except Exception as e:
-            print(f"Error al leer el archivo {ruta_archivo}: {e}")
+            raise Exception(f"Error al leer el archivo {ruta_archivo}: {e}")
 
         return filas
 

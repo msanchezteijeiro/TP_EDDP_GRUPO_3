@@ -1,15 +1,19 @@
 from redes import construir_red
 from vehiculos import instanciar_vehiculos
 from itinerarios import Itinerario
-from solicitudes import solicitudes
+from lector_archivos import Lector_Archivos
 from graficos import Grafico
 
 
 
 if __name__ == "__main__":
     try:
-    #Construyo la Red
+        #Construyo la Red
         nodos_disponibles = construir_red()
+
+        #Extraemos las solicitudes de los csv
+        lista_solicitudes = Lector_Archivos.cargar_archivo_como_listas("solicitudes.csv")
+        solicitudes = Lector_Archivos.decodificar_solicitudes(lista_solicitudes)
 
         #Instancio los vehiculos: 
         vehiculos_por_modo, ferroviaria, automotor, fluvial, aerea = instanciar_vehiculos()
@@ -38,7 +42,7 @@ if __name__ == "__main__":
             #Grafico de Cantidad de Caminos Posibles por Modo:
             Grafico.graf_cantidad_vs_modo(itinerarios_final)
             
-            #Grafico de carga por vahiculo por cantidad de vehiculos:
+            #Grafico de carga por vehiculo por cantidad de vehiculos:
             Grafico.graf_carga_por_unidad(resultado_kpi_1, tupla_solicitud)
  
 
