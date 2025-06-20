@@ -32,8 +32,8 @@ class Nodo:
         self.vecinos[destino].append(conexion) #agrega la conexion al diccioario de ese destino
 
         #Revisamos si el modo estaba en la lista de modos de ese destino, si no estaba lo agregamos.
-        if conexion.modo not in self.modos_soportados:
-            self.modos_soportados.append(conexion.modo)
+        if conexion.getModo() not in self.modos_soportados:
+            self.modos_soportados.append(conexion.getModo())
 
     def getVecinos(self):
         return self.vecinos

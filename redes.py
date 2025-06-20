@@ -74,7 +74,7 @@ def instanciar_conexiones(nodos):
                     nodos[destino].agregar_conexion(origen, conexion_inversa)
 
                 except (ValueError, TypeError) as e:
-                    print(f"Error creando conexión entre '{origen}' y '{destino}' via '{c['modo']}': {e}. Registro omitido.")
+                    raise ValueError(f"Error creando conexión entre '{origen}' y '{destino}' via '{c['modo']}': {e}. Registro omitido.")
 
 
 def construir_red(): #YA NO NECESITA NINGUN MANEJO DE ERRO, se manejaron al instanciar Nodos y Conexiones arriba.

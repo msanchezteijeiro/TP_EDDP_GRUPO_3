@@ -58,55 +58,46 @@ class Itinerario:
     
 
 #función que busca todos los caminos posibles entre dos nodos, con un solo modo de transporte y sin ciclos
-def construir_itinerario(nodos, solicitud_tupla): #nodos es un..., solicitud_tupla es una tupla con id_carga y datos
-    
+def buscador_caminos(nodos, actual, destino, camino, visitados, modo, itinerarios_base):
+    #si ya llegmos al destino, termina el árbol
+    if actual == destino:
+        if modo not in itinerarios_base:
+            itinerarios_base[modo] = []
+        itinerarios_base[modo].append(list(camino))
+        return itinerarios_base
+
+    #marcamos el nodo como visitado
+    visitados.append(actual)
+
+    for vecino, conexiones in nodos[actual].getVecinos().items():
+        if vecino in visitados:
+            continue
+
+        for conexion in conexiones:
+            if conexion.getModo() == modo:
+                camino.append(conexion)
+                buscador_caminos(nodos, vecino, destino, camino, visitados, modo, itinerarios_base)
+                camino.pop()
+
+    visitados.pop()
+    return itinerarios_base 
+
+
+def construir_itinerario(nodos, solicitud_tupla):
     itinerarios_base = {}
 
-    # Extraemos de la tupla, el diccionario datos (el id no nos interesa por ahora)
-    _, datos = solicitud_tupla #pues se que no usare id_carga
-    
+    _, datos = solicitud_tupla
     origen = datos["origen"]
     destino = datos["destino"]
 
-    # Lista de modos disponibles construida a partir del nodo origen:
     modos_disponibles = nodos[origen].getModosSoportados()
-        #nos traemos los modos de transporte que soporta el nodo origen, q son los unicos que podemos usar para buscar caminos
 
-    # Función recursiva para buscar caminos:
-    def buscador_caminos(actual, destino, camino, visitados, modo):
-        # Caso base: si llegamos al destino, guardamos el camino actual
-        if actual == destino:
-            if modo not in itinerarios_base:
-                itinerarios_base[modo] = []
-            itinerarios_base[modo].append(list(camino))  # copiamos el camino actual
-            return
-
-        # Marcamos el nodo como visitado (agregamos a la lista)
-        visitados.append(actual)
-
-        # Recorremos todos los vecinos del nodo actual
-        for vecino, conexiones in nodos[actual].getVecinos().items():
-
-            # Si el vecino ya fue visitado, lo salteamos para evitar ciclos
-            if vecino in visitados:
-                continue
-
-            # Recorremos todas las conexiones hacia ese vecino
-            for conexion in conexiones:
-                # Si el modo coincide con el modo actual...
-                if conexion.getModo() == modo:
-                    camino.append(conexion)              # agregamos la conexión al camino actual
-                    buscador_caminos(vecino, destino, camino, visitados, modo)  # llamamos recursivamente desde el vecino
-                    camino.pop()                         # volvemos para atrás (backtracking)
-
-        visitados.pop() # Desmarcamos el nodo actual para permitir su uso en otros caminos
-
-    # Recorremos todos los modos posibles y buscamos caminos para cada uno, con la funcion recursiva definida arriba
     for modo in modos_disponibles:
         if origen in nodos and destino in nodos:
-            buscador_caminos(actual=origen, destino=destino, camino=[], visitados=[], modo=modo)
+            itinerarios_base = buscador_caminos(nodos, origen, destino, [], [], modo, itinerarios_base)
 
-    return itinerarios_base #itinerarios_base es un diccionario, en el que la clave es "modo" y el valor es lista de las conexiones que usa ese camino
+    return itinerarios_base
+
 
 
 #AGREGAMOS EL TEMA DE COSTOS:
