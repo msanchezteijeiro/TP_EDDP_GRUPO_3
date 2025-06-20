@@ -383,10 +383,10 @@ class Aerea (Vehiculo):
         return self.costo_por_kg
     
     def getVel_buen_tiempo (self): 
-        return self.Vel_buen_tiempo
+        return self.vel_buen_tiempo
     
     def getVel_mal_tiempo (self): 
-        return self.Vel_mal_tiempo
+        return self.vel_mal_tiempo
 
     
     def calcular_cant_vehiculos (self, conexion, carga):
@@ -416,7 +416,7 @@ class Aerea (Vehiculo):
         if not isinstance (conexion, Conexion):
             raise TypeError ('No se ingreso una conexion valida')
         
-        velocidad = self.getVel_buen_tiempo
+        velocidad = self.getVel_buen_tiempo()
         if conexion.getRestriccion() == "prob_mal_tiempo":
             
             try:
@@ -426,7 +426,7 @@ class Aerea (Vehiculo):
                 
                 num_random = random.random()
                 if num_random < prob_mal_tiempo: #hay mal tiempo, uso menor velocidad
-                    velocidad = self.getVel_mal_tiempo
+                    velocidad = self.getVel_mal_tiempo()
 
                 #si num_random es mayor o igual, no hay mal tiempo, me quedo con la mayor velocidad definida antes
 
