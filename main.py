@@ -42,17 +42,18 @@ if __name__ == "__main__":
 
             plt.show()
 
-
             #Grafico de Costo Acumulado vs Distancia Acumulada: Para el Itinerario KPI 2
-            distancia_acum_c, costo_acum = Grafico.obtener_datos_costo_vs_distancia(tupla_solicitud, itinerarios_final, resultado_kpi_2)
+            distancia_acum_c, costo_acum, costo_fijo = Grafico.obtener_datos_costo_vs_distancia(tupla_solicitud, itinerarios_final, resultado_kpi_2)
 
             #print(distancia_acum_c)
             #print(costo_acum)
 
-            grafico1 = Grafico.grafico_lineal("Costo Acumulado vs. Distancia Acumulada", "Distancia Acumulada [km]", "Costo Acumulado [$]", distancia_acum_c, costo_acum)
+            grafico2= Grafico.grafico_lineal("Costo Acumulado vs. Distancia Acumulada", "Distancia Acumulada [km]", "Costo Acumulado [$]", distancia_acum_c, costo_acum)
+            grafico3 = Grafico.grafico_lineal("Costo Acumulado vs. Distancia Acumulada", "Distancia Acumulada [km]", "Costo Acumulado [$]", distancia_acum_c, costo_fijo)
 
-
+            
             plt.show()
+
 
 
 

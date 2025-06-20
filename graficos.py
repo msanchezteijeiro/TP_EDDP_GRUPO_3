@@ -76,10 +76,11 @@ class Grafico:
         vehiculo = vehiculos_por_modo[mejor_itinerario.getModo()]
 
         carga_kg = datos["peso_kg"]
-        distancia_acum = [0, 0]
-        costo_acum = [0, vehiculo.calcular_costo_carga(mejor_itinerario.camino, carga_kg)]
+        distancia_acum = [0]
+        costo_acum = [0]
+        costo_fijo = [vehiculo.calcular_costo_carga(mejor_itinerario.camino, carga_kg)]
         total_distancia = 0
-        total_costo = vehiculo.calcular_costo_carga(mejor_itinerario.camino, carga_kg)
+        total_costo = 0
 
         for conexion in mejor_itinerario.camino:
             distancia = conexion.getDistancia()
@@ -90,8 +91,9 @@ class Grafico:
 
             distancia_acum.append(total_distancia)
             costo_acum.append(total_costo)
+            costo_fijo.append(vehiculo.calcular_costo_carga(mejor_itinerario.camino, carga_kg))
 
-        return distancia_acum, costo_acum
+        return distancia_acum, costo_acum, costo_fijo
 
 
 """
