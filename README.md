@@ -387,6 +387,8 @@ Para cada solicitud procesada se muestra:
 
 -Un gráfico de barras que muestra la cantidad de itinerarios por modo de transporte
 
+-Un grafico que muestra la cantidad de vehiculos y la carga que este lleva. (con la solicitud inicial, se ve como es un solo vehiculo que lleva toda la carga.)
+
 Estos gráficos se visualizan automáticamente al ejecutar el programa principal y requieren tener instalada la librería matplotlib.
 Las funciones pueden ser reutilizadas o adaptadas para otros análisis visuales según las necesidades del usuario.
 
