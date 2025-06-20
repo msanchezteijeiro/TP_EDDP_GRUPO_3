@@ -41,13 +41,15 @@ class Vehiculo:
 
 
 class Ferroviaria (Vehiculo): 
-    def __init__ (self, capacidad, velocidad, costo_fijo, costo_por_kg, modo='ferroviaria'):    
+    def __init__ (self, capacidad, velocidad, costo_fijo, costo_por_kg, distancia_quiebre, costo_por_km_min, costo_por_km_max, modo='ferroviaria'):    
         super().__init__(capacidad)
         self.setModo (modo)
         self.setVelocidad(velocidad)
         self.setCosto_fijo(costo_fijo)
         self.setCosto_por_kg(costo_por_kg)
-        
+        self.setDistancia_quiebre(distancia_quiebre)
+        self.setCosto_por_km_min(costo_por_km_min)
+        self.setCosto_por_km_max(costo_por_km_max)
         Vehiculo.modos.append(modo.lower())
     
     def setVelocidad (self, velocidad): 
@@ -71,7 +73,22 @@ class Ferroviaria (Vehiculo):
         if not Conexion.validar_modo(modo): 
             raise ValueError("el modo no es uno de los cuatro permitidos")
         self.modo = modo.lower()
+        
+    def setDistancia_quiebre (self, distancia_quiebre):
+        if not Validaciones.validar_int(distancia_quiebre) and not Validaciones.validar_float(distancia_quiebre): 
+            raise TypeError ("la distancia de quiebre debe ser un numero")
+        self.distancia_quiebre = distancia_quiebre
     
+    def setCosto_por_km_min (self, costo_por_km_min):
+        if not Validaciones.validar_int(costo_por_km_min) and not Validaciones.validar_float(costo_por_km_min): 
+            raise TypeError ("el costo por km minimo debe ser un numero")
+        self.costo_por_km_min = costo_por_km_min
+        
+    def setCosto_por_km_max (self, costo_por_km_max):
+        if not Validaciones.validar_int(costo_por_km_max) and not Validaciones.validar_float(costo_por_km_max): 
+            raise TypeError ("el costo por km maximo debe ser un numero")
+        self.costo_por_km_max = costo_por_km_max
+        
     
     def getVelocidad (self): 
         return self.velocidad
@@ -81,7 +98,15 @@ class Ferroviaria (Vehiculo):
     
     def getCosto_por_kg (self):
         return self.costo_por_kg
-
+    
+    def getDistancia_quiebre (self):
+        return self.distancia_quiebre
+    
+    def getCosto_por_km_min (self):
+        return self.costo_por_km_min
+    
+    def getCosto_por_km_max (self):
+        return self.costo_por_km_max
     def calcular_cant_vehiculos (self, conexion, carga):
         if not isinstance (conexion, Conexion): 
             raise TypeError ('No se ingreso una conexion valida')
@@ -99,10 +124,10 @@ class Ferroviaria (Vehiculo):
         if not isinstance (conexion, Conexion): 
             raise TypeError ('No se ingreso una conexion valida')
         
-        if conexion.getDistancia() < 200:
-            costo_por_km = 20
+        if conexion.getDistancia() < self.distancia_quiebre:
+            costo_por_km = self.costo_por_km_max
         else:
-            costo_por_km = 15
+            costo_por_km = self.costo_por_km_min
         
         costo_tramo_por_vehiculo = (conexion.getDistancia() * costo_por_km) + self.costo_fijo 
 
@@ -124,12 +149,15 @@ class Ferroviaria (Vehiculo):
 
 
 class Automotor (Vehiculo): 
-    def __init__ (self, capacidad, velocidad, costo_fijo, costo_por_km, modo = "automotor"):
+    def __init__ (self, capacidad, velocidad, costo_fijo, costo_por_km, carga_quiebre, costo_por_kg_min, costo_por_kg_max, modo = "automotor"):
         super().__init__(capacidad)
         self.setModo (modo)
         self.setVelocidad(velocidad)
         self.setCosto_fijo(costo_fijo)
         self.setCosto_por_km(costo_por_km)
+        self.setCarga_quiebre(carga_quiebre)
+        self.setCosto_por_kg_min(costo_por_kg_min)
+        self.setCosto_por_kg_max(costo_por_kg_max)
         
         Vehiculo.modos.append(modo.lower())
         
@@ -154,6 +182,25 @@ class Automotor (Vehiculo):
         if not Conexion.validar_modo(modo): 
             raise ValueError("el modo no es uno de los cuatro permitidos")
         self.modo = modo.lower()
+        
+    def setCarga_quiebre (self, carga_quiebre):
+        if not Validaciones.validar_int(carga_quiebre) and not Validaciones.validar_float(carga_quiebre): 
+            raise TypeError ("la carga de quiebre debe ser un numero")
+        self.carga_quiebre = carga_quiebre
+        
+        
+        
+    def setCosto_por_kg_min (self, costo_por_kg_min):
+        if not Validaciones.validar_int (costo_por_kg_min) and not Validaciones.validar_float(costo_por_kg_min): 
+            raise TypeError ("el costo por kg minimo debe ser un numero")
+        self.costo_por_kg_min = costo_por_kg_min
+        
+    def setCosto_por_kg_max (self, costo_por_kg_max):
+        if not Validaciones.validar_int (costo_por_kg_max) and not Validaciones.validar_float(costo_por_kg_max): 
+            raise TypeError ("el costo por kg maximo debe ser un numero")
+        self.costo_por_kg_max = costo_por_kg_max
+        
+        
     
     def getVelocidad (self): 
         return self.velocidad
@@ -164,6 +211,12 @@ class Automotor (Vehiculo):
     def getCosto_por_km (self):
         return self.costo_por_km
     
+    def getCarga_quiebre (self):
+        return self.carga_quiebre
+    def getCosto_por_kg_min (self):
+        return self.costo_por_kg_min
+    def getCosto_por_kg_max (self):
+        return self.costo_por_kg_max
     
     def calcular_cant_vehiculos (self, conexion, carga):
         if not isinstance (conexion, Conexion): 
@@ -180,10 +233,10 @@ class Automotor (Vehiculo):
 
     #Funcion auxiliar:
     def calcular_costo_carga_por_vehiculo(self, carga):
-        if carga < 15000:
-            costo_por_kg = 1
+        if carga < self.carga_quiebre:
+            costo_por_kg = self.costo_por_kg_min
         else:
-            costo_por_kg = 2
+            costo_por_kg = self.costo_por_kg_max
 
         costo_carga_por_vehiculo = (carga * costo_por_kg)
 
@@ -442,8 +495,8 @@ class Aerea (Vehiculo):
 def instanciar_vehiculos():
 
     try: #no se pasa por parametro aquellos valores que dependen de algo, se calculan por metodos
-        ferroviaria = Ferroviaria(150000, 100, 100, 3) #capacidad, velocidad, costo_fijo, costo_por_kg
-        automotor = Automotor(30000, 80, 30, 5) #capacidad, velocidad, costo_fijo, costo_por_km
+        ferroviaria = Ferroviaria(150000, 100, 100, 3, 200, 15, 20) #capacidad, velocidad, costo_fijo, costo_por_kg
+        automotor = Automotor(30000, 80, 30, 5, 15000, 1, 2) #capacidad, velocidad, costo_fijo, costo_por_km
         fluvial = Fluvial(100000, 40, 15, 2, 500, 1500) #capacidad, velocidad, costo_por_km, costo_por_kg
         aerea =  Aerea(5000, 750, 40, 10, 600, 400) #capacidad, costo_fijo, costo_por_km, costo_por_kg, vel_buen_tiempo, vel_mal_tiempo
 
