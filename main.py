@@ -48,11 +48,12 @@ if __name__ == "__main__":
             #print(distancia_acum_c)
             #print(costo_acum)
 
-            grafico2= Grafico.grafico_lineal("Costo Acumulado vs. Distancia Acumulada", "Distancia Acumulada [km]", "Costo Acumulado [$]", distancia_acum_c, costo_acum)
+            grafico2 = Grafico.grafico_lineal("Costo Acumulado vs. Distancia Acumulada", "Distancia Acumulada [km]", "Costo Acumulado [$]", distancia_acum_c, costo_acum)
             grafico3 = Grafico.grafico_lineal("Costo Acumulado vs. Distancia Acumulada", "Distancia Acumulada [km]", "Costo Acumulado [$]", distancia_acum_c, costo_fijo)
-
             
             plt.show()
+
+            Grafico.Cantidad_modo(tupla_solicitud, nodos_disponibles)
 
 
 
