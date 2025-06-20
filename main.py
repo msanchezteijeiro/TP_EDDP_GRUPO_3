@@ -1,5 +1,3 @@
-# main.py
-import matplotlib.pyplot as plt
 from redes import construir_red
 from vehiculos import instanciar_vehiculos
 from itinerarios import Itinerario
@@ -40,7 +38,8 @@ if __name__ == "__main__":
             #Grafico de Cantidad de Caminos Posibles por Modo:
             Grafico.graf_cantidad_vs_modo(itinerarios_final)
             
-            Grafico.graf_carga_por_unidad(resultado_kpi_2, tupla_solicitud)
+            #Grafico de carga por vahiculo por cantidad de vehiculos:
+            Grafico.graf_carga_por_unidad(resultado_kpi_1, tupla_solicitud)
  
 
             
