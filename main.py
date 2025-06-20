@@ -13,8 +13,8 @@ if __name__ == "__main__":
     #Construyo la Red
         nodos_disponibles = construir_red()
 
-        #Instancio los vehiculos:  NO FUNCIONA SI LOS INSTANCIAMOS ACA!!! REVISAR (sino quedaran en vehiculos)
-        #vehiculos_por_modo, ferroviaria, automotor, fluvial, aerea = instanciar_vehiculos()
+        #Instancio los vehiculos: 
+        vehiculos_por_modo, ferroviaria, automotor, fluvial, aerea = instanciar_vehiculos()
 
         #RECORRO SOLICITUDES:
         for tupla_solicitud in solicitudes.items(): 
@@ -22,7 +22,7 @@ if __name__ == "__main__":
             print("\n\n" + ("-" * 150))
             print(f"\nProcesando solicitud: {id_carga} | Peso = {datos['peso_kg']:<.2f}kg | {datos['origen']} → {datos['destino']}")
         
-            itinerarios_final = Itinerario.itinerario_por_solicitud(nodos_disponibles, tupla_solicitud)
+            itinerarios_final = Itinerario.itinerario_por_solicitud(nodos_disponibles, tupla_solicitud, vehiculos_por_modo)
             Itinerario.imprimir_itinerario_final(itinerarios_final)
 
             resultado_kpi_1 = Itinerario.kpi_1(itinerarios_final)
@@ -31,33 +31,14 @@ if __name__ == "__main__":
             Itinerario.imprimir_kpi_2(resultado_kpi_2)
 
 
-
-            #Grafico de Costo Acumulado vs Distancia Acumulada: Para el Itinerario KPI 1
-            tiempo_acum, distancia_acum_t = Grafico.obtener_datos_distancia_vs_tiempo(tupla_solicitud, itinerarios_final, resultado_kpi_1)
-
-            #print(distancia_acum_t)
-            #print(tiempo_acum)
-
-            grafico1 = Grafico.grafico_lineal("Distancia Acumulada vs. Tiempo Acumulado", "Tiempo Acumulado [min]", "Distancia Acumulada [km]", tiempo_acum, distancia_acum_t)
-
-            plt.show()
+            #Grafico de Distancia Acumulada vs. Tiempo Acumulado: : Para el Itinerario KPI 1
+            Grafico.graf_distancia_vs_tiempo(tupla_solicitud, itinerarios_final, resultado_kpi_1, vehiculos_por_modo)
 
             #Grafico de Costo Acumulado vs Distancia Acumulada: Para el Itinerario KPI 2
-            distancia_acum_c, costo_acum, costo_fijo = Grafico.obtener_datos_costo_vs_distancia(tupla_solicitud, itinerarios_final, resultado_kpi_2)
+            Grafico.graf_tiempo_vs_costo(tupla_solicitud, itinerarios_final, resultado_kpi_2, vehiculos_por_modo)
 
-            #print(distancia_acum_c)
-            #print(costo_acum)
-
-            grafico2 = Grafico.grafico_lineal("Costo Acumulado vs. Distancia Acumulada", "Distancia Acumulada [km]", "Costo Acumulado [$]", distancia_acum_c, costo_acum)
-            grafico3 = Grafico.grafico_lineal("Costo Acumulado vs. Distancia Acumulada", "Distancia Acumulada [km]", "Costo Acumulado [$]", distancia_acum_c, costo_fijo)
-            
-            plt.show()
-
-            Grafico.Cantidad_modo(tupla_solicitud, nodos_disponibles)
-
-
-
-
+            #Grafico de Cantidad de Caminos Posibles por Modo:
+            Grafico.graf_cantidad_vs_modo(itinerarios_final)
 
 
     except Exception as e:

@@ -1,10 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
-from redes import construir_red
-from solicitudes import solicitudes
-from itinerarios import construir_itinerario, calcular_costos_y_tiempos, itinerario_por_solicitud
-from vehiculos import vehiculos_por_modo
-from itinerarios import kpi_1
+
+from itinerarios import Itinerario
 
 class Grafico: 
     
@@ -16,13 +13,11 @@ class Grafico:
         plt.bar(lista_x, lista_y,color='green',width=0.5)
         plt.grid()
         
-        
     @staticmethod
     def grafico_torta(titulo, secciones, cantidades):
         plt.pie(cantidades,labels=secciones, autopct='%1.2f%%')
         plt.title(label=titulo, loc='center', color='blue')
         
-    
     @staticmethod 
     def grafico_lineal(titulo, nombre_x, nombre_y, x1, y1): #linea 1 y linea2 son los nombres de las dos lineas
         plt.title(titulo)
@@ -34,17 +29,15 @@ class Grafico:
         
 
 
-    #from vehiculos import vehiculos_por_modo  CREO Q ESTA ARRIBA
-
     @staticmethod
-    def obtener_datos_distancia_vs_tiempo(tupla_solicitud, itinerarios, resultado_kp1):
+    def graf_distancia_vs_tiempo(tupla_solicitud, itinerarios_final, itineario_elegido, vehiculos_por_modo):
         id_carga, datos = tupla_solicitud
 
-        if not itinerarios:
+        if not itinerarios_final:
             raise ValueError(f"No hay itinerarios disponibles para la solicitud {id_carga}.")
 
         # Usamo el itinearaio recibido por parametro
-        _, mejor_itinerario = resultado_kp1
+        _, mejor_itinerario = itineario_elegido
         vehiculo = vehiculos_por_modo[mejor_itinerario.getModo()]
 
         distancia_acum = [0]
@@ -62,17 +55,19 @@ class Grafico:
             distancia_acum.append(total_distancia)
             tiempo_acum.append(total_tiempo)
 
-        return tiempo_acum, distancia_acum
+        Grafico.grafico_lineal("Distancia Acumulada vs. Tiempo Acumulado", "Tiempo Acumulado [min]", "Distancia Acumulada [km]", tiempo_acum, distancia_acum)
+
+        plt.show()
 
 
     @staticmethod
-    def obtener_datos_costo_vs_distancia(tupla_solicitud, itinerarios, resultado_kp1):
+    def graf_tiempo_vs_costo(tupla_solicitud, itinerarios_final, itineario_elegido, vehiculos_por_modo):
         id_carga, datos = tupla_solicitud
 
-        if not itinerarios:
+        if not itinerarios_final:
             raise ValueError(f"No hay itinerarios disponibles para la solicitud {id_carga}.")
 
-        _, mejor_itinerario = resultado_kp1
+        _, mejor_itinerario = itineario_elegido
         vehiculo = vehiculos_por_modo[mejor_itinerario.getModo()]
 
         carga_kg = datos["peso_kg"]
@@ -93,13 +88,14 @@ class Grafico:
             costo_acum.append(total_costo)
             costo_fijo.append(vehiculo.calcular_costo_carga(mejor_itinerario.camino, carga_kg))
 
-        return distancia_acum, costo_acum, costo_fijo
+        grafico2 = Grafico.grafico_lineal("Costo Acumulado vs. Distancia Acumulada", "Distancia Acumulada [km]", "Costo Acumulado [$]", distancia_acum, costo_acum)
+        grafico3 = Grafico.grafico_lineal("Costo Acumulado vs. Distancia Acumulada", "Distancia Acumulada [km]", "Costo Acumulado [$]", distancia_acum, costo_fijo)
+            
+        plt.show()
 
 
     @staticmethod
-    def Cantidad_modo(tupla_solicitud, nodos_disponibles):
-        
-        itinerarios_final = itinerario_por_solicitud(nodos_disponibles, tupla_solicitud)
+    def graf_cantidad_vs_modo(itinerarios_final):
         
         cant_modos = []
         for i in itinerarios_final.values():
@@ -110,15 +106,15 @@ class Grafico:
             if elemento not in modos:
                 modos.append(elemento)
                 cantidad.append(cant_modos.count(elemento))
-        X = np.array(modos)
+        X = np.array([m.capitalize() for m in modos])
         Y = np.array(cantidad)
 
         fig, ax = plt.subplots(figsize=(5, 5))
         ax.bar(X, Y, color='blue')
 
-        ax.set_title('Cantidad de modos en todos los caminos posibles.')
-        ax.set_xlabel('Modos')
-        ax.set_ylabel('Cantidades')
+        ax.set_title('Cantidad de Caminos Posibles por Modo')
+        ax.set_xlabel('Modo')
+        ax.set_ylabel('Cantidad')
 
         plt.show()
 

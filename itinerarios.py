@@ -1,6 +1,3 @@
-from vehiculos import vehiculos_por_modo 
-
-
 class Itinerario:
     def __init__(self, modo: str, camino: list, costo: float, tiempo: float):
         
@@ -99,7 +96,7 @@ class Itinerario:
 
     #Funcion que calcula costos y tiempos y los agrega a los itinerarios base.
     @staticmethod
-    def calcular_costos_y_tiempos(itinerarios_base, carga_kg):
+    def calcular_costos_y_tiempos(itinerarios_base, carga_kg, vehiculos_por_modo):
         itinerarios_final = {}
         id_actual = 1
 
@@ -124,12 +121,12 @@ class Itinerario:
 
     #Funcion unificada que llamo desde el main:
     @staticmethod
-    def itinerario_por_solicitud(nodos_existentes, solicitud_tupla):
+    def itinerario_por_solicitud(nodos_existentes, solicitud_tupla, vehiculos_por_modo):
         itinerario_sin_costos = Itinerario.construir_itinerario(nodos_existentes, solicitud_tupla)
         # Extraemos de la tupla, el diccionario datos
         _, datos = solicitud_tupla #pues se que no usare id_carga
         
-        itinerarios_final_por_solicitud = Itinerario.calcular_costos_y_tiempos(itinerario_sin_costos, datos["peso_kg"])
+        itinerarios_final_por_solicitud = Itinerario.calcular_costos_y_tiempos(itinerario_sin_costos, datos["peso_kg"], vehiculos_por_modo)
         
         return itinerarios_final_por_solicitud
 

@@ -228,12 +228,14 @@ class Automotor (Vehiculo):
 
 
 class Fluvial (Vehiculo): 
-    def __init__ (self, capacidad, velocidad, costo_por_km, costo_por_kg, modo = "fluvial"):
+    def __init__ (self, capacidad, velocidad, costo_por_km, costo_por_kg, costo_fijo_fluvial, costo_fijo_maritimo, modo = "fluvial"):
         super().__init__(capacidad)
         self.setModo(modo)
         self.setVelocidad(velocidad)
         self.setCosto_por_km(costo_por_km)
         self.setCosto_por_kg(costo_por_kg)
+        self.setCosto_fijo_fluvial(costo_fijo_fluvial)
+        self.setCosto_fijo_maritimo(costo_fijo_maritimo)
         
         Vehiculo.modos.append(modo.lower())
         
@@ -259,6 +261,17 @@ class Fluvial (Vehiculo):
             raise ValueError("el modo no es uno de los cuatro permitidos")
         self.modo = modo.lower()
 
+    def setCosto_fijo_fluvial (self, costo_fijo_fluvial): 
+        if not Validaciones.validar_int (costo_fijo_fluvial) and not Validaciones.validar_float(costo_fijo_fluvial): 
+            raise TypeError ("el costo fijo fluvial debe ser un numero")
+        self.costo_fijo_fluvial = costo_fijo_fluvial
+
+    def setCosto_fijo_maritimo (self, costo_fijo_maritimo): 
+        if not Validaciones.validar_int (costo_fijo_maritimo) and not Validaciones.validar_float(costo_fijo_maritimo): 
+            raise TypeError ("el costo fijo maritimo debe ser un numero")
+        self.costo_fijo_maritimo = costo_fijo_maritimo
+
+
     def getVelocidad (self): 
         return self.velocidad
     
@@ -268,6 +281,13 @@ class Fluvial (Vehiculo):
     def getCosto_por_kg (self):
         return self.costo_por_kg
     
+    def getCosto_fijo_fluvial (self):
+        return self.costo_fijo_fluvial
+    
+    def getCosto_fijo_maritimo (self):
+        return self.costo_fijo_maritimo
+    
+
     def calcular_cant_vehiculos (self, conexion, carga):
         if not isinstance (conexion, Conexion): 
             raise TypeError ('No se ingreso una conexion valida')
@@ -287,9 +307,9 @@ class Fluvial (Vehiculo):
         
         if conexion.getRestriccion() == 'tipo':
             if conexion.getValorRestriccion() == 'fluvial': 
-                costo_fijo = 500
+                costo_fijo = self.getCosto_fijo_fluvial()
             elif conexion.getValorRestriccion() == 'maritimo':
-                costo_fijo = 1500
+                costo_fijo = self.getCosto_fijo_maritimo()
             else:
                 raise ValueError (f"El campo obligatorio {conexion.getValorRestriccion()} vino vacío (None).")
         else:
@@ -309,12 +329,14 @@ class Fluvial (Vehiculo):
 
 
 class Aerea (Vehiculo): 
-    def __init__ (self, capacidad, costo_fijo, costo_por_km, costo_por_kg, modo = "aerea"):
+    def __init__ (self, capacidad, costo_fijo, costo_por_km, costo_por_kg, vel_buen_tiempo, vel_mal_tiempo, modo = "aerea"):
         super().__init__(capacidad)
         self.setModo(modo)
         self.setCosto_fijo(costo_fijo)
         self.setCosto_por_km(costo_por_km)
         self.setCosto_por_kg(costo_por_kg)
+        self.setVel_buen_tiempo(vel_buen_tiempo)
+        self.setVel_mal_tiempo(vel_mal_tiempo)
         
         Vehiculo.modos.append(modo.lower())
         
@@ -340,6 +362,16 @@ class Aerea (Vehiculo):
             raise ValueError("el modo no es uno de los cuatro permitidos")
         self.modo = modo.lower()
 
+    def setVel_buen_tiempo (self, vel_buen_tiempo): 
+        if not Validaciones.validar_int(vel_buen_tiempo) and not Validaciones.validar_float(vel_buen_tiempo): 
+            raise TypeError ("la velocidad debe ser un numero")
+        self.vel_buen_tiempo = vel_buen_tiempo
+
+    def setVel_mal_tiempo (self, vel_mal_tiempo): 
+        if not Validaciones.validar_int(vel_mal_tiempo) and not Validaciones.validar_float(vel_mal_tiempo): 
+            raise TypeError ("la velocidad debe ser un numero")
+        self.vel_mal_tiempo = vel_mal_tiempo
+
         
     def getCosto_fijo (self): 
         return self.costo_fijo   
@@ -349,6 +381,13 @@ class Aerea (Vehiculo):
     
     def getCosto_por_kg (self):
         return self.costo_por_kg
+    
+    def getVel_buen_tiempo (self): 
+        return self.Vel_buen_tiempo
+    
+    def getVel_mal_tiempo (self): 
+        return self.Vel_mal_tiempo
+
     
     def calcular_cant_vehiculos (self, conexion, carga):
         if not isinstance (conexion, Conexion): 
@@ -377,7 +416,7 @@ class Aerea (Vehiculo):
         if not isinstance (conexion, Conexion):
             raise TypeError ('No se ingreso una conexion valida')
         
-        velocidad = 600
+        velocidad = self.getVel_buen_tiempo
         if conexion.getRestriccion() == "prob_mal_tiempo":
             
             try:
@@ -387,7 +426,7 @@ class Aerea (Vehiculo):
                 
                 num_random = random.random()
                 if num_random < prob_mal_tiempo: #hay mal tiempo, uso menor velocidad
-                    velocidad = 400
+                    velocidad = self.getVel_mal_tiempo
 
                 #si num_random es mayor o igual, no hay mal tiempo, me quedo con la mayor velocidad definida antes
 
@@ -404,8 +443,8 @@ def instanciar_vehiculos():
     try: #no se pasa por parametro aquellos valores que dependen de algo, se calculan por metodos
         ferroviaria = Ferroviaria(150000, 100, 100, 3) #capacidad, velocidad, costo_fijo, costo_por_kg
         automotor = Automotor(30000, 80, 30, 5) #capacidad, velocidad, costo_fijo, costo_por_km
-        fluvial = Fluvial(100000, 40, 15, 2) #capacidad, velocidad, costo_por_km, costo_por_kg
-        aerea =  Aerea(5000, 750, 40, 10) #capacidad, costo_fijo, costo_por_km, costo_por_kg
+        fluvial = Fluvial(100000, 40, 15, 2, 500, 1500) #capacidad, velocidad, costo_por_km, costo_por_kg
+        aerea =  Aerea(5000, 750, 40, 10, 600, 400) #capacidad, costo_fijo, costo_por_km, costo_por_kg, vel_buen_tiempo, vel_mal_tiempo
 
         vehiculos_por_modo = {
             "ferroviaria": ferroviaria,
@@ -422,6 +461,9 @@ def instanciar_vehiculos():
     return vehiculos_por_modo, ferroviaria, automotor, fluvial, aerea
 
 
+
+"""
+quedo instanciado en el main: SE PUEDE BORRAR
 vehiculos_por_modo, ferroviaria, automotor, fluvial, aerea = instanciar_vehiculos()
 
 #TESTEAMOS:
@@ -432,5 +474,5 @@ if __name__ == "__main__":
     print(fluvial)
     print(aerea)
 
-
+"""
 
