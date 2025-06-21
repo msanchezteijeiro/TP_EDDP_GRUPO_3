@@ -13,9 +13,10 @@ y genera visualizaciones gráficas.
 
 El programa necesita tres archivos .csv para su correcto funcionamiento.
 El estado inicial de la red de transporte, las solicitudes de envio y los nodos disponibles.
+IMPORTANTE: Fijarse que no haya lineas de mas en el archivo.csv para que lo lea correctamente
 
 1. nodos.csv
-Contiene el listado de todos los nodos (ciudades) que forman parte de la red de transporte.
+Contiene el listado de todos los nodos (ciudades) que forman parte de la red de transporte. No debe haber lineas extras vacias en el archivo para asegurarse el buen funcionamiento del proyecto.
 Ejemplo del contenido del archivo:
 nombre
 Zarate
