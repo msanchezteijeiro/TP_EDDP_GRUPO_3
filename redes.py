@@ -82,14 +82,3 @@ def construir_red(): #YA NO NECESITA NINGUN MANEJO DE ERRO, se manejaron al inst
     instanciar_conexiones(nodos_existentes)
     return nodos_existentes
 
-
-#TESTEAMOS:
-if __name__ == "__main__":
-
-    try:
-        nodos_existentes = construir_red()
-    except Exception as e:
-        print("Error al contruir la red: {e}")
-
-
-

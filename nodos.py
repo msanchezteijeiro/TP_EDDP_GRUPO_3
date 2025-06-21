@@ -1,7 +1,6 @@
 from validaciones import Validaciones
 
 
-#IMPORTANTE: Ver si hay q validar como validamos a setNombre, a las otras funciones (agregar_conexion, etc)
 
 class Nodo:
     def __init__(self, nombre: str):
@@ -24,7 +23,6 @@ class Nodo:
 
 
     def agregar_conexion(self, destino, conexion):#funcion q agrega una conexion al nodo
-        #agregar validacion de conexion??
         
         if destino not in self.vecinos: #si el destino no esta en los vecinos, lo agregamos
             self.vecinos[destino] = []

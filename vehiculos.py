@@ -515,17 +515,3 @@ def instanciar_vehiculos():
     return vehiculos_por_modo, ferroviaria, automotor, fluvial, aerea
 
 
-
-"""
-quedo instanciado en el main: SE PUEDE BORRAR
-vehiculos_por_modo, ferroviaria, automotor, fluvial, aerea = instanciar_vehiculos()
-
-#TESTEAMOS:
-if __name__ == "__main__":
-    # código de prueba local_
-    print(ferroviaria)
-    print(automotor)
-    print(fluvial)
-    print(aerea)
-
-"""
