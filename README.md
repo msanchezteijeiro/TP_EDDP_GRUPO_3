@@ -2,6 +2,13 @@
 
 Este es el repositorio del Grupo 3.
 
+-Nicolas Agustin Mendez 65858
+-Dante Tosoratti 65823
+-Matias Sanchez Teijeiro 66374
+-Pedro Arraiza 65863 
+-Santiago Carpentier 65866
+-Mateo Gabella 65850
+
 # Proposito del trabajo
 
 Este proyecto resuelve un problema de planificación de transporte multimodal. 
