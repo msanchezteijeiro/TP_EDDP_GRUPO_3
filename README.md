@@ -1,6 +1,6 @@
-# TP5_EDDP
+# TP_EDDP_GRUPO_3
 
-Este es el repositorio del Grupo 5.
+Este es el repositorio del Grupo 3.
 
 # Proposito del trabajo
 
