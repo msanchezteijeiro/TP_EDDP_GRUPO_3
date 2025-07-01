@@ -40,7 +40,7 @@ if __name__ == "__main__":
             Grafico.graf_tiempo_vs_costo(tupla_solicitud, itinerarios_final, resultado_kpi_2, vehiculos_por_modo)
 
             #Grafico de Cantidad de Caminos Posibles por Modo:
-            Grafico.graf_cantidad_vs_modo(itinerarios_final)
+            Grafico.graf_cantidad_vs_modo(itinerarios_final, tupla_solicitud)
             
             #Grafico de carga por vehiculo por cantidad de vehiculos:
             Grafico.graf_carga_por_unidad(resultado_kpi_1, tupla_solicitud)

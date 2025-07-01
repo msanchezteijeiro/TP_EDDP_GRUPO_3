@@ -55,7 +55,7 @@ class Grafico:
             distancia_acum.append(total_distancia)
             tiempo_acum.append(total_tiempo)
 
-        Grafico.grafico_lineal("Distancia Acumulada vs. Tiempo Acumulado", "Tiempo Acumulado [min]", "Distancia Acumulada [km]", tiempo_acum, distancia_acum)
+        Grafico.grafico_lineal(f'{id_carga}:\nDistancia Acumulada vs. Tiempo Acumulado', "Tiempo Acumulado [min]", "Distancia Acumulada [km]", tiempo_acum, distancia_acum)
 
         plt.show()
 
@@ -88,15 +88,17 @@ class Grafico:
             costo_acum.append(total_costo)
             costo_fijo.append(vehiculo.calcular_costo_carga(mejor_itinerario.camino, carga_kg))
 
-        grafico2 = Grafico.grafico_lineal("Costo Acumulado vs. Distancia Acumulada", "Distancia Acumulada [km]", "Costo Acumulado [$]", distancia_acum, costo_acum)
-        grafico3 = Grafico.grafico_lineal("Costo Acumulado vs. Distancia Acumulada", "Distancia Acumulada [km]", "Costo Acumulado [$]", distancia_acum, costo_fijo)
+        grafico2 = Grafico.grafico_lineal(f'{id_carga}:\nCosto Acumulado vs. Distancia Acumulada', "Distancia Acumulada [km]", "Costo Acumulado [$]", distancia_acum, costo_acum)
+        grafico3 = Grafico.grafico_lineal(f'{id_carga}:\nCosto Acumulado vs. Distancia Acumulada', "Distancia Acumulada [km]", "Costo Acumulado [$]", distancia_acum, costo_fijo)
             
         plt.show()
 
 
     @staticmethod
-    def graf_cantidad_vs_modo(itinerarios_final):
-        
+    def graf_cantidad_vs_modo(itinerarios_final,tupla_solicitud):
+        id_carga, datos = tupla_solicitud
+        if not itinerarios_final:
+            raise ValueError(f"No hay itinerarios disponibles para la solicitud {id_carga}.")
         cant_modos = []
         for i in itinerarios_final.values():
             cant_modos.append(i.getModo())
@@ -112,16 +114,19 @@ class Grafico:
         fig, ax = plt.subplots(figsize=(5, 5))
         ax.bar(X, Y, color='blue')
 
-        ax.set_title('Cantidad de Caminos Posibles por Modo')
+        ax.set_title(f'{id_carga}:\nCantidad de Caminos Posibles por Modo')
         ax.set_xlabel('Modo')
         ax.set_ylabel('Cantidad')
 
         plt.show()
 
     @staticmethod
-    def graf_carga_por_unidad (itinerario_final, solicitud):
-        carga = solicitud[1]['peso_kg']
-        modo = itinerario_final[1].getModo()
+    def graf_carga_por_unidad (resultado_kpi_1, tupla_solicitud):
+        id_carga, datos = tupla_solicitud
+        if not resultado_kpi_1:
+            raise ValueError(f"No hay itinerarios disponibles para la solicitud {id_carga}.")
+        carga = datos['peso_kg']
+        modo = resultado_kpi_1[1].getModo()
         cant_vehiculos = 0
         vehiculos = []
         cargas = []
@@ -142,7 +147,7 @@ class Grafico:
         nros_vehiculos = np.array(vehiculos)
         x = nros_vehiculos.astype(str)
         y = np.array(cargas)
-        Grafico.grafico_barras('Carga por vehiculo', "Vehiculo nro", "Carga [kg]", x, y)
+        Grafico.grafico_barras(f'{id_carga}:\nCarga por vehiculo de tipo {modo}', "Vehiculo nro", "Carga [kg]", x, y)
         plt.show()
         
 
