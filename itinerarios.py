@@ -194,8 +194,30 @@ class Itinerario:
         par_res = (id_res, res) #tupla
 
         return par_res 
+    
+    @staticmethod
+    def kpi_3(itinerarios_final, vehiculos_por_modo, carga_kg): 
+        
+        if not itinerarios_final:
+            return None
 
+        min_consumo = float('inf')
+        id_res = None
+        res = None
+        
+        for id, itinerario in itinerarios_final.items():
+            vehiculo = vehiculos_por_modo[itinerario.getModo().lower()]
+            consumo_total = 0
+            for conexion in itinerario.getCamino():
+                consumo_total += vehiculo.calcular_combustible(conexion.getDistancia())
+            consumo_por_kg = consumo_total / carga_kg if carga_kg > 0 else float('inf')
+            if consumo_por_kg < min_consumo:
+                min_consumo = consumo_por_kg
+                id_res = id
+                res = itinerario
 
+        par_res = (id_res, res)
+        return par_res
 
     #Funciones para imprimir KPIs:
     @staticmethod
@@ -222,6 +244,17 @@ class Itinerario:
             print(f"El itinerario {id_res} es el mejor.\n")
             print(res)
 
+    @staticmethod
+    def imprimir_kpi_3(par_res): 
+        if not par_res: 
+            print("\n\nNo hay itinerarios disponibles para KPI 3.")
+        else: 
+            id_res = par_res[0]
+            res = par_res[1]
+            print("\n\nMEJOR ITINERARIO SEGÚN: → | KPI 3: Minimizar el consumo de combustible por kg de carga |")
+            print("-" * 87)
+            print(f"El itinerario {id_res} es el mejor.\n")
+            print(res)
 
 
 

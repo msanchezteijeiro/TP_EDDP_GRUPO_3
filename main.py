@@ -26,11 +26,15 @@ if __name__ == "__main__":
         
             itinerarios_final = Itinerario.itinerario_por_solicitud(nodos_disponibles, tupla_solicitud, vehiculos_por_modo)
             Itinerario.imprimir_itinerario_final(itinerarios_final)
+            carga_kg = tupla_solicitud[1]["peso_kg"]
+            
 
             resultado_kpi_1 = Itinerario.kpi_1(itinerarios_final)
             resultado_kpi_2 = Itinerario.kpi_2(itinerarios_final)
+            resultado_kpi_3 = Itinerario.kpi_3(itinerarios_final, vehiculos_por_modo, carga_kg)
             Itinerario.imprimir_kpi_1(resultado_kpi_1)
             Itinerario.imprimir_kpi_2(resultado_kpi_2)
+            Itinerario.imprimir_kpi_3(resultado_kpi_3)
 
 
             #Grafico de Distancia Acumulada vs. Tiempo Acumulado: : Para el Itinerario KPI 1
@@ -50,6 +54,4 @@ if __name__ == "__main__":
             
     except Exception as e:
         print(f'Error: {e}')
-
-
 

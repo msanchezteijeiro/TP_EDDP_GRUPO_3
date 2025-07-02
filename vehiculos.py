@@ -10,10 +10,12 @@ class Vehiculo:
     @classmethod
     def getModos(cls):
         return cls.modos
+    
 
-    def __init__ (self, capacidad: float, modo=None):
+    def __init__ (self, capacidad: float, rendimiento: float, modo=None):
         self.modo = modo
         self.setCapacidad(capacidad)
+        self.setRendimiento(rendimiento)
         Vehiculo.vehiculos.append(self)
     
     def setCapacidad (self, capacidad): 
@@ -21,11 +23,19 @@ class Vehiculo:
             raise ValueError (f"la capacidad {capacidad} no es valida")
         self.capacidad = capacidad
     
+    def setRendimiento(self, rendimiento): 
+        if not Validaciones.validar_float(rendimiento) and not Validaciones.validar_int(rendimiento) and rendimiento <= 0: 
+            raise ValueError (f"el rendimiento {rendimiento} no es valido")
+        self.rendimiento = rendimiento
+    
     def getModo (self): 
         return self.modo
 
     def getCapacidad (self): 
         return self.capacidad
+    
+    def getRendimiento(self): 
+        return self.rendimiento
     
     def calcular_cant_vehiculos(self):
         raise NotImplementedError("La subclase debe implementar calcular_cant_vehiculos")
@@ -38,11 +48,15 @@ class Vehiculo:
 
     def calcular_tiempo(self):
         raise NotImplementedError("La subclase debe implementar calcular_tiempo")
+    
+    def calcular_combustible(self, distancia): 
+        combustible_usado = self.rendimiento * distancia
+        return combustible_usado
 
 
 class Ferroviaria (Vehiculo): 
-    def __init__ (self, capacidad, velocidad, costo_fijo, costo_por_kg, distancia_quiebre, costo_por_km_min, costo_por_km_max, modo='ferroviaria'):    
-        super().__init__(capacidad)
+    def __init__ (self, capacidad, velocidad, costo_fijo, costo_por_kg, distancia_quiebre, costo_por_km_min, costo_por_km_max, rendimiento, modo='ferroviaria'):    
+        super().__init__(capacidad, rendimiento)
         self.setModo (modo)
         self.setVelocidad(velocidad)
         self.setCosto_fijo(costo_fijo)
@@ -149,8 +163,8 @@ class Ferroviaria (Vehiculo):
 
 
 class Automotor (Vehiculo): 
-    def __init__ (self, capacidad, velocidad, costo_fijo, costo_por_km, carga_quiebre, costo_por_kg_min, costo_por_kg_max, modo = "automotor"):
-        super().__init__(capacidad)
+    def __init__ (self, capacidad, velocidad, costo_fijo, costo_por_km, carga_quiebre, costo_por_kg_min, costo_por_kg_max, rendimiento, modo = "automotor"):
+        super().__init__(capacidad, rendimiento)
         self.setModo (modo)
         self.setVelocidad(velocidad)
         self.setCosto_fijo(costo_fijo)
@@ -282,8 +296,8 @@ class Automotor (Vehiculo):
 
 
 class Fluvial (Vehiculo): 
-    def __init__ (self, capacidad, velocidad, costo_por_km, costo_por_kg, costo_fijo_fluvial, costo_fijo_maritimo, modo = "fluvial"):
-        super().__init__(capacidad)
+    def __init__ (self, capacidad, velocidad, costo_por_km, costo_por_kg, costo_fijo_fluvial, costo_fijo_maritimo, rendimiento, modo = "fluvial"):
+        super().__init__(capacidad, rendimiento)
         self.setModo(modo)
         self.setVelocidad(velocidad)
         self.setCosto_por_km(costo_por_km)
@@ -383,8 +397,8 @@ class Fluvial (Vehiculo):
 
 
 class Aerea (Vehiculo): 
-    def __init__ (self, capacidad, costo_fijo, costo_por_km, costo_por_kg, vel_buen_tiempo, vel_mal_tiempo, modo = "aerea"):
-        super().__init__(capacidad)
+    def __init__ (self, capacidad, costo_fijo, costo_por_km, costo_por_kg, vel_buen_tiempo, vel_mal_tiempo, rendimiento, modo = "aerea"):
+        super().__init__(capacidad, rendimiento)
         self.setModo(modo)
         self.setCosto_fijo(costo_fijo)
         self.setCosto_por_km(costo_por_km)
@@ -495,10 +509,10 @@ class Aerea (Vehiculo):
 def instanciar_vehiculos():
 
     try: #no se pasa por parametro aquellos valores que dependen de algo, se calculan por metodos
-        ferroviaria = Ferroviaria(150000, 100, 100, 3, 200, 15, 20) #capacidad, velocidad, costo_fijo, costo_por_kg
-        automotor = Automotor(30000, 80, 30, 5, 15000, 1, 2) #capacidad, velocidad, costo_fijo, costo_por_km
-        fluvial = Fluvial(100000, 40, 15, 2, 500, 1500) #capacidad, velocidad, costo_por_km, costo_por_kg
-        aerea =  Aerea(5000, 750, 40, 10, 600, 400) #capacidad, costo_fijo, costo_por_km, costo_por_kg, vel_buen_tiempo, vel_mal_tiempo
+        ferroviaria = Ferroviaria(150000, 100, 100, 3, 200, 15, 20, 3) #capacidad, velocidad, costo_fijo, costo_por_kg, rendimiento
+        automotor = Automotor(30000, 80, 30, 5, 15000, 1, 2, 2) #capacidad, velocidad, costo_fijo, costo_por_km, rendimiento
+        fluvial = Fluvial(100000, 40, 15, 2, 500, 1500, 45) #capacidad, velocidad, costo_por_km, costo_por_kg, rendimiento
+        aerea =  Aerea(5000, 750, 40, 10, 600, 400, 3.5) #capacidad, costo_fijo, costo_por_km, costo_por_kg, vel_buen_tiempo, vel_mal_tiempo, rendimiento
 
         vehiculos_por_modo = {
             "ferroviaria": ferroviaria,
