@@ -1,3 +1,4 @@
+from datetime import timedelta
 class Itinerario:
     def __init__(self, modo: str, camino: list, costo: float, tiempo: float):
         
@@ -46,7 +47,6 @@ class Itinerario:
     
     @staticmethod
     def formatear_tiempo_minutos(tiempo_en_min):
-        from datetime import timedelta
         return str(timedelta(minutes=tiempo_en_min))
     
 
@@ -210,7 +210,12 @@ class Itinerario:
             consumo_total = 0
             for conexion in itinerario.getCamino():
                 consumo_total += vehiculo.calcular_combustible(conexion.getDistancia())
-            consumo_por_kg = consumo_total / carga_kg if carga_kg > 0 else float('inf')
+
+            if carga_kg > 0:  
+                consumo_por_kg = consumo_total / carga_kg  
+            else:
+                raise ValueError("La carga debe ser mayor que 0.")
+
             if consumo_por_kg < min_consumo:
                 min_consumo = consumo_por_kg
                 id_res = id

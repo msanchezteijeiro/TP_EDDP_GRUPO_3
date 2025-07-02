@@ -5,13 +5,14 @@ from vehiculos import Vehiculo
 class Grafico: 
     
     @staticmethod
-    def grafico_barras(titulo, nombre_x, nombre_y, lista_x, lista_y):
+    def grafico_barras(titulo, nombre_x, nombre_y, lista_x, lista_y,ticksy):
         plt.title(label= titulo, fontsize=10, color='black')
         plt.xlabel(nombre_x)
         plt.ylabel(nombre_y)
         plt.bar(lista_x, lista_y,color='green',width=0.5)
         plt.grid()
         plt.xticks(rotation=0, ha='center')
+        plt.yticks(ticksy)
         
     @staticmethod
     def grafico_torta(titulo, secciones, cantidades):
@@ -19,25 +20,26 @@ class Grafico:
         plt.title(label=titulo, loc='center', color='blue')
         
     @staticmethod 
-    def grafico_lineal(titulo, nombre_x, nombre_y, x1, y1): #linea 1 y linea2 son los nombres de las dos lineas
-        plt.title(titulo)
+    def grafico_lineal(titulo, nombre_x, nombre_y, x1, y1,descripción,color): #linea 1 y linea2 son los nombres de las dos lineas
+        plt.title(titulo,fontsize=10, color='black')
         plt.xlabel(nombre_x)
         plt.ylabel(nombre_y)
         # Grafica de lineas
-        plt.plot(x1,y1,color='green',linewidth=3, marker="o")
+        plt.plot(x1,y1,color=color,linewidth=3, marker="o",label=descripción)
         plt.grid()
+        plt.legend()
         
 
 
     @staticmethod
-    def graf_distancia_vs_tiempo(tupla_solicitud, itinerarios_final, itineario_elegido, vehiculos_por_modo):
+    def graf_distancia_vs_tiempo(tupla_solicitud, itinerarios_final, resultado_kpi_1, vehiculos_por_modo):
         id_carga, datos = tupla_solicitud
 
         if not itinerarios_final:
             raise ValueError(f"No hay itinerarios disponibles para la solicitud {id_carga}.")
 
         # Usamo el itinearaio recibido por parametro
-        _, mejor_itinerario = itineario_elegido
+        nro_itinerario, mejor_itinerario = resultado_kpi_1
         vehiculo = vehiculos_por_modo[mejor_itinerario.getModo()]
 
         distancia_acum = [0]
@@ -55,19 +57,19 @@ class Grafico:
             distancia_acum.append(total_distancia)
             tiempo_acum.append(total_tiempo)
 
-        Grafico.grafico_lineal(f'{id_carga}:\nDistancia Acumulada vs. Tiempo Acumulado', "Tiempo Acumulado [min]", "Distancia Acumulada [km]", tiempo_acum, distancia_acum)
+        Grafico.grafico_lineal(f'{id_carga} / Itinerario nro {nro_itinerario}:\nDistancia Acumulada vs. Tiempo Acumulado \nModo {mejor_itinerario.getModo().capitalize()}, optimiza el Tiempo', "Tiempo Acumulado [min]", "Distancia Acumulada [km]", tiempo_acum, distancia_acum,"Distancia recorrida","black")
 
         plt.show()
 
 
     @staticmethod
-    def graf_tiempo_vs_costo(tupla_solicitud, itinerarios_final, itineario_elegido, vehiculos_por_modo):
+    def graf_tiempo_vs_costo(tupla_solicitud, itinerarios_final, resultado_kpi_2, vehiculos_por_modo):
         id_carga, datos = tupla_solicitud
 
         if not itinerarios_final:
             raise ValueError(f"No hay itinerarios disponibles para la solicitud {id_carga}.")
 
-        _, mejor_itinerario = itineario_elegido
+        nro_itinerario , mejor_itinerario = resultado_kpi_2
         vehiculo = vehiculos_por_modo[mejor_itinerario.getModo()]
 
         carga_kg = datos["peso_kg"]
@@ -87,15 +89,14 @@ class Grafico:
             distancia_acum.append(total_distancia)
             costo_acum.append(total_costo)
             costo_fijo.append(vehiculo.calcular_costo_carga(mejor_itinerario.camino, carga_kg))
-
-        grafico2 = Grafico.grafico_lineal(f'{id_carga}:\nCosto Acumulado vs. Distancia Acumulada', "Distancia Acumulada [km]", "Costo Acumulado [$]", distancia_acum, costo_acum)
-        grafico3 = Grafico.grafico_lineal(f'{id_carga}:\nCosto Acumulado vs. Distancia Acumulada', "Distancia Acumulada [km]", "Costo Acumulado [$]", distancia_acum, costo_fijo)
-            
+        Grafico.grafico_lineal(f'{id_carga} / Itinerario nro {nro_itinerario}:\nCosto Acumulado vs. Distancia Acumulada \nModo {mejor_itinerario.getModo().capitalize()}, optimiza el Costo', "Distancia Acumulada [km]", "Costo Acumulado [$]", distancia_acum, costo_fijo,"Cambio de costo fijo por conexión","red")
+        Grafico.grafico_lineal(f'{id_carga} / Itinerario nro {nro_itinerario}:\nCosto Acumulado vs. Distancia Acumulada \nModo {mejor_itinerario.getModo().capitalize()}, optimiza el Costo', "Costo Acumulado [$]", distancia_acum, costo_acum, "Incremento de costo por kilómetro","yellow")
+        
         plt.show()
 
 
     @staticmethod
-    def graf_cantidad_vs_modo(itinerarios_final,tupla_solicitud):
+    def graf_cantidad_vs_modo(itinerarios_final,tupla_solicitud,vehiculos_por_modo):
         id_carga, datos = tupla_solicitud
         if not itinerarios_final:
             raise ValueError(f"No hay itinerarios disponibles para la solicitud {id_carga}.")
@@ -108,6 +109,10 @@ class Grafico:
             if elemento not in modos:
                 modos.append(elemento)
                 cantidad.append(cant_modos.count(elemento))
+        for vehiculo in vehiculos_por_modo.keys():
+            if not(vehiculo in modos):
+                modos.append(vehiculo)
+                cantidad.append(0)
         X = np.array([m.capitalize() for m in modos])
         Y = np.array(cantidad)
 
@@ -138,16 +143,27 @@ class Grafico:
                     vehiculos.append(cant_vehiculos)
                     carga -= vehiculo.getCapacidad()
                 if carga > 0: 
+                    resto = carga
                     cargas.append(carga)
                     cant_vehiculos += 1
                     vehiculos.append(cant_vehiculos)
                     carga = 0 
-                    
-        
+                carga_max = vehiculo.getCapacidad()
         nros_vehiculos = np.array(vehiculos)
-        x = nros_vehiculos.astype(str)
-        y = np.array(cargas)
-        Grafico.grafico_barras(f'{id_carga}:\nCarga por vehiculo de tipo {modo}', "Vehiculo nro", "Carga [kg]", x, y)
+        ticks = []
+        for i in range(1,6):
+            ticks.append(int(i * carga_max / 5))
+        ticks.append(resto)
+        if len(nros_vehiculos) != 1:
+            x = nros_vehiculos.astype(str)
+            y = np.array(cargas)
+            Grafico.grafico_barras(f'{id_carga} / Itinerario nro: {resultado_kpi_1[0]}:\nCarga por vehiculo \nModo {modo.capitalize()}, optimiza el Tiempo', "Vehiculo nro", "Carga [kg]", x, y,sorted(ticks))
+        else:
+            nros_vehiculos = np.append(nros_vehiculos,[2])
+            cargas.append(0)
+            x = nros_vehiculos.astype(str)
+            y = np.array(cargas)
+            Grafico.grafico_barras(f'{id_carga} / Itinerario nro: {resultado_kpi_1[0]}:\nCarga por vehiculo \nModo {modo.capitalize()}, optimiza el Tiempo', "Vehiculo nro", "Carga [kg]", x, y,sorted(ticks))
         plt.show()
         
 

@@ -32,6 +32,7 @@ if __name__ == "__main__":
             resultado_kpi_1 = Itinerario.kpi_1(itinerarios_final)
             resultado_kpi_2 = Itinerario.kpi_2(itinerarios_final)
             resultado_kpi_3 = Itinerario.kpi_3(itinerarios_final, vehiculos_por_modo, carga_kg)
+            
             Itinerario.imprimir_kpi_1(resultado_kpi_1)
             Itinerario.imprimir_kpi_2(resultado_kpi_2)
             Itinerario.imprimir_kpi_3(resultado_kpi_3)
@@ -44,7 +45,7 @@ if __name__ == "__main__":
             Grafico.graf_tiempo_vs_costo(tupla_solicitud, itinerarios_final, resultado_kpi_2, vehiculos_por_modo)
 
             #Grafico de Cantidad de Caminos Posibles por Modo:
-            Grafico.graf_cantidad_vs_modo(itinerarios_final, tupla_solicitud)
+            Grafico.graf_cantidad_vs_modo(itinerarios_final, tupla_solicitud,vehiculos_por_modo)
             
             #Grafico de carga por vehiculo por cantidad de vehiculos:
             Grafico.graf_carga_por_unidad(resultado_kpi_1, tupla_solicitud)
