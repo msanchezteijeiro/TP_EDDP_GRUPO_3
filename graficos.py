@@ -5,7 +5,7 @@ from vehiculos import Vehiculo
 class Grafico: 
     
     @staticmethod
-    def grafico_barras(titulo, nombre_x, nombre_y, lista_x, lista_y,ticksy):
+    def grafico_barras(titulo, nombre_x, nombre_y, lista_x, lista_y, ticksy):
         plt.title(label= titulo, fontsize=10, color='black')
         plt.xlabel(nombre_x)
         plt.ylabel(nombre_y)
@@ -20,7 +20,7 @@ class Grafico:
         plt.title(label=titulo, loc='center', color='blue')
         
     @staticmethod 
-    def grafico_lineal(titulo, nombre_x, nombre_y, x1, y1,descripción,color): #linea 1 y linea2 son los nombres de las dos lineas
+    def grafico_lineal(titulo, nombre_x, nombre_y, x1, y1, descripción, color): #linea 1 y linea2 son los nombres de las dos lineas
         plt.title(titulo,fontsize=10, color='black')
         plt.xlabel(nombre_x)
         plt.ylabel(nombre_y)
@@ -57,7 +57,7 @@ class Grafico:
             distancia_acum.append(total_distancia)
             tiempo_acum.append(total_tiempo)
 
-        Grafico.grafico_lineal(f'{id_carga} / Itinerario nro {nro_itinerario}:\nDistancia Acumulada vs. Tiempo Acumulado \nModo {mejor_itinerario.getModo().capitalize()}, optimiza el Tiempo', "Tiempo Acumulado [min]", "Distancia Acumulada [km]", tiempo_acum, distancia_acum,"Distancia recorrida","black")
+        Grafico.grafico_lineal(f'{id_carga} / Itinerario N°{nro_itinerario}:\nDistancia Acumulada vs. Tiempo Acumulado \nModo {mejor_itinerario.getModo().capitalize()}, optimiza el Tiempo', "Tiempo Acumulado [min]", "Distancia Acumulada [km]", tiempo_acum, distancia_acum,"Distancia recorrida","black")
 
         plt.show()
 
@@ -89,8 +89,8 @@ class Grafico:
             distancia_acum.append(total_distancia)
             costo_acum.append(total_costo)
             costo_fijo.append(vehiculo.calcular_costo_carga(mejor_itinerario.camino, carga_kg))
-        Grafico.grafico_lineal(f'{id_carga} / Itinerario nro {nro_itinerario}:\nCosto Acumulado vs. Distancia Acumulada \nModo {mejor_itinerario.getModo().capitalize()}, optimiza el Costo', "Distancia Acumulada [km]", "Costo Acumulado [$]", distancia_acum, costo_fijo,"Cambio de costo fijo por conexión","red")
-        Grafico.grafico_lineal(f'{id_carga} / Itinerario nro {nro_itinerario}:\nCosto Acumulado vs. Distancia Acumulada \nModo {mejor_itinerario.getModo().capitalize()}, optimiza el Costo',"Distancia Acumulada [km]", "Costo Acumulado [$]", distancia_acum, costo_acum, "Incremento de costo por kilómetro","yellow")
+        Grafico.grafico_lineal(f'{id_carga} / Itinerario N°{nro_itinerario}:\nCosto Acumulado vs. Distancia Acumulada \nModo {mejor_itinerario.getModo().capitalize()}, optimiza el Costo', "Distancia Acumulada [km]", "Costo Acumulado [$]", distancia_acum, costo_fijo,"Costo fijo por conexión","red")
+        Grafico.grafico_lineal(f'{id_carga} / Itinerario N°{nro_itinerario}:\nCosto Acumulado vs. Distancia Acumulada \nModo {mejor_itinerario.getModo().capitalize()}, optimiza el Costo',"Distancia Acumulada [km]", "Costo Acumulado [$]", distancia_acum, costo_acum, "Incremento de costo por kilómetro","yellow")
         
         plt.show()
 
@@ -160,13 +160,13 @@ class Grafico:
         if len(nros_vehiculos) != 1:
             x = nros_vehiculos.astype(str)
             y = np.array(cargas)
-            Grafico.grafico_barras(f'{id_carga} / Itinerario nro: {resultado_kpi_1[0]}:\nCarga por vehiculo \nModo {modo.capitalize()}, optimiza el Tiempo', "Vehiculo nro", "Carga [kg]", x, y,sorted(ticks))
+            Grafico.grafico_barras(f'{id_carga} / Itinerario N°{resultado_kpi_1[0]}:\nCarga por vehiculo \nModo {modo.capitalize()}, optimiza el Tiempo', "Vehiculo N°", "Carga [kg]", x, y,sorted(ticks))
         else:
             nros_vehiculos = np.append(nros_vehiculos,[2])
             cargas.append(0)
             x = nros_vehiculos.astype(str)
             y = np.array(cargas)
-            Grafico.grafico_barras(f'{id_carga} / Itinerario nro: {resultado_kpi_1[0]}:\nCarga por vehiculo \nModo {modo.capitalize()}, optimiza el Tiempo', "Vehiculo nro", "Carga [kg]", x, y,sorted(ticks))
+            Grafico.grafico_barras(f'{id_carga} / Itinerario N°{resultado_kpi_1[0]}:\nCarga por vehiculo \nModo {modo.capitalize()}, optimiza el Tiempo', "Vehiculo N°", "Carga [kg]", x, y,sorted(ticks))
         plt.show()
         
 

@@ -1,4 +1,5 @@
 from datetime import timedelta
+
 class Itinerario:
     def __init__(self, modo: str, camino: list, costo: float, tiempo: float):
         
@@ -109,10 +110,10 @@ class Itinerario:
                 costo_total_camino = vehiculo.calcular_costo_carga(camino, carga_kg)
                 tiempo_total_camino = 0
 
-                for conexion in camino:
+                for conexion in camino: #cada camino es una forma de ir, osea un itinerario
                     costo_total_camino += vehiculo.calcular_costo_tramo(conexion, carga_kg)
                     tiempo_total_camino += vehiculo.calcular_tiempo(conexion)
-                info = Itinerario(modo, camino, costo_total_camino, tiempo_total_camino)
+                info = Itinerario(modo, camino, costo_total_camino, tiempo_total_camino) #instancio ese itinerario
                 itinerarios_final[id_actual] = info
                 id_actual += 1
 
@@ -195,34 +196,43 @@ class Itinerario:
 
         return par_res 
     
+
+    
     @staticmethod
-    def kpi_3(itinerarios_final, vehiculos_por_modo, carga_kg): 
+    def kpi_3(itinerarios_final, vehiculos_por_modo, tupla_solicitud): 
         
         if not itinerarios_final:
             return None
+        
+        carga_kg = tupla_solicitud[1]["peso_kg"]
+        if not(carga_kg > 0):  
+                raise ValueError("La carga debe ser mayor que 0.")
 
         min_consumo = float('inf')
         id_res = None
         res = None
         
         for id, itinerario in itinerarios_final.items():
-            vehiculo = vehiculos_por_modo[itinerario.getModo().lower()]
+            vehiculo = vehiculos_por_modo[itinerario.getModo().lower()] #identifica el vehiculo del q se trata
             consumo_total = 0
-            for conexion in itinerario.getCamino():
-                consumo_total += vehiculo.calcular_combustible(conexion.getDistancia())
+            for conexion in itinerario.getCamino(): #recorro cada conexion dentro del camino de ese itinerario
+                consumo_total += vehiculo.calcular_combustible(conexion.getDistancia()) #en litros de combustible
 
-            if carga_kg > 0:  
-                consumo_por_kg = consumo_total / carga_kg  
-            else:
-                raise ValueError("La carga debe ser mayor que 0.")
+            #Asigno el valor de consumo_por_kg, no hace falta validarlo, ya se validó arriba.
+            consumo_por_kg = consumo_total / carga_kg  #queda en litros/kg
 
-            if consumo_por_kg < min_consumo:
+            if consumo_por_kg < min_consumo: #si es menor al que tenia, lo reemplazo
                 min_consumo = consumo_por_kg
                 id_res = id
                 res = itinerario
 
-        par_res = (id_res, res)
+        par_res = (id_res, res) #Luego de recorrer todo, me queda el itineario con menor consumo por kg
+
         return par_res
+    
+
+
+
 
     #Funciones para imprimir KPIs:
     @staticmethod

@@ -509,9 +509,9 @@ class Aerea (Vehiculo):
 def instanciar_vehiculos():
 
     try: #no se pasa por parametro aquellos valores que dependen de algo, se calculan por metodos
-        ferroviaria = Ferroviaria(150000, 100, 100, 3, 200, 15, 20, 3) #capacidad, velocidad, costo_fijo, costo_por_kg, rendimiento
-        automotor = Automotor(30000, 80, 30, 5, 15000, 1, 2, 2) #capacidad, velocidad, costo_fijo, costo_por_km, rendimiento
-        fluvial = Fluvial(100000, 40, 15, 2, 500, 1500, 45) #capacidad, velocidad, costo_por_km, costo_por_kg, rendimiento
+        ferroviaria = Ferroviaria(150000, 100, 100, 3, 200, 15, 20, 3) #capacidad, velocidad, costo_fijo, costo_por_kg, distancia_quiebre, costo_por_km_min, costo_por_km_max, rendimiento
+        automotor = Automotor(30000, 80, 30, 5, 15000, 1, 2, 2) #capacidad, velocidad, costo_fijo, costo_por_km, carga_quiebre, costo_por_kg_min, costo_por_kg_max, rendimiento
+        fluvial = Fluvial(100000, 40, 15, 2, 500, 1500, 45) #capacidad, velocidad, costo_por_km, costo_por_kg, costo_fijo_fluvial, costo_fijo_maritimo, rendimiento
         aerea =  Aerea(5000, 750, 40, 10, 600, 400, 3.5) #capacidad, costo_fijo, costo_por_km, costo_por_kg, vel_buen_tiempo, vel_mal_tiempo, rendimiento
 
         vehiculos_por_modo = {
