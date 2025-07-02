@@ -1,7 +1,7 @@
 from redes import construir_red
+from solicitudes import extraer_solicitudes
 from vehiculos import instanciar_vehiculos
 from itinerarios import Itinerario
-from lector_archivos import Lector_Archivos
 from graficos import Grafico
 
 
@@ -12,8 +12,7 @@ if __name__ == "__main__":
         nodos_disponibles = construir_red()
 
         #Extraemos las solicitudes de los csv
-        lista_solicitudes = Lector_Archivos.cargar_archivo_como_listas("solicitudes.csv")
-        solicitudes = Lector_Archivos.decodificar_solicitudes(lista_solicitudes)
+        solicitudes = extraer_solicitudes()
 
         #Instancio los vehiculos: 
         vehiculos_por_modo, ferroviaria, automotor, fluvial, aerea = instanciar_vehiculos()
@@ -27,30 +26,29 @@ if __name__ == "__main__":
             itinerarios_final = Itinerario.itinerario_por_solicitud(nodos_disponibles, tupla_solicitud, vehiculos_por_modo)
             Itinerario.imprimir_itinerario_final(itinerarios_final)
             
-            
-            resultado_kpi_1 = Itinerario.kpi_1(itinerarios_final)
-            resultado_kpi_2 = Itinerario.kpi_2(itinerarios_final)
-            resultado_kpi_3 = Itinerario.kpi_3(itinerarios_final, vehiculos_por_modo, tupla_solicitud)
 
-            Itinerario.imprimir_kpi_1(resultado_kpi_1)
-            Itinerario.imprimir_kpi_2(resultado_kpi_2)
-            Itinerario.imprimir_kpi_3(resultado_kpi_3)
+            resultado_indicador_rend_tiempo = Itinerario.indicador_rend_tiempo(itinerarios_final)
+            resultado_indicador_rend_costo = Itinerario.indicador_rend_costo(itinerarios_final)
+            resultado_indicador_rend_combustible = Itinerario.indicador_rend_combustible(itinerarios_final, vehiculos_por_modo, tupla_solicitud)
+
+            Itinerario.imprimir_indicador_rend_tiempo(resultado_indicador_rend_tiempo)
+            Itinerario.imprimir_indicador_rend_costo(resultado_indicador_rend_costo)
+            Itinerario.imprimir_indicador_rend_combustible(resultado_indicador_rend_combustible)
 
 
             #Grafico de Distancia Acumulada vs. Tiempo Acumulado: : Para el Itinerario KPI 1
-            Grafico.graf_distancia_vs_tiempo(tupla_solicitud, itinerarios_final, resultado_kpi_1, vehiculos_por_modo)
+            Grafico.graf_distancia_vs_tiempo(tupla_solicitud, itinerarios_final, resultado_indicador_rend_tiempo, vehiculos_por_modo)
 
             #Grafico de Costo Acumulado vs Distancia Acumulada: Para el Itinerario KPI 2
-            Grafico.graf_tiempo_vs_costo(tupla_solicitud, itinerarios_final, resultado_kpi_2, vehiculos_por_modo)
+            Grafico.graf_tiempo_vs_costo(tupla_solicitud, itinerarios_final, resultado_indicador_rend_costo, vehiculos_por_modo)
 
             #Grafico de Cantidad de Caminos Posibles por Modo:
             Grafico.graf_cantidad_vs_modo(itinerarios_final, tupla_solicitud,vehiculos_por_modo)
             
             #Grafico de carga por vehiculo por cantidad de vehiculos:
-            Grafico.graf_carga_por_unidad(resultado_kpi_1, tupla_solicitud)
+            Grafico.graf_carga_por_unidad(resultado_indicador_rend_tiempo, tupla_solicitud)
  
 
-            
             
     except Exception as e:
         print(f'Error: {e}')

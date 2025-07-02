@@ -156,7 +156,7 @@ class Itinerario:
 
     #Este es el del timepo que le pasa como parametro el diccionario con los posibles caminos
     @staticmethod
-    def kpi_1(itinerarios_final):
+    def indicador_rend_tiempo(itinerarios_final):
 
         if not itinerarios_final:
             return None #como tiene un return, si entra a este if, termina la funcion
@@ -175,7 +175,7 @@ class Itinerario:
 
     #Este es el del costo: devuelve el camino con menor costo total
     @staticmethod
-    def kpi_2(itinerarios_final): 
+    def indicador_rend_costo(itinerarios_final): 
 
         if not itinerarios_final:
             return None #como tiene un return, si entra a este if, termina la funcion
@@ -196,10 +196,9 @@ class Itinerario:
 
         return par_res 
     
-
     
     @staticmethod
-    def kpi_3(itinerarios_final, vehiculos_por_modo, tupla_solicitud): 
+    def indicador_rend_combustible(itinerarios_final, vehiculos_por_modo, tupla_solicitud): 
         
         if not itinerarios_final:
             return None
@@ -216,8 +215,7 @@ class Itinerario:
             vehiculo = vehiculos_por_modo[itinerario.getModo().lower()] #identifica el vehiculo del q se trata
             consumo_total = 0
             for conexion in itinerario.getCamino(): #recorro cada conexion dentro del camino de ese itinerario
-                consumo_total += vehiculo.calcular_combustible(conexion.getDistancia()) #en litros de combustible
-
+                consumo_total += vehiculo.calcular_combustible(conexion.getDistancia(), conexion, carga_kg) #en litros de combustible
             #Asigno el valor de consumo_por_kg, no hace falta validarlo, ya se validó arriba.
             consumo_por_kg = consumo_total / carga_kg  #queda en litros/kg
 
@@ -229,14 +227,11 @@ class Itinerario:
         par_res = (id_res, res) #Luego de recorrer todo, me queda el itineario con menor consumo por kg
 
         return par_res
-    
-
-
 
 
     #Funciones para imprimir KPIs:
     @staticmethod
-    def imprimir_kpi_1(par_res):
+    def imprimir_indicador_rend_tiempo(par_res):
         if not par_res:
             print("\n\nNo hay itinerarios disponibles para KPI 1.")
         else:
@@ -248,7 +243,7 @@ class Itinerario:
             print(res)
 
     @staticmethod
-    def imprimir_kpi_2(par_res):
+    def imprimir_indicador_rend_costo(par_res):
         if not par_res:
             print("\n\nNo hay itinerarios disponibles para KPI 2.")
         else:
@@ -260,7 +255,7 @@ class Itinerario:
             print(res)
 
     @staticmethod
-    def imprimir_kpi_3(par_res): 
+    def imprimir_indicador_rend_combustible(par_res): 
         if not par_res: 
             print("\n\nNo hay itinerarios disponibles para KPI 3.")
         else: 
@@ -270,6 +265,4 @@ class Itinerario:
             print("-" * 87)
             print(f"El itinerario {id_res} es el mejor.\n")
             print(res)
-
-
 

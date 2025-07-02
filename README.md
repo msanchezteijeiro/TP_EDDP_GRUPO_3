@@ -293,10 +293,10 @@ Para cada camino encontrado, calcula:
 -Muestra todos los itinerarios generados en formato tabla:
 ID, Modo, COsto total, Tiempo total , camino
 
-"kpi_1(itinerarios_final)"
+"indicador_rend_tiempo(itinerarios_final)"
 Minimiza el timepo total
 
-"kpi_2(itinerarios_final)"
+"indicador_rend_costo(itinerarios_final)"
 Minimiza el costo total
 
 Cada uno retorna una tupla (ID, itinerario) correspondiente al mejor caso.

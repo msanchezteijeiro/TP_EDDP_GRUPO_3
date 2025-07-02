@@ -49,8 +49,8 @@ class Vehiculo:
     def calcular_tiempo(self):
         raise NotImplementedError("La subclase debe implementar calcular_tiempo")
     
-    def calcular_combustible(self, distancia): 
-        combustible_usado = self.rendimiento * distancia
+    def calcular_combustible(self, distancia, conexion, carga): 
+        combustible_usado = self.calcular_cant_vehiculos(conexion, carga) * self.rendimiento * distancia
         return combustible_usado
 
 
@@ -121,7 +121,8 @@ class Ferroviaria (Vehiculo):
     
     def getCosto_por_km_max (self):
         return self.costo_por_km_max
-    def calcular_cant_vehiculos (self, conexion, carga):
+    
+    def calcular_cant_vehiculos(self, conexion, carga):
         if not isinstance (conexion, Conexion): 
             raise TypeError ('No se ingreso una conexion valida')
 
@@ -232,7 +233,7 @@ class Automotor (Vehiculo):
     def getCosto_por_kg_max (self):
         return self.costo_por_kg_max
     
-    def calcular_cant_vehiculos (self, conexion, carga):
+    def calcular_cant_vehiculos(self, conexion, carga):
         if not isinstance (conexion, Conexion): 
             raise TypeError ('No se ingreso una conexion valida')
         
@@ -356,7 +357,7 @@ class Fluvial (Vehiculo):
         return self.costo_fijo_maritimo
     
 
-    def calcular_cant_vehiculos (self, conexion, carga):
+    def calcular_cant_vehiculos(self, conexion, carga):
         if not isinstance (conexion, Conexion): 
             raise TypeError ('No se ingreso una conexion valida')
 
@@ -457,7 +458,7 @@ class Aerea (Vehiculo):
         return self.vel_mal_tiempo
 
     
-    def calcular_cant_vehiculos (self, conexion, carga):
+    def calcular_cant_vehiculos(self, conexion, carga):
         if not isinstance (conexion, Conexion): 
             raise TypeError ('No se ingreso una conexion valida')
         
