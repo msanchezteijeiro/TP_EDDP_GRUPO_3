@@ -90,7 +90,7 @@ class Grafico:
             costo_acum.append(total_costo)
             costo_fijo.append(vehiculo.calcular_costo_carga(mejor_itinerario.camino, carga_kg))
         Grafico.grafico_lineal(f'{id_carga} / Itinerario nro {nro_itinerario}:\nCosto Acumulado vs. Distancia Acumulada \nModo {mejor_itinerario.getModo().capitalize()}, optimiza el Costo', "Distancia Acumulada [km]", "Costo Acumulado [$]", distancia_acum, costo_fijo,"Cambio de costo fijo por conexión","red")
-        Grafico.grafico_lineal(f'{id_carga} / Itinerario nro {nro_itinerario}:\nCosto Acumulado vs. Distancia Acumulada \nModo {mejor_itinerario.getModo().capitalize()}, optimiza el Costo', "Costo Acumulado [$]", distancia_acum, costo_acum, "Incremento de costo por kilómetro","yellow")
+        Grafico.grafico_lineal(f'{id_carga} / Itinerario nro {nro_itinerario}:\nCosto Acumulado vs. Distancia Acumulada \nModo {mejor_itinerario.getModo().capitalize()}, optimiza el Costo',"Distancia Acumulada [km]", "Costo Acumulado [$]", distancia_acum, costo_acum, "Incremento de costo por kilómetro","yellow")
         
         plt.show()
 
@@ -153,7 +153,10 @@ class Grafico:
         ticks = []
         for i in range(1,6):
             ticks.append(int(i * carga_max / 5))
-        ticks.append(resto)
+        try:
+            ticks.append(resto)
+        except:
+            pass
         if len(nros_vehiculos) != 1:
             x = nros_vehiculos.astype(str)
             y = np.array(cargas)
