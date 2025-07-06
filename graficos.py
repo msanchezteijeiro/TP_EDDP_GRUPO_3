@@ -96,6 +96,37 @@ class Grafico:
 
 
     @staticmethod
+    def graf_combustible_vs_distancia(tupla_solicitud, itinerarios_final, resultado_indicador_rend_combustible, vehiculos_por_modo):
+        id_carga, datos = tupla_solicitud
+
+        if not itinerarios_final:
+            raise ValueError(f"No hay itinerarios disponibles para la solicitud {id_carga}.")
+
+        nro_itinerario, mejor_itinerario = resultado_indicador_rend_combustible
+        vehiculo = vehiculos_por_modo[mejor_itinerario.getModo().lower()]
+        carga_kg = datos["peso_kg"]
+
+        distancia_acum = [0]
+        consumo_acum = [0]
+        total_distancia = 0
+        total_consumo = 0
+
+        for conexion in mejor_itinerario.camino:
+            distancia = conexion.getDistancia()
+            consumo = vehiculo.calcular_combustible(distancia, conexion, carga_kg)
+
+            total_distancia += distancia
+            total_consumo += consumo
+
+            distancia_acum.append(total_distancia)
+            consumo_acum.append(total_consumo)
+
+        Grafico.grafico_lineal(f'{id_carga} / Itinerario N°{nro_itinerario}: Optimiza el Consumo / Modo {mejor_itinerario.getModo().capitalize()}\n\nConsumo Acumulado vs. Distancia Acumulada', "Distancia Acumulada [km]", "Consumo Acumulado [litros]", distancia_acum, consumo_acum, "Consumo de combustible", "green")
+
+        plt.show()
+
+
+    @staticmethod
     def graf_cantidad_vs_modo(itinerarios_final,tupla_solicitud,vehiculos_por_modo):
         id_carga, datos = tupla_solicitud
         if not itinerarios_final:

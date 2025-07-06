@@ -154,114 +154,103 @@ class Itinerario:
 
 
 
-    #Este es el del timepo que le pasa como parametro el diccionario con los posibles caminos
     @staticmethod
-    def indicador_rend_tiempo(itinerarios_final):
-
+    def indicador_por_rend(itinerarios_final, funcion_rendimiento, funcion_impresion, **kwargs):
         if not itinerarios_final:
-            return None #como tiene un return, si entra a este if, termina la funcion
-
-        tiempo_min = float('inf')
-        id_res = None
-        res = None
-        for (id, itinerario) in itinerarios_final.items():
-            if itinerario.getTiempo() < tiempo_min:
-                tiempo_min = itinerario.getTiempo()
-                id_res = id
-                res = itinerario
-        par_res = (id_res, res) #tupla
-        return par_res
-
-
-    #Este es el del costo: devuelve el camino con menor costo total
-    @staticmethod
-    def indicador_rend_costo(itinerarios_final): 
-
-        if not itinerarios_final:
-            return None #como tiene un return, si entra a este if, termina la funcion
-
-        costo_min = None
-        id_res = None
-        res = None
-        for id, itinerario in itinerarios_final.items():
-            if costo_min is None:
-                costo_min = itinerario.getCosto()
-                id_res = id
-                res = itinerario
-            elif itinerario.getCosto() < costo_min:
-                costo_min = itinerario.getCosto()
-                id_res = id
-                res = itinerario
-        par_res = (id_res, res) #tupla
-
-        return par_res 
-    
-    
-    @staticmethod
-    def indicador_rend_combustible(itinerarios_final, vehiculos_por_modo, tupla_solicitud): 
-        
-        if not itinerarios_final:
+            funcion_impresion(None)  # Imprime mensaje de "no hay itinerarios"
             return None
-        
-        carga_kg = tupla_solicitud[1]["peso_kg"]
-        if not(carga_kg > 0):  
-                raise ValueError("La carga debe ser mayor que 0.")
 
-        min_consumo = float('inf')
+        mejor_valor = float('inf') #Parte del inf como mejor valor, y luego recorre para encontrar el menor.
         id_res = None
         res = None
-        
-        for id, itinerario in itinerarios_final.items():
-            vehiculo = vehiculos_por_modo[itinerario.getModo().lower()] #identifica el vehiculo del q se trata
-            consumo_total = 0
-            for conexion in itinerario.getCamino(): #recorro cada conexion dentro del camino de ese itinerario
-                consumo_total += vehiculo.calcular_combustible(conexion.getDistancia(), conexion, carga_kg) #en litros de combustible
-            #Asigno el valor de consumo_por_kg, no hace falta validarlo, ya se validó arriba.
-            consumo_por_kg = consumo_total / carga_kg  #queda en litros/kg
 
-            if consumo_por_kg < min_consumo: #si es menor al que tenia, lo reemplazo
-                min_consumo = consumo_por_kg
+        for id, itinerario in itinerarios_final.items():
+
+            #rendimiento es un valor obtenido con la funcion pasada por parametro
+            rendimiento = funcion_rendimiento(itinerario, **kwargs)
+
+            if rendimiento < mejor_valor: #si es menor al que tenia, lo reemplazo
+                mejor_valor = rendimiento
                 id_res = id
                 res = itinerario
 
-        par_res = (id_res, res) #Luego de recorrer todo, me queda el itineario con menor consumo por kg
+        par_res = (id_res, res)
+        funcion_impresion(par_res)  # Imprime el resultado del mejor itinerario
 
-        return par_res
+        return par_res #Luego de recorrer todo, me queda el itineario con menor valor, osea el mejor optimizado
+
+
+    # Criterio 1: Tiempo total: Obtenes el tiempo del itinerario recibido por parametro.
+    @staticmethod
+    def rendimiento_por_tiempo(itinerario, **kwargs):
+        return itinerario.getTiempo()
+
+
+    # Criterio 2: Costo total: Obtenes el costo total del itinerario recibido
+    @staticmethod
+    def rendimiento_por_costo(itinerario, **kwargs):
+        return itinerario.getCosto()
+
+
+    # Criterio 3: Consumo por kg (usa kwargs: vehiculos_por_modo y tupla_solicitud) Obtenes el consumo por kg.
+    @staticmethod
+    def rendimiento_por_combustible(itinerario, **kwargs):
+
+        if not ("vehiculos_por_modo" in kwargs and "tupla_solicitud" in kwargs): #chequea que esten en kwargs
+            raise KeyError("Faltan parámetros requeridos: 'vehiculos_por_modo' y/o 'tupla_solicitud'.")
+        vehiculos_por_modo = kwargs["vehiculos_por_modo"]
+        tupla_solicitud = kwargs["tupla_solicitud"]
+
+        carga_kg = tupla_solicitud[1].get("peso_kg") #chequa que carga sea positivo
+        if not (carga_kg and carga_kg > 0):
+            raise ValueError("La carga debe ser mayor que 0.")
+
+        vehiculo = vehiculos_por_modo[itinerario.getModo().lower()] #identifica el vehiculo del q se trata
+
+        consumo_total = 0
+
+        for conexion in itinerario.getCamino(): #recorro cada conexion dentro del camino de ese itinerario
+            consumo_total += vehiculo.calcular_combustible(conexion.getDistancia(), conexion, carga_kg) #en litros de combustible
+        
+        #Asigno el valor de consumo_por_kg, no hace falta validarlo, ya se validó arriba.
+        consumo_por_kg = consumo_total / carga_kg  #queda en litros/kg
+
+        return consumo_por_kg
 
 
     #Funciones para imprimir KPIs:
     @staticmethod
-    def imprimir_indicador_rend_tiempo(par_res):
+    def imprimir_rend_tiempo(par_res):
         if not par_res:
-            print("\n\nNo hay itinerarios disponibles para KPI 1.")
+            print("\n\nNo hay itinerarios disponibles para el Indicador por Rendimiento de Tiempo.")
         else:
             id_res = par_res[0]
             res = par_res[1]
-            print("\n\nMEJOR ITINERARIO SEGÚN: → | KPI 1: Minimizar el Tiempo Total de Entrega |")
+            print("\n\nMEJOR ITINERARIO SEGÚN: → | Indicador por Rendimiento: Minimizar el Tiempo Total de Entrega |")
             print("-" * 72)
             print(f"El itinerario {id_res} es el mejor.\n")
             print(res)
 
     @staticmethod
-    def imprimir_indicador_rend_costo(par_res):
+    def imprimir_rend_costo(par_res):
         if not par_res:
-            print("\n\nNo hay itinerarios disponibles para KPI 2.")
+            print("\n\nNo hay itinerarios disponibles para el Indicador por Rendimiento de Costo.")
         else:
             id_res = par_res[0]
             res = par_res[1]
-            print("\n\nMEJOR ITINERARIO SEGÚN: → | KPI 2: Minimizar el Costo Total del Transporte |")
+            print("\n\nMEJOR ITINERARIO SEGÚN: → | Indicador por Rendimiento: Minimizar el Costo Total del Transporte |")
             print("-" * 75)
             print(f"El itinerario {id_res} es el mejor.\n")
             print(res)
 
     @staticmethod
-    def imprimir_indicador_rend_combustible(par_res): 
+    def imprimir_rend_combustible(par_res): 
         if not par_res: 
-            print("\n\nNo hay itinerarios disponibles para KPI 3.")
+            print("\n\nNo hay itinerarios disponibles para el Indicador por Rendimiento de Combustible.")
         else: 
             id_res = par_res[0]
             res = par_res[1]
-            print("\n\nMEJOR ITINERARIO SEGÚN: → | KPI 3: Minimizar el consumo de combustible por kg de carga |")
+            print("\n\nMEJOR ITINERARIO SEGÚN: → | Indicador por Rendimiento: Minimizar el consumo de combustible por kg de carga |")
             print("-" * 87)
             print(f"El itinerario {id_res} es el mejor.\n")
             print(res)
