@@ -403,5 +403,18 @@ Las funciones pueden ser reutilizadas o adaptadas para otros análisis visuales 
 
 
 
+# Cambios para el final.
+
+Cambios en los graficos donde ahora se puede ver a que solucion pertenecen. Mostrando el nombre de la carga, el numero de itinerario y el modo de transporte. Mejora en general del aspecto de los graficos. Muestra por kpi la mejor solucion.
+
+Creacion del atributo en la clase vehiculos para calcular rendimiento del combustible y con eso el kpi de rendimiento de combustible. 
+
+Correccion en la clase itinerario donde se calculan los kpi por separado pero dentro de un mismo.
+
+Usamos KWARGS, que consiste ne pasar un numero variable de argumentos con nombre a una funcion. Viene de "keyword arguments". Acepta cualquier cantidad de argumentos con nombre y los guarda en un diccionario.
+
+
+
+
 
 
